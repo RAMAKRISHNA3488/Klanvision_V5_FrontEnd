@@ -457,23 +457,30 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
       <style>{`
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        @media (max-width: 1024px) {
+          .whatsapp-chat-popup {
+            width: 380px !important;
+            height: 600px !important;
+            bottom: 190px !important;
+            right: 24px !important;
+            border-radius: 28px !important;
+          }
+        }
         @media (max-width: 768px) {
           .whatsapp-chat-popup {
-            width: 90vw !important;
-            height: 70vh !important;
-            right: 5vw !important;
-            bottom: 190px !important;
+            width: 360px !important;
+            height: 550px !important;
+            right: 20px !important;
+            bottom: 180px !important;
           }
         }
         @media (max-width: 480px) {
           .whatsapp-chat-popup {
-            bottom: 0 !important;
-            right: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
-            border-radius: 0 !important;
+            width: calc(100vw - 32px) !important;
+            height: 500px !important;
+            right: 16px !important;
+            bottom: 180px !important;
+            border-radius: 24px !important;
           }
         }
       `}</style>

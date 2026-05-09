@@ -394,23 +394,30 @@ export default function AIAssistant({ isOpen, onToggle, isVisible }: AIAssistant
           right: 24px;
           z-index: 10000;
         }
+        @media (max-width: 1024px) {
+          .ai-chat-popup {
+            width: 400px !important;
+            height: 600px !important;
+            bottom: 100px !important;
+            right: 24px !important;
+            border-radius: 28px !important;
+          }
+        }
         @media (max-width: 768px) {
           .ai-chat-popup {
-            width: 90vw !important;
-            height: 70vh !important;
-            right: 5vw !important;
-            bottom: 100px !important;
+            width: 360px !important;
+            height: 550px !important;
+            right: 20px !important;
+            bottom: 90px !important;
           }
         }
         @media (max-width: 480px) {
           .ai-chat-popup {
-            bottom: 0 !important;
-            right: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
-            border-radius: 0 !important;
+            width: calc(100vw - 32px) !important;
+            height: 500px !important;
+            right: 16px !important;
+            bottom: 90px !important;
+            border-radius: 24px !important;
           }
           .ai-assistant-toggle {
             bottom: 20px !important;
