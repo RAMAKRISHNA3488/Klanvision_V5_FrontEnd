@@ -32,6 +32,8 @@ const TIMELINES = [
 
 type Step = 'GREETING' | 'ASK_EMAIL' | 'ASK_PHONE' | 'ASK_SERVICE' | 'ASK_BUDGET' | 'ASK_TIMELINE' | 'COMPLETE';
 
+
+
 type Message = {
   id: number;
   text: string;
@@ -56,6 +58,7 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
     budget: '',
     timeline: ''
   });
+
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -113,6 +116,7 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
     };
     setMessages(prev => [...prev, userMsg]);
     setInputValue('');
+
     processFlow(text);
   };
 
@@ -123,6 +127,7 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
         setStep('ASK_EMAIL');
         addBotMessage(`Thank you, ${input} 😊\n\nTo proceed further, kindly provide your Business Email Address.\n\n📧 Example: example@company.com`);
         break;
+
       case 'ASK_EMAIL':
         if (validateEmail(input)) {
           setLeadData(prev => ({ ...prev, email: input }));
@@ -132,6 +137,7 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
           addBotMessage("I'm sorry, that doesn't look like a valid email. Please enter a valid Business Email Address.");
         }
         break;
+
       case 'ASK_PHONE':
         if (validatePhone(input)) {
           setLeadData(prev => ({ ...prev, phone: input }));
@@ -141,16 +147,21 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
           addBotMessage("Invalid phone number format. Please try again.\n\nExample: +91-**********");
         }
         break;
+
+
+
       case 'ASK_SERVICE':
         setLeadData(prev => ({ ...prev, service: input }));
         setStep('ASK_BUDGET');
         addBotMessage("Excellent choice 🚀\n\nPlease select your estimated project budget:", BUDGETS);
         break;
+
       case 'ASK_BUDGET':
         setLeadData(prev => ({ ...prev, budget: input }));
         setStep('ASK_TIMELINE');
         addBotMessage("Great 👍\n\nPlease select your expected project timeline:", TIMELINES);
         break;
+
       case 'ASK_TIMELINE':
         const finalData = { ...leadData, timeline: input };
         setLeadData(finalData);
@@ -175,6 +186,7 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
           "Budget": data.budget,
           "Timeline": data.timeline,
           _subject: `🟢 WhatsApp Lead - ${data.name}`,
+
           _template: 'table',
           _captcha: 'false'
         })
@@ -189,6 +201,7 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
       e.preventDefault();
       e.stopPropagation();
     }
+    
     const message = `🚀 *New Project Inquiry - Klanvision*\n\n` +
       `👤 *Name:* ${leadData.name}\n` +
       `📧 *Email:* ${leadData.email}\n` +
@@ -197,19 +210,24 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
       `💰 *Budget:* ${leadData.budget}\n` +
       `⏳ *Timeline:* ${leadData.timeline}\n\n` +
       `Hello Klanvision Team 👋, I would like to discuss my project requirements. Please assist me with the next steps. 😊`;
+    
     const whatsappUrl = `https://wa.me/919380202408?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
+
+
   return (
     <>
+      {/* Floating Button (Right Bottom - Above Chatbot) */}
       <AnimatePresence>
         {isVisible && (
-          <div className="whatsapp-toggle">
+          <div style={{ position: 'fixed', bottom: '115px', right: '24px', zIndex: 10000 }}>
             <motion.button
               initial={{ scale: 0, opacity: 0 }}
               animate={{ 
-                scale: 1, opacity: 1,
+                scale: 1,
+                opacity: 1,
                 rotate: [0, -10, 10, -10, 10, 0]
               }}
               exit={{ scale: 0, opacity: 0 }}
@@ -232,343 +250,230 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }: Whats
               {!isOpen && (
                 <div style={{ position: 'absolute', top: 2, right: 2, width: 14, height: 14, background: '#EF4444', borderRadius: '50%', border: '2px solid white' }} />
               )}
+              
+              {/* Notification Pulse */}
+              {!isOpen && (
+                <motion.div
+                  animate={{ scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  style={{ position: 'absolute', inset: -6, borderRadius: '50%', border: '2px solid #25D366' }}
+                />
+              )}
             </motion.button>
           </div>
         )}
       </AnimatePresence>
 
+      {/* Chat Window Popup */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={onToggle}
-              className="chat-backdrop"
-            />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 20, transformOrigin: 'bottom right' }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="whatsapp-chat-popup"
+            style={{
+              position: 'fixed',
+              bottom: '190px',
+              right: '24px',
+              width: '380px',
+              maxWidth: 'calc(100vw - 48px)',
+              height: '650px',
+              maxHeight: 'calc(100vh - 250px)',
+              overflow: 'hidden',
+              display: 'flex', flexDirection: 'column',
+              fontFamily: "'Inter', sans-serif",
+              background: 'var(--bg-surface)',
+              borderRadius: '28px',
+              border: '1px solid var(--border-main)',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+              zIndex: 10001,
+              backdropFilter: 'blur(10px)'
+            }}
+          >
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="whatsapp-chat-popup"
-            >
-              {/* Header */}
-              <div className="chat-header" style={{ background: 'linear-gradient(135deg, #128C7E, #25D366)' }}>
-                <div className="header-info">
-                  <div className="brand-logo">
-                    <img src="/logo.png" alt="Klanvision" />
-                  </div>
-                  <div>
-                    <div className="header-title">Klanvision Support</div>
-                    <div className="header-status">
-                      <span className="status-dot" /> Online | Typically instant
-                    </div>
-                  </div>
+            {/* Banner Header */}
+            <div style={{ 
+              padding: '24px', 
+              background: 'linear-gradient(135deg, #128C7E, #25D366)', 
+              color: 'white', 
+              display: 'flex', 
+              flexDirection: 'column',
+              gap: 12,
+              position: 'relative'
+            }}>
+              <button onClick={onToggle} style={{ position: 'absolute', top: 12, right: 12, background: 'none', border: 'none', color: 'white', cursor: 'pointer', opacity: 0.7, padding: 8 }}><X size={22} /></button>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <img src="/logo.png" alt="Klanvision" style={{ width: '80%', height: 'auto' }} />
                 </div>
-                <button onClick={onToggle} className="close-btn"><X size={20} /></button>
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: 17, letterSpacing: '-0.3px' }}>Welcome to Klanvision</div>
+                  <div style={{ fontSize: 11, opacity: 0.9 }}>We Build Future Digital Solutions</div>
+                </div>
               </div>
+              <div style={{ fontSize: 10, background: 'rgba(255,255,255,0.2)', padding: '4px 10px', borderRadius: 20, width: 'fit-content', alignSelf: 'flex-start' }}>
+                Online | Typically replies instantly
+              </div>
+            </div>
 
-              {/* Messages Area */}
-              <div ref={scrollRef} className="messages-area">
-                {messages.map((msg) => (
-                  <div key={msg.id} className={`message-wrapper ${msg.sender}`}>
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={`message-bubble ${msg.sender}`}
-                    >
-                      {msg.text}
-                      <div className="message-time">
-                        {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </div>
-                    </motion.div>
-                    
-                    {msg.options && step !== 'COMPLETE' && (
-                      <div className="options-container">
-                        {msg.options.map((opt) => (
-                          <motion.button
-                            key={opt}
-                            whileHover={{ scale: 1.02, background: '#128C7E', color: 'white' }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleSend(opt)}
-                            className="option-btn"
-                          >
-                            {opt}
-                          </motion.button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-                
-                {isTyping && (
-                  <div className="typing-indicator">
-                    <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0 }} />
-                    <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} />
-                    <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} />
-                  </div>
-                )}
-
-                {step === 'COMPLETE' && (
-                  <motion.button
+            {/* Messages Area */}
+            <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', gap: 14, background: 'var(--bg-surface-soft)', backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")', backgroundSize: 'contain' }}>
+              {messages.map((msg) => (
+                <div key={msg.id} style={{ display: 'flex', flexDirection: 'column', alignItems: msg.sender === 'user' ? 'flex-end' : 'flex-start', gap: 6 }}>
+                  <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    onClick={(e) => openWhatsApp(e)}
-                    className="whatsapp-redirect-btn"
+                    style={{
+                      maxWidth: '85%',
+                      padding: '12px 18px',
+                      borderRadius: msg.sender === 'user' ? '22px 22px 4px 22px' : '22px 22px 22px 4px',
+                      background: msg.sender === 'user' ? '#DCF8C6' : 'white',
+                      color: '#303030',
+                      fontSize: '14px',
+                      lineHeight: 1.5,
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                      whiteSpace: 'pre-wrap',
+                      position: 'relative'
+                    }}
                   >
-                    <FaWhatsapp size={20} /> CHAT ON WHATSAPP
-                  </motion.button>
-                )}
-              </div>
-
-              {/* Input Area */}
-              {step !== 'COMPLETE' && (
-                <div className="input-area">
-                  <div className="input-container">
-                    <input
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                      placeholder="Type a message..."
-                    />
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => handleSend()}
-                      className="send-btn"
-                      style={{ background: '#128C7E' }}
-                    >
-                      <Send size={18} />
-                    </motion.button>
-                  </div>
+                    {msg.text}
+                    <div style={{ fontSize: 9, color: '#9CA3AF', textAlign: 'right', marginTop: 4 }}>
+                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                  </motion.div>
+                  
+                  {/* Options */}
+                  {msg.options && step !== 'COMPLETE' && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 6 }}>
+                      {msg.options.map((opt) => (
+                        <motion.button
+                          key={opt}
+                          whileHover={{ scale: 1.05, background: '#128C7E', color: 'white', boxShadow: '0 5px 15px rgba(18, 140, 126, 0.3)' }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleSend(opt)}
+                          style={{
+                            padding: '8px 18px',
+                            borderRadius: '50px',
+                            border: '1px solid #128C7E',
+                            background: 'white',
+                            color: '#128C7E',
+                            fontSize: '12px',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          {opt}
+                        </motion.button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+              
+              {isTyping && (
+                <div style={{ alignSelf: 'flex-start', display: 'flex', gap: 4, padding: '12px 20px', background: 'white', borderRadius: 20, border: '1px solid #E5E7EB' }}>
+                    <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0 }} style={{ width: 6, height: 6, background: '#9CA3AF', borderRadius: '50%' }} />
+                    <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} style={{ width: 6, height: 6, background: '#9CA3AF', borderRadius: '50%' }} />
+                    <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} style={{ width: 6, height: 6, background: '#9CA3AF', borderRadius: '50%' }} />
                 </div>
               )}
-            </motion.div>
-          </>
+
+              {step === 'COMPLETE' && (
+                <motion.button
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(37, 211, 102, 0.4)' }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={(e) => openWhatsApp(e)}
+
+                  style={{
+                    marginTop: 10,
+                    width: '100%',
+                    padding: '16px',
+                    borderRadius: '16px',
+                    background: '#25D366',
+                    color: 'white',
+                    border: 'none',
+                    fontWeight: 800,
+                    fontSize: 15,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 12,
+                    cursor: 'pointer',
+                    boxShadow: '0 5px 15px rgba(37, 211, 102, 0.3)'
+                  }}
+                >
+                  <FaWhatsapp size={22} /> CHAT ON WHATSAPP
+                </motion.button>
+              )}
+            </div>
+
+            {/* Input Area */}
+            {step !== 'COMPLETE' && (
+              <div style={{ padding: '24px', borderTop: '1px solid var(--border-main)', background: 'var(--bg-surface)' }}>
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <input
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                    placeholder="Message Klanvision..."
+                    style={{ 
+                      flex: 1, 
+                      padding: '14px 22px', 
+                      borderRadius: 50, 
+                      border: '1.5px solid var(--border-main)', 
+                      outline: 'none', 
+                      fontSize: '14px', 
+                      background: 'var(--bg-surface-soft)', 
+                      color: 'var(--text-main)',
+                      transition: '0.3s'
+                    }}
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.1, boxShadow: '0 8px 20px rgba(18, 140, 126, 0.3)' }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => handleSend()}
+                    style={{ 
+                      width: 48, height: 48, borderRadius: '50%', 
+                      background: 'linear-gradient(135deg, #25D366, #128C7E)', color: 'white', 
+                      border: 'none', cursor: 'pointer', 
+                      display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}
+                  >
+                    <Send size={20} />
+                  </motion.button>
+                </div>
+              </div>
+            )}
+          </motion.div>
         )}
       </AnimatePresence>
 
       <style>{`
-        .whatsapp-toggle {
-          position: fixed;
-          bottom: 100px;
-          right: 24px;
-          z-index: 10000;
-        }
-        .chat-backdrop {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.4);
-          backdrop-filter: blur(4px);
-          z-index: 10000;
-          display: none;
-        }
-        .whatsapp-chat-popup {
-          position: fixed;
-          bottom: 180px;
-          right: 24px;
-          width: 360px;
-          height: 600px;
-          max-height: calc(100vh - 240px);
-          background: var(--bg-surface);
-          border-radius: 24px;
-          border: 1px solid var(--border-main);
-          boxShadow: 0 20px 50px rgba(0,0,0,0.3);
-          z-index: 10001;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          font-family: 'Inter', sans-serif;
-        }
-        .chat-header {
-          padding: 16px 20px;
-          color: white;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .header-info {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        .brand-logo {
-          width: 38px;
-          height: 38px;
-          background: white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          padding: 4px;
-        }
-        .brand-logo img { width: 80%; height: auto; }
-        .header-title {
-          font-weight: 800;
-          font-size: 15px;
-        }
-        .header-status {
-          font-size: 10px;
-          opacity: 0.9;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-        .status-dot {
-          width: 6px;
-          height: 6px;
-          background: #10B981;
-          border-radius: 50%;
-        }
-        .close-btn {
-          background: none;
-          border: none;
-          color: white;
-          cursor: pointer;
-          opacity: 0.7;
-          padding: 4px;
-        }
-        .messages-area {
-          flex: 1;
-          overflow-y: auto;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          background: var(--bg-surface-soft);
-          background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
-          background-size: contain;
-        }
-        .message-wrapper {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .message-wrapper.user { align-items: flex-end; }
-        .message-wrapper.bot { align-items: flex-start; }
-        .message-bubble {
-          max-width: 85%;
-          padding: 10px 14px;
-          font-size: 13.5px;
-          line-height: 1.5;
-          box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-          white-space: pre-wrap;
-          position: relative;
-        }
-        .message-bubble.user {
-          background: #DCF8C6;
-          color: #303030;
-          border-radius: 15px 15px 0 15px;
-        }
-        .message-bubble.bot {
-          background: white;
-          color: #303030;
-          border-radius: 15px 15px 15px 0;
-        }
-        .message-time {
-          font-size: 9px;
-          color: #9CA3AF;
-          text-align: right;
-          margin-top: 4px;
-        }
-        .options-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-          margin-top: 4px;
-        }
-        .option-btn {
-          padding: 6px 12px;
-          border-radius: 50px;
-          border: 1px solid #128C7E;
-          background: white;
-          color: #128C7E;
-          font-size: 11px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: 0.2s;
-        }
-        .typing-indicator {
-          display: flex;
-          gap: 4px;
-          padding: 8px 12px;
-          background: white;
-          border-radius: 15px;
-          border: 1px solid #E5E7EB;
-          width: fit-content;
-        }
-        .typing-indicator span {
-          width: 4px;
-          height: 4px;
-          background: #9CA3AF;
-          border-radius: 50%;
-        }
-        .whatsapp-redirect-btn {
-          margin-top: 10px;
-          width: 100%;
-          padding: 14px;
-          border-radius: 12px;
-          background: #25D366;
-          color: white;
-          border: none;
-          font-weight: 700;
-          font-size: 14px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          cursor: pointer;
-          box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
-        }
-        .input-area {
-          padding: 15px 20px;
-          background: var(--bg-surface);
-          border-top: 1px solid var(--border-main);
-        }
-        .input-container {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-        }
-        .input-container input {
-          flex: 1;
-          padding: 10px 16px;
-          border-radius: 50px;
-          border: 1.5px solid var(--border-main);
-          outline: none;
-          font-size: 13.5px;
-          background: var(--bg-surface-soft);
-          color: var(--text-main);
-        }
-        .send-btn {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          border: none;
-          color: white;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        @media (max-width: 480px) {
-          .chat-backdrop { display: block; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        @media (max-width: 768px) {
           .whatsapp-chat-popup {
-            inset: 0 !important;
-            width: 100% !important;
-            height: 100dvh !important;
-            max-height: 100dvh !important;
-            border-radius: 0 !important;
-            border: none !important;
+            width: 90vw !important;
+            height: 70vh !important;
+            right: 5vw !important;
+            bottom: 190px !important;
           }
-          .whatsapp-toggle {
-            bottom: 16px;
-            right: 16px;
+        }
+        @media (max-width: 480px) {
+          .whatsapp-chat-popup {
+            bottom: 0 !important;
+            right: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+            border-radius: 0 !important;
           }
         }
       `}</style>
