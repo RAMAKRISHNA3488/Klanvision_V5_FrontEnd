@@ -250,7 +250,7 @@ export default function ServicesSection() {
         </motion.div>
 
         {/* ── Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((s, i) => (
             <motion.div
               key={s.title}
@@ -363,6 +363,32 @@ export default function ServicesSection() {
           ))}
         </div>
       </div>
+
+      {/* ── Responsive Refinements ──────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1024px) {
+          #services { padding: 64px 0 !important; }
+          #services .container { padding: 0 24px; }
+        }
+        @media (max-width: 768px) {
+          #services { padding: 56px 0 !important; }
+          #services h2 { font-size: 1.6rem !important; }
+          #services .grid { gap: 16px !important; }
+          #services .card h3 { font-size: 13px !important; }
+          #services .card p { font-size: 11px !important; }
+        }
+        @media (max-width: 480px) {
+          #services { padding: 48px 0 !important; }
+          #services h2 { font-size: 1.4rem !important; }
+          #services .grid { gap: 10px !important; }
+          #services .card { padding: 20px 12px !important; gap: 8px !important; }
+          #services .card h3 { font-size: 12px !important; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; height: 32px; }
+          #services .card p { display: none !important; } /* Hide desc on very small mobile to maintain 2-col layout */
+          #services .read-more-wrap { justify-content: center; margin-top: 12px !important; gap: 6px !important; }
+          #services .read-more-wrap span { display: block !important; font-size: 10px !important; } 
+          #services .read-more-wrap div { width: 24px !important; height: 24px !important; } /* Smaller arrow circle */
+        }
+      `}</style>
 
       {/* ── Service Detail Modal */}
       <AnimatePresence>

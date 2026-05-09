@@ -339,23 +339,38 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
             </div>
           </div>
 
+          {/* Mobile Right Actions – theme toggle + hamburger */}
+          <div style={{ display: 'none', alignItems: 'center', gap: 8, paddingRight: 16 }} className="mobile-only-flex">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={toggleTheme}
+              style={{
+                width: 38, height: 38, borderRadius: 10, border: '1px solid var(--border-main)',
+                background: 'var(--bg-surface-soft)', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: theme === 'light' ? '#F59E0B' : '#6366F1',
+              }}
+            >
+              {theme === 'light' ? <Sun size={18} strokeWidth={2.5} /> : <Moon size={18} strokeWidth={2.5} />}
+            </motion.button>
 
-          {/* Hamburger – shown only on mobile (≤1024px) */}
-          <button
-            id="hamburger-btn"
-            onClick={() => setMobileOpen(o => !o)}
-            style={{
-              width: 38, height: 38, borderRadius: 10, border: 'none',
-              background: '#F5F6FA', cursor: 'pointer',
-              display: 'none', alignItems: 'center', justifyContent: 'center',
-              marginRight: 16,
-            }}
-          >
-            {mobileOpen
-              ? <svg width="20" height="20" fill="none" stroke="#1F2937" strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-              : <svg width="20" height="20" fill="none" stroke="#1F2937" strokeWidth="2" viewBox="0 0 24 24"><line x1="3" y1="8" x2="21" y2="8" /><line x1="3" y1="16" x2="21" y2="16" /></svg>
-            }
-          </button>
+            <button
+              id="hamburger-btn"
+              onClick={() => setMobileOpen(o => !o)}
+              style={{
+                width: 38, height: 38, borderRadius: 10, border: 'none',
+                background: 'var(--bg-surface-soft)', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--text-main)'
+              }}
+            >
+              {mobileOpen
+                ? <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                : <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="3" y1="8" x2="21" y2="8" /><line x1="3" y1="16" x2="21" y2="16" /></svg>
+              }
+            </button>
+          </div>
         </div>
       </motion.header>
 
@@ -366,7 +381,11 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            style={{ position: 'fixed', top: 110, left: 24, right: 24, zIndex: 998, background: 'white', borderRadius: 24, overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+            style={{ 
+              position: 'fixed', top: 110, left: 24, right: 24, zIndex: 998, 
+              background: 'var(--bg-surface)', borderRadius: 24, overflow: 'hidden', 
+              boxShadow: '0 10px 30px rgba(0,0,0,0.1)', border: '1px solid var(--border-main)' 
+            }}
           >
             <div style={{ padding: '16px' }}>
               {navItems.map((item, i) => (
@@ -382,6 +401,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
                     background: 'transparent', cursor: 'pointer',
                     fontSize: 14, fontWeight: 600,
                     fontFamily: 'sans-serif',
+                    color: 'var(--text-main)'
                   }}
                 >
                   {item.label}
@@ -393,21 +413,70 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
                   )}
                 </motion.button>
               ))}
-              {/* Mobile CTA */}
-              <motion.button
+              {/* Mobile Theme Toggle Row - Entire row clickable */}
+              <motion.div
                 initial={{ x: -16, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: navItems.length * 0.05 }}
-                onClick={() => scrollTo('contact')}
+                onClick={toggleTheme}
+                style={{ 
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '12px 16px', borderRadius: 12, background: 'var(--bg-surface-soft)',
+                  marginTop: 8, border: '1px solid var(--border-main)', cursor: 'pointer'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ color: theme === 'light' ? '#F59E0B' : '#6366F1' }}>
+                    {theme === 'light' ? <Sun size={20} /> : <Moon size={20} />}
+                  </div>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)' }}>
+                    {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+                  </span>
+                </div>
+                {/* Visual toggle switch look */}
+                <div style={{ 
+                  width: 44, height: 24, borderRadius: 20, background: theme === 'light' ? '#e5e7eb' : '#6366f1', 
+                  position: 'relative', transition: 'all 0.3s' 
+                }}>
+                  <motion.div 
+                    animate={{ x: theme === 'light' ? 2 : 22 }}
+                    style={{ 
+                      width: 20, height: 20, borderRadius: '50%', background: 'white', 
+                      position: 'absolute', top: 2, boxShadow: '0 2px 4px rgba(0,0,0,0.2)' 
+                    }} 
+                  />
+                </div>
+              </motion.div>
+
+              {/* Mobile Admin CTA */}
+              <motion.button
+                initial={{ x: -16, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: (navItems.length + 1) * 0.05 }}
+                onClick={() => window.location.href = '/admin'}
                 style={{
                   background: '#FF6B35', color: 'white', border: 'none',
-                  padding: '12px', cursor: 'pointer', width: '100%',
+                  padding: '14px', cursor: 'pointer', width: '100%',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-                  fontSize: 14, fontWeight: 700, fontFamily: 'sans-serif',
+                  fontSize: 13, fontWeight: 900, fontFamily: 'sans-serif',
                   borderRadius: 12, marginTop: 12
                 }}
               >
-                Request for Quote
+                <div style={{ position: 'relative', width: 8, height: 8 }}>
+                  <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#10B981' }} />
+                  <motion.div
+                    animate={{ scale: [1, 2.5], opacity: [0.6, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#10B981' }}
+                  />
+                </div>
+                ADMIN SECURE LOGIN
+                <div style={{
+                  width: 22, height: 22, background: 'white', borderRadius: '50%',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <ShieldCheck size={12} color="#FF6B35" />
+                </div>
               </motion.button>
             </div>
           </motion.div>
@@ -418,7 +487,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
       <style>{`
         @media (max-width: 1024px) {
           .desktop-nav { display: none !important; }
-          #hamburger-btn { display: flex !important; }
+          .mobile-only-flex { display: flex !important; }
         }
       `}</style>
     </>

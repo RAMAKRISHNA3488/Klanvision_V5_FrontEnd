@@ -358,22 +358,21 @@ export default function StrategicServices() {
           <div className="accent-bar" />
           <h2
             className="font-bold tracking-tight text-[var(--text-main)]"
-
             style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(1.4rem, 2.8vw, 2.8rem)',
+              fontSize: 'clamp(1rem, 2.8vw, 2.8rem)',
               fontWeight: 700,
               lineHeight: 1.15,
               letterSpacing: '-0.02em',
             }}
           >
-            Strategic Application Services<br />
-            <span className="gradient-text">for Seamless Online Success</span>
+            <span style={{ whiteSpace: 'nowrap' }}>Strategic Application Services</span><br />
+            <span className="gradient-text" style={{ whiteSpace: 'nowrap' }}>for Seamless Online Success</span>
           </h2>
         </motion.div>
 
         {/* ── Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
           {services.map((s, i) => (
             <motion.div
               key={s.label}
@@ -433,6 +432,27 @@ export default function StrategicServices() {
           ))}
         </div>
       </div>
+
+      {/* ── Responsive Refinements ──────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1024px) {
+          #strategic-services { padding: 64px 0 !important; }
+          #strategic-services .container { padding: 0 24px; }
+        }
+        @media (max-width: 768px) {
+          #strategic-services { padding: 56px 0 !important; }
+          #strategic-services h2 { font-size: 1.6rem !important; }
+          #strategic-services .grid { gap: 16px !important; }
+        }
+        @media (max-width: 480px) {
+          #strategic-services { padding: 48px 0 !important; }
+          #strategic-services h2 { font-size: 1.4rem !important; }
+          #strategic-services .grid { gap: 10px !important; } /* Tighter gap for 2-col mobile */
+          #strategic-services .card { padding: 16px 12px !important; gap: 8px !important; }
+          #strategic-services .card span:first-of-type { font-size: 12px !important; } /* Smaller label */
+          #strategic-services .card span:last-of-type { font-size: 10px !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* Truncate desc if needed */
+        }
+      `}</style>
     </section>
   );
 }

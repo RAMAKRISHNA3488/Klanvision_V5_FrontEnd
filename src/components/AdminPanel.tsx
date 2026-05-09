@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, FileText, MessageSquare,
   Settings, LogOut, Search, Bell, Plus,
-  CheckCircle2, Clock, Calendar, Mail,
+  TrendingUp, CheckCircle2, Clock, Calendar, Mail,
   ShieldCheck, Filter, Edit2, Trash2, UserPlus,
   LayoutPanelLeft, Activity, Zap, Star, Rocket, Globe,
   Shield, Check, X, Lock, Send, Paperclip, CornerUpLeft, CheckCheck, Eye, EyeOff, Upload
@@ -244,7 +244,7 @@ export default function AdminPanel() {
       email: 'group@klanvision.com'
     };
     setChatGroups(prev => [...prev, newGroup]);
-    addActivity('System', 'Group Created', 'system', 'success', `Created group ${name}`);
+    addActivity('System', 'Group Created', 'user', 'success', `Created group ${name}`);
   };
 
   const [blogs, setBlogs] = useState<Blog[]>([
@@ -463,7 +463,7 @@ export default function AdminPanel() {
       }
     } else {
       setLoginError('Invalid security credentials provided.');
-      addActivity('System', 'Failed Login', 'security', 'warning', `Invalid attempt for ${loginForm.email}`);
+      addActivity('System', 'Failed Login', 'security', 'error', `Invalid attempt for ${loginForm.email}`);
     }
   };
 
@@ -1002,7 +1002,7 @@ export default function AdminPanel() {
             setBlogCategoryFilter={setBlogCategoryFilter}
           />
           <AnimatePresence mode="wait">
-            {activeTab === 'dashboard' && <DashboardView projects={projects} users={users} blogs={blogs} activities={activities} setActiveTab={setActiveTab} />}
+            {activeTab === 'dashboard' && <DashboardView projects={projects} users={users} blogs={blogs} activities={activities} />}
             {activeTab === 'users' && (
               <UsersView
                 users={users}
@@ -1087,7 +1087,6 @@ export default function AdminPanel() {
                 maintenanceMode={maintenanceMode} setMaintenanceMode={setMaintenanceMode}
                 platformLogo={platformLogo} setPlatformLogo={setPlatformLogo}
                 companyName={companyName} setCompanyName={setCompanyName}
-                addActivity={addActivity}
               />
             )}
             {activeTab === 'activity' && <ActivityView activities={activities} />}
@@ -1549,7 +1548,7 @@ function ProjectForm({ initialData, teamMembers, onSave }: { initialData: Projec
 }
 
 
-function ProjectsView({ projects, onAddClick, onEditClick, searchQuery, statusFilter }: any) {
+function ProjectsView({ projects, onAddClick, onEditClick, onDeleteClick, searchQuery, statusFilter }: any) {
   const filteredProjects = projects.filter((p: any) => {
     const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.client.toLowerCase().includes(searchQuery.toLowerCase());
@@ -1638,7 +1637,7 @@ function ProjectsView({ projects, onAddClick, onEditClick, searchQuery, statusFi
   );
 }
 
-function BlogsView({ blogs, onAddClick, onEditClick, searchQuery, categoryFilter }: any) {
+function BlogsView({ blogs, onAddClick, onEditClick, onDeleteClick, searchQuery, categoryFilter }: any) {
   const filteredBlogs = blogs.filter((b: any) => {
     const matchesSearch = b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       b.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -2323,8 +2322,7 @@ function SettingsView({
   twoFactor, setTwoFactor,
   maintenanceMode, setMaintenanceMode,
   platformLogo, setPlatformLogo,
-  companyName, setCompanyName,
-  addActivity
+  companyName, setCompanyName
 }: any) {
   const [activeSection, setActiveSection] = useState('Interface');
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
@@ -2772,7 +2770,7 @@ function ActivityView({ activities }: { activities: ActivityLog[] }) {
   );
 }
 
-function DashboardView({ projects, users, activities, setActiveTab }: any) {
+function DashboardView({ projects, users, activities }: any) {
   const deliveredCount = projects.filter((p: any) => p.status === 'Delivered').length;
   const inProgressCount = projects.filter((p: any) => p.status === 'In Progress' || p.status === 'Active').length;
   const upcomingCount = projects.filter((p: any) => p.status === 'Planning' || p.status === 'Upcoming').length;

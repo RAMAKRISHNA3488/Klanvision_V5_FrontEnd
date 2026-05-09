@@ -41,6 +41,7 @@ import MobileAppPage from './components/MobileAppPage';
 import CloudServicesPage from './components/CloudServicesPage';
 import UpgradeMigrationPage from './components/UpgradeMigrationPage';
 import APIIntegrationPage from './components/APIIntegrationPage';
+import { MessageCircle } from 'lucide-react';
 
 // ── Loader Component ─────────────────────────────────────────
 // Full-screen branded splash screen displayed for 2.4 seconds
@@ -191,8 +192,8 @@ function Loader() {
       {/* Visionary Branding Section */}
       <div style={{ textAlign: 'center', zIndex: 1 }}>
         <motion.div
-          initial={{ opacity: 0, letterSpacing: '10px' }}
-          animate={{ opacity: 1, letterSpacing: '6px' }}
+          initial={{ opacity: 0, tracking: '10px' }}
+          animate={{ opacity: 1, tracking: '6px' }}
           transition={{ duration: 1 }}
         >
           <h1 style={{ 

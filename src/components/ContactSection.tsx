@@ -410,7 +410,7 @@ export default function ContactSection() {
         </div>
       </div>
 
-      {/* Keyframe animations */}
+      {/* Keyframe and Responsive animations */}
       <style>{`
         @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes pulse-slow { 
@@ -418,6 +418,26 @@ export default function ContactSection() {
           50% { transform: scale(1.4); opacity: 0.6; } 
         }
         .pulse-slow { animation: pulse-slow 2s infinite ease-in-out; }
+
+        @media (max-width: 1024px) {
+          #contact { padding: 64px 0 !important; }
+          #contact .container { padding: 0 24px; }
+        }
+        @media (max-width: 768px) {
+          #contact { padding: 56px 0 !important; }
+          #contact h2 { font-size: 1.6rem !important; }
+          #contact .grid { gap: 32px !important; }
+        }
+        @media (max-width: 480px) {
+          #contact { padding: 48px 0 !important; }
+          #contact h2 { font-size: 1.4rem !important; }
+          #contact .card { padding: 24px 20px !important; border-radius: 16px !important; }
+          #contact h3 { font-size: 16px !important; }
+          #contact p { font-size: 13px !important; }
+          #contact .btn-primary { padding: 14px !important; font-size: 14px !important; }
+          #contact .form-input { font-size: 14px !important; padding: 10px 10px 10px 40px !important; }
+          #contact textarea.form-input { padding-top: 14px !important; }
+        }
       `}</style>
     </section>
   );

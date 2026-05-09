@@ -143,7 +143,7 @@ export default function AboutSection() {
             </div>
 
             {/* Milestone tiles – float over bottom of image in a 3-column grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginTop: -36, padding: '0 16px', position: 'relative', zIndex: 2 }}>
+            <div className="milestone-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginTop: -36, padding: '0 16px', position: 'relative', zIndex: 2 }}>
               {[
                 { icon: SvgCalendar3D, val: '2025',     lbl: 'Founded'  },
                 { icon: SvgLocation3D, val: 'Anantapur', lbl: 'HQ, AP'  },
@@ -155,7 +155,7 @@ export default function AboutSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 + i * 0.1 }}
-                  className="glass"
+                  className="glass milestone-tile"
                   style={{ 
                     borderRadius: 16, 
                     padding: '14px 10px', 
@@ -170,10 +170,9 @@ export default function AboutSection() {
                   }}
                 >
                   <div style={{ marginBottom: 4 }}><m.icon /></div>
-                  <div style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: 16, color: 'var(--text-main)' }}>{m.val}</div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: 11, marginTop: 2 }}>{m.lbl}</div>
+                  <h4 style={{ margin: 0, fontFamily: 'sans-serif', fontWeight: 800, fontSize: 16, color: 'var(--text-main)' }}>{m.val}</h4>
+                  <span style={{ color: 'var(--text-muted)', fontSize: 11, marginTop: 2 }}>{m.lbl}</span>
                 </motion.div>
-
               ))}
             </div>
           </motion.div>
@@ -247,6 +246,31 @@ export default function AboutSection() {
         </div>
       </div>
 
+      {/* ── Responsive Refinements ──────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1024px) {
+          #about { padding: 64px 0 !important; }
+          #about .container { padding: 0 24px; }
+        }
+        @media (max-width: 768px) {
+          #about { padding: 56px 0 !important; }
+          #about h2 { font-size: 1.6rem !important; }
+          .milestone-grid { gap: 8px !important; margin-top: -24px !important; }
+          .milestone-tile { padding: 12px 6px !important; border-radius: 12px !important; }
+          .milestone-tile h4 { font-size: 14px !important; }
+          .milestone-tile span { font-size: 9px !important; }
+        }
+        @media (max-width: 480px) {
+          #about { padding: 48px 0 !important; }
+          #about h2 { font-size: 1.4rem !important; }
+          .milestone-grid { gap: 6px !important; margin-top: -20px !important; }
+          .milestone-tile { padding: 10px 4px !important; }
+          .milestone-tile h4 { font-size: 11px !important; }
+          .milestone-tile span { font-size: 8px !important; }
+          #about p { font-size: 14px !important; line-height: 1.6 !important; }
+          #about ul li { fontSize: 13px !important; }
+        }
+      `}</style>
     </section>
   );
 }

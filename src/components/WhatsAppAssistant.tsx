@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send } from 'lucide-react';
+import { X, Send, User, CheckCircle2, MessageCircle, Phone, Mail, Calendar, Briefcase, IndianRupee, Target } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 
 // ── Configuration ──

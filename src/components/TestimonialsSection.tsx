@@ -102,7 +102,20 @@ export default function TestimonialsSection() {
 
   // cardWidth = (containerWidth - (VISIBLE-1)*GAP) / VISIBLE
   // stepPx    = cardWidth + GAP  =  (containerWidth + GAP) / VISIBLE
-  const stepPx = containerWidth > 0 ? (containerWidth + GAP) / VISIBLE : 0;
+  const [visibleCards, setVisibleCards] = useState(3);
+  
+  useEffect(() => {
+    const updateVisible = () => {
+      if (window.innerWidth <= 480) setVisibleCards(1);
+      else if (window.innerWidth <= 1024) setVisibleCards(2);
+      else setVisibleCards(3);
+    };
+    updateVisible();
+    window.addEventListener('resize', updateVisible);
+    return () => window.removeEventListener('resize', updateVisible);
+  }, []);
+
+  const stepPx = containerWidth > 0 ? (containerWidth + GAP) / visibleCards : 0;
   const translateX = -activeIndex * stepPx;
 
   // Auto-advance: move forward by 1 every 4 s
@@ -193,13 +206,13 @@ export default function TestimonialsSection() {
               display: 'flex',
               gap: GAP,
               // track is wide enough to hold all duplicated cards
-              width: `calc(${track.length / VISIBLE * 100}% + ${track.length / VISIBLE * GAP}px)`,
+              width: `calc(${track.length / visibleCards * 100}% + ${track.length / visibleCards * GAP}px)`,
             }}
             animate={{ x: translateX }}
             transition={animate ? { duration: 0.5, ease: 'easeInOut' } : { duration: 0 }}
           >
             {track.map((t, i) => {
-              const cardWidthStyle = `calc((${containerWidth}px - ${(VISIBLE - 1) * GAP}px) / ${VISIBLE})`;
+              const cardWidthStyle = `calc((${containerWidth}px - ${(visibleCards - 1) * GAP}px) / ${visibleCards})`;
               return (
                 <div
                   key={i}
@@ -231,7 +244,7 @@ export default function TestimonialsSection() {
                   <p style={{
                     color: 'var(--text-main)', fontSize: 15, lineHeight: 1.75, marginBottom: 24,
                     fontStyle: 'italic', fontFamily: "'Roboto','Poppins',sans-serif",
-                  }}>
+                  }} className="testimonial-text">
                     &ldquo;{t.text}&rdquo;
                   </p>
 
@@ -246,7 +259,7 @@ export default function TestimonialsSection() {
                       background: 'linear-gradient(135deg, #4F46E5, #7C3AED)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0, color: 'white',
-                    }}>
+                    }} className="author-icon">
                       <t.icon size={22} />
                     </div>
                     <div>
@@ -291,6 +304,7 @@ export default function TestimonialsSection() {
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
           style={{ display: 'flex', justifyContent: 'center', gap: 32, marginTop: 56, flexWrap: 'wrap' }}
+          className="trust-badges"
         >
           {[
             { icon: Medal, text: 'ISO Certified Quality' },
@@ -304,7 +318,7 @@ export default function TestimonialsSection() {
               padding: '10px 22px', fontSize: 14, fontWeight: 600, color: 'var(--text-main)',
               fontFamily: "'Poppins',sans-serif",
               border: '1px solid var(--border-main)'
-            }}>
+            }} className="badge-item">
 
               <span style={{ display: 'flex', alignItems: 'center', color: '#4F46E5' }}>
                 <b.icon size={18} />
@@ -315,6 +329,32 @@ export default function TestimonialsSection() {
         </motion.div>
 
       </div>
+
+      {/* ── Responsive Refinements ──────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1024px) {
+          #testimonials { padding: 64px 0 !important; }
+          #testimonials .container { padding: 0 24px; }
+          .trust-badges { gap: 16px !important; }
+        }
+        @media (max-width: 768px) {
+          #testimonials { padding: 56px 0 !important; }
+          #testimonials h2 { font-size: 1.6rem !important; }
+          .testimonial-card { padding: 24px !important; }
+          .testimonial-text { fontSize: 14px !important; }
+          .badge-item { padding: 8px 16px !important; fontSize: 12px !important; }
+        }
+        @media (max-width: 480px) {
+          #testimonials { padding: 48px 0 !important; }
+          #testimonials h2 { font-size: 1.4rem !important; }
+          .testimonial-card { padding: 20px !important; border-radius: 16px !important; }
+          .testimonial-text { fontSize: 13px !important; line-height: 1.6 !important; }
+          .author-icon { width: 40px !important; height: 40px !important; }
+          .author-icon svg { width: 18px !important; height: 18px !important; }
+          .trust-badges { margin-top: 32px !important; gap: 8px !important; }
+          .badge-item { width: 100% !important; justify-content: center; }
+        }
+      `}</style>
     </section>
   );
 }

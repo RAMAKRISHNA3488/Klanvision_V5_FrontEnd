@@ -151,6 +151,7 @@ export default function Hero() {
 
           {/* ── RIGHT COLUMN: Hero Image with Decorative Rings ───── */}
           <motion.div initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }}
+            className="hero-image-container"
             style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
 
             {/* Pulse rings – three concentric fading circles that animate outward */}
@@ -230,20 +231,108 @@ export default function Hero() {
       </div>
 
       {/* ── Responsive Media Queries ────────────────────────────────
-          Tablet (≤1024px): stack columns, center-align content.
-          Mobile (≤768px): ensure scroll indicator is always visible. */}
+          Refined breakpoints for Laptop, Tablet, and Mobile.
+          Ensures the design is fluid and premium on all screens. */}
       <style>{`
+        /* Tablet & Small Laptops (≤1024px) */
         @media (max-width: 1024px) {
-          .hero-grid { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center !important; }
-          .hero-grid > div { align-items: center !important; }
-          .hero-grid > div:last-child { margin-top: 0 !important; }
-          .hero-features { margin: 0 auto; text-align: left; align-items: flex-start; }
-          .hero-ctas { justify-content: center !important; }
-          .hero-stats { justify-content: center !important; }
+          #hero { 
+            height: auto !important; 
+            min-height: 100vh !important; 
+            padding-top: 120px !important; 
+            padding-bottom: 100px !important; 
+          }
+          .hero-grid { 
+            grid-template-columns: 1fr !important; 
+            gap: 48px !important; 
+            text-align: center !important; 
+          }
+          .hero-grid > div { 
+            align-items: center !important; 
+            justify-content: center !important;
+          }
+          .hero-image-container {
+            width: 100% !important;
+            padding: 40px 0 !important;
+          }
+          .hero-description { 
+            margin: 0 auto !important; 
+          }
+          .hero-features { 
+            margin: 0 auto !important; 
+            width: fit-content !important;
+          }
+          .hero-ctas { 
+            justify-content: center !important; 
+          }
+          .hero-stats { 
+            justify-content: center !important; 
+          }
         }
+
+        /* Mobile (≤768px) */
         @media (max-width: 768px) {
-          .scroll-indicator { display: flex !important; }
-          #hero { height: auto !important; min-height: 100vh !important; padding-bottom: 100px !important; }
+          #hero { 
+            padding-top: 100px !important; 
+          }
+          .hero-grid { 
+            gap: 32px !important; 
+          }
+          .hero-rings { 
+            display: none !important; /* Hide rings on mobile for cleaner look */
+          }
+          .hero-image-wrap { 
+            width: 180px !important; 
+            height: 180px !important; 
+          }
+          .hero-float-card { 
+            padding: 8px 12px !important;
+            min-width: 110px !important;
+            z-index: 10 !important;
+          }
+          .float-card-title { font-size: 11px !important; }
+          .float-card-sub { font-size: 9px !important; }
+          
+          /* Positioning adjustment for mobile - more conservative to avoid clipping */
+          .hero-float-card:nth-of-type(1) { top: -5px !important; right: -15px !important; }
+          .hero-float-card:nth-of-type(2) { bottom: -5px !important; left: -15px !important; }
+
+          .hero-stat-number {
+            font-size: 1.4rem !important;
+          }
+          .hero-stat-label {
+            font-size: 10px !important;
+          }
+        }
+
+        /* Very Small Devices (≤480px) */
+        @media (max-width: 480px) {
+          #hero { 
+            padding-top: 90px !important; 
+          }
+          .hero-ctas {
+            flex-direction: column !important;
+            width: 100% !important;
+            max-width: 300px !important;
+            margin: 0 auto !important;
+          }
+          .hero-ctas button {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+          .hero-stats {
+            gap: 12px !important;
+          }
+          .hero-image-wrap {
+            width: 150px !important;
+            height: 150px !important;
+          }
+          .hero-float-card { 
+            padding: 6px 10px !important;
+            z-index: 10 !important;
+          }
+          .hero-float-card:nth-of-type(1) { top: -10px !important; right: -25px !important; }
+          .hero-float-card:nth-of-type(2) { bottom: -10px !important; left: -25px !important; }
         }
       `}</style>
     </section>

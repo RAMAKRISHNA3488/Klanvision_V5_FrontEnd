@@ -199,7 +199,7 @@ export default function PortfolioSection() {
         </div>
 
         {/* ── Cards Grid */}
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
             {filtered.map((p, i) => {
               const SvgIcon = iconMap[p.title];
@@ -229,11 +229,12 @@ export default function PortfolioSection() {
                     background: `linear-gradient(135deg, ${p.color}15, ${p.color}30)`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     position: 'relative',
-                  }}>
+                  }} className="portfolio-cover">
                     <motion.div
                       animate={{ y: [0, -6, 0] }}
                       transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
                       style={{ filter: 'drop-shadow(0 8px 18px rgba(0,0,0,0.2))' }}
+                      className="portfolio-icon-wrap"
                     >
                       {SvgIcon && <SvgIcon />}
                     </motion.div>
@@ -242,17 +243,17 @@ export default function PortfolioSection() {
                       position: 'absolute', top: 12, right: 12,
                       background: p.color, color: 'white', fontSize: 11, fontWeight: 700,
                       padding: '4px 12px', borderRadius: 50, letterSpacing: 0.5,
-                    }}>
+                    }} className="portfolio-cat-badge">
                       {p.category}
                     </div>
                   </div>
 
                   {/* Card body */}
-                  <div style={{ padding: '24px' }}>
+                  <div style={{ padding: '24px' }} className="portfolio-body">
                     <h3 style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 700, fontSize: 18, marginBottom: 10, color: 'var(--text-main)' }}>{p.title}</h3>
                     <p style={{ color: 'var(--text-muted)', fontSize: 14, lineHeight: 1.65, marginBottom: 16, fontFamily: "'Roboto','Poppins',sans-serif" }}>{p.desc}</p>
 
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }} className="portfolio-tags">
                       {p.tags.map(tag => (
                         <span key={tag} style={{
                           fontSize: 12, fontWeight: 600, padding: '3px 10px', borderRadius: 50,
@@ -269,6 +270,36 @@ export default function PortfolioSection() {
           </AnimatePresence>
         </motion.div>
       </div>
+
+      {/* ── Responsive Refinements ──────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1024px) {
+          #portfolio { padding: 64px 0 !important; }
+          #portfolio .container { padding: 0 24px; }
+        }
+        @media (max-width: 768px) {
+          #portfolio { padding: 56px 0 !important; }
+          #portfolio h2 { font-size: 1.6rem !important; }
+          #portfolio .grid { gap: 16px !important; }
+          .portfolio-cover { height: 140px !important; }
+          .portfolio-body { padding: 16px !important; }
+          .portfolio-body h3 { font-size: 15px !important; }
+          .portfolio-body p { font-size: 11px !important; }
+        }
+        @media (max-width: 480px) {
+          #portfolio { padding: 48px 0 !important; }
+          #portfolio h2 { font-size: 1.4rem !important; }
+          #portfolio .grid { gap: 12px !important; }
+          .portfolio-cover { height: 100px !important; }
+          .portfolio-icon-wrap { transform: scale(0.6) !important; }
+          .portfolio-cat-badge { font-size: 8px !important; padding: 2px 6px !important; top: 6px !important; right: 6px !important; }
+          .portfolio-body { padding: 12px 8px !important; }
+          .portfolio-body h3 { font-size: 11px !important; margin-bottom: 4px !important; font-weight: 700 !important; height: 30px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+          .portfolio-body p { font-size: 9px !important; display: -webkit-box !important; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4 !important; margin-bottom: 8px !important; }
+          .portfolio-tags { display: flex !important; gap: 4px !important; }
+          .portfolio-tags span { font-size: 8px !important; padding: 2px 6px !important; }
+        }
+      `}</style>
     </section>
   );
 }

@@ -212,17 +212,16 @@ export default function BlogSection() {
 
         </motion.div>
 
-        {/* Blog Cards Grid – 1 col mobile, 2 cols sm, 3 cols lg */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Blog Cards Grid – 2 col mobile, 3 cols lg */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedPosts.map((post, i) => (
-            // Each card slides up and fades in with a staggered delay
             <motion.article
               key={post.title}
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              whileHover={{ y: -7 }}         // lift on hover
+              whileHover={{ y: -7 }}
               className="card"
               style={{ 
                 overflow: 'hidden', 
@@ -233,47 +232,42 @@ export default function BlogSection() {
                 transition: 'all 0.3s ease'
               }}
             >
-
-              {/* Cover area – tinted gradient background with 3D icon */}
               <div style={{
                 height: 180, background: `linear-gradient(135deg, ${post.tagColor}08, ${post.tagColor}15)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 position: 'relative', overflow: 'hidden'
-              }}>
-                {/* 3D Icon with slight shadow */}
-                <div style={{ filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.12))' }}>
+              }} className="blog-cover">
+                <div style={{ filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.12))' }} className="blog-icon-wrap">
                    <post.icon />
                 </div>
-                
-                {/* Thin top color accent line matching tag color */}
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: post.tagColor }} />
               </div>
 
-              <div style={{ padding: '24px' }}>
-                {/* Tag pill + publication date row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+              <div style={{ padding: '24px' }} className="blog-body">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }} className="blog-meta-top">
                   <span className="blog-tag" style={{ background: `${post.tagColor}15`, color: post.tagColor }}>
                     {post.tag}
                   </span>
-                  <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>{post.date}</span>
+                  <span style={{ color: 'var(--text-muted)', fontSize: 12 }} className="blog-date">{post.date}</span>
                 </div>
 
-                {/* Article title and excerpt */}
                 <h3 style={{ fontFamily: 'sans-serif', fontWeight: 700, fontSize: 17, marginBottom: 10, lineHeight: 1.3, color: 'var(--text-main)' }}>{post.title}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: 13.5, lineHeight: 1.65, marginBottom: 20 }}>{post.excerpt}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: 13.5, lineHeight: 1.65, marginBottom: 20 }} className="blog-excerpt">{post.excerpt}</p>
 
-                {/* Footer row – author and read time */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 16, borderTop: '1px solid var(--border-main)' }}>
-                  <span style={{ color: 'var(--text-muted)', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}><PenTool size={12} /> {post.author}</span>
-                  <span style={{ color: 'var(--text-muted)', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={12} /> {post.readTime}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 16, borderTop: '1px solid var(--border-main)' }} className="blog-footer">
+                  <span style={{ color: 'var(--text-muted)', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <PenTool size={12} /> <span className="author-name">{post.author}</span>
+                  </span>
+                  <span style={{ color: 'var(--text-muted)', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Clock size={12} /> {post.readTime}
+                  </span>
                 </div>
-
               </div>
             </motion.article>
           ))}
         </div>
 
-        {/* "View All Articles" CTA – centered below the grid */}
+        {/* "View All Articles" CTA */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -296,6 +290,38 @@ export default function BlogSection() {
         </motion.div>
       </div>
 
+      {/* ── Responsive Refinements ──────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1024px) {
+          #blog { padding: 64px 0 !important; }
+          #blog .container { padding: 0 24px; }
+        }
+        @media (max-width: 768px) {
+          #blog { padding: 56px 0 !important; }
+          #blog h2 { font-size: 1.6rem !important; }
+          #blog .grid { gap: 16px !important; }
+          .blog-cover { height: 140px !important; }
+          .blog-body { padding: 16px !important; }
+          .blog-body h3 { font-size: 15px !important; }
+          .blog-excerpt { font-size: 11px !important; }
+        }
+        @media (max-width: 480px) {
+          #blog { padding: 48px 0 !important; }
+          #blog h2 { font-size: 1.4rem !important; }
+          #blog .grid { gap: 12px !important; }
+          .blog-cover { height: 110px !important; }
+          .blog-icon-wrap { transform: scale(0.65) !important; }
+          .blog-body { padding: 12px 8px !important; }
+          .blog-body h3 { font-size: 11px !important; margin-bottom: 6px !important; font-weight: 700 !important; height: 30px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3 !important; }
+          .blog-excerpt { display: -webkit-box !important; font-size: 9px !important; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4 !important; margin-bottom: 12px !important; height: 26px; }
+          .blog-tag { font-size: 8px !important; padding: 2px 6px !important; }
+          .blog-date { font-size: 8px !important; }
+          .blog-footer { padding-top: 10px !important; }
+          .author-name { display: none !important; }
+          .blog-footer span { font-size: 9px !important; gap: 3px !important; }
+          .blog-meta-top { margin-bottom: 8px !important; }
+        }
+      `}</style>
     </section>
   );
 }

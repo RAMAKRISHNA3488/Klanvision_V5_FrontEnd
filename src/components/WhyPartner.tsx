@@ -109,8 +109,8 @@ export default function WhyPartner() {
 
         </motion.div>
 
-        {/* Reason Cards – 1 col mobile, 2 cols sm, 3 cols lg */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+        {/* Reason Cards – 2 col mobile, 3 cols lg */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
           {reasons.map((r, i) => (
             <motion.div
               key={r.title}
@@ -160,13 +160,12 @@ export default function WhyPartner() {
           ))}
         </div>
 
-        {/* Animated Stat Counters – 4 cards showing live-counting numbers */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-14"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-14"
         >
           {stats.map((s, idx) => (
             <motion.div 
@@ -248,6 +247,7 @@ export default function WhyPartner() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
+          className="cta-banner"
           style={{
             borderRadius: 28, overflow: 'hidden', position: 'relative',
             background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
@@ -281,6 +281,39 @@ export default function WhyPartner() {
         </motion.div>
       </div>
 
+      {/* ── Responsive Refinements ──────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1024px) {
+          #why-partner { padding: 64px 0 !important; }
+          #why-partner .container { padding: 0 24px; }
+        }
+        @media (max-width: 768px) {
+          #why-partner { padding: 56px 0 !important; }
+          #why-partner h2 { font-size: 1.6rem !important; }
+          #why-partner p { font-size: 14px !important; }
+          #why-partner .grid { gap: 16px !important; }
+          #why-partner .card { padding: 20px 16px !important; }
+          #why-partner .card h3 { font-size: 15px !important; }
+          #why-partner .stat-card { padding: 20px 10px !important; }
+          #why-partner .stat-card div:nth-child(3) { font-size: 24px !important; } /* Stat number */
+          #why-partner .stat-card div:last-child { font-size: 10px !important; } /* Stat label */
+        }
+        @media (max-width: 480px) {
+          #why-partner { padding: 48px 0 !important; }
+          #why-partner h2 { font-size: 1.4rem !important; }
+          #why-partner .grid { gap: 10px !important; }
+          #why-partner .card { padding: 16px 12px !important; gap: 12px !important; }
+          #why-partner .card h3 { font-size: 13px !important; margin-bottom: 4px !important; }
+          #why-partner .card p { font-size: 10px !important; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+          #why-partner .card div:first-child { width: 48px !important; height: 48px !important; } /* Icon badge */
+          #why-partner .stat-card { padding: 16px 8px !important; }
+          #why-partner .stat-card div:nth-child(3) { font-size: 20px !important; } /* Stat number */
+          .cta-banner { padding: 40px 20px !important; }
+          .cta-banner h3 { font-size: 20px !important; }
+          .cta-banner p { font-size: 14px !important; margin-bottom: 24px !important; }
+          #why-partner-cta { padding: 12px 32px !important; font-size: 14px !important; }
+        }
+      `}</style>
     </section>
   );
 }

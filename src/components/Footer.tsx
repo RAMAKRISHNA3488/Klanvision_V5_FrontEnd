@@ -210,6 +210,7 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             style={{ display: 'flex', flexDirection: 'column' }}
+            className="footer-col-brand"
           >
 
             {/* Logo mark + wordmark */}
@@ -258,13 +259,13 @@ export default function Footer() {
 
 
             {/* Tagline */}
-            <p style={{ color: '#9CA3AF', fontSize: 14, lineHeight: 1.75, marginBottom: 20 }}>
+            <p style={{ color: '#9CA3AF', fontSize: 14, lineHeight: 1.75, marginBottom: 20 }} className="footer-tagline">
 
               Transforming the Future of Technology | Empowering Businesses with Enhanced Digital Solutions.
             </p>
 
             {/* Social icon buttons – hover reveals platform brand color */}
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }} className="footer-socials">
               {socials.map(s => (
                 <motion.a
                   key={s.label}
@@ -294,6 +295,7 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
+            className="footer-col-links"
           >
             <FooterHeading>Quick Links</FooterHeading>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -325,6 +327,7 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.15 }}
+            className="footer-col-legal"
           >
             <FooterHeading>Legal</FooterHeading>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -418,6 +421,7 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
+            className="footer-col-contact"
           >
             <FooterHeading>Contact</FooterHeading>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -491,8 +495,25 @@ export default function Footer() {
       <style>{`
         .footer-link:hover { color: #FF6B35 !important; }
         .footer-link:hover .link-dot { opacity: 1 !important; }
-        @media (max-width: 1024px) { .footer-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 640px)  { .footer-grid { grid-template-columns: 1fr !important; } }
+        
+        @media (max-width: 1024px) { 
+          .footer-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 40px !important; } 
+        }
+        
+        @media (max-width: 640px) { 
+          .footer-grid { 
+            grid-template-columns: 1fr 1fr !important; 
+            gap: 32px 16px !important; 
+            padding: 48px 0 32px !important;
+          }
+          .footer-col-brand { grid-column: span 2; margin-bottom: 8px; }
+          .footer-col-contact { grid-column: span 2; margin-top: 8px; }
+          .footer-tagline { font-size: 13px !important; }
+          .footer-socials { gap: 8px !important; }
+          .footer-socials a { width: 34px !important; height: 34px !important; }
+          .footer-link { font-size: 12px !important; }
+          footer h4 { font-size: 13px !important; }
+        }
       `}</style>
       {/* Legal Modal Overlay */}
       <AnimatePresence>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, X, Send } from 'lucide-react';
+import { Bot, X, Send, User, Code2, CheckCircle2, ChevronRight, Mail, Phone, Calendar, Target, Briefcase, IndianRupee } from 'lucide-react';
 
 // ── Configuration ──
 const SERVICES = [
