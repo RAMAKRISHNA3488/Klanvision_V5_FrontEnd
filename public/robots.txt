@@ -1,4 +1,17 @@
+# =====================================================
+# robots.txt — Klanvision.com
+# Allow all crawlers to index all pages.
+# Block admin-only and non-public routes.
+# =====================================================
+
 User-agent: *
 Allow: /
 
+# Block non-public / utility routes
+Disallow: /admin
+Disallow: /apply
+Disallow: /admin/
+Disallow: /apply/
+
+# Sitemap location
 Sitemap: https://www.klanvision.com/sitemap.xml
