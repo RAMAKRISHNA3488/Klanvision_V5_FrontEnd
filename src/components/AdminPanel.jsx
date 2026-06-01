@@ -93,6 +93,33 @@ const hasTabPermission = (user, tabId) => {
   return perms.includes(required);
 };
 
+const hasWritePermission = (user, tabId) => {
+  if (!user) return false;
+  const role = (user.role || '').toUpperCase();
+  
+  // Super Admin and Admin have full write access everywhere
+  if (role === 'SUPER_ADMIN' || role === 'SUPER ADMIN' || role === 'ADMIN' || role === 'ADMINISTRATOR') {
+    return true;
+  }
+  
+  // Viewer has no write access (read-only)
+  if (role === 'VIEWER') {
+    return false;
+  }
+  
+  // Developer can write to projects and settings
+  if (role === 'DEVELOPER') {
+    return tabId === 'projects' || tabId === 'settings';
+  }
+  
+  // Editor can write to blogs
+  if (role === 'EDITOR') {
+    return tabId === 'blogs';
+  }
+  
+  return false;
+};
+
 function UnauthorizedView() {
   return (
     <motion.div
@@ -1075,6 +1102,7 @@ export default function AdminPanel() {
                   onToggleAccess={handleToggleUserAccess}
                   searchQuery={globalSearchQuery}
                   roleFilter={userRoleFilter}
+                  canEdit={hasWritePermission(currentUser, 'users')}
                 />
               ) : <UnauthorizedView />
             )}
@@ -1093,6 +1121,7 @@ export default function AdminPanel() {
                   }}
                   searchQuery={globalSearchQuery}
                   statusFilter={projectStatusFilter}
+                  canEdit={hasWritePermission(currentUser, 'projects')}
                 />
               ) : <UnauthorizedView />
             )}
@@ -1111,6 +1140,7 @@ export default function AdminPanel() {
                   }}
                   searchQuery={globalSearchQuery}
                   categoryFilter={blogCategoryFilter}
+                  canEdit={hasWritePermission(currentUser, 'blogs')}
                 />
               ) : <UnauthorizedView />
             )}
@@ -1125,6 +1155,7 @@ export default function AdminPanel() {
                   platformLogo={platformLogo} setPlatformLogo={setPlatformLogo}
                   companyName={companyName} setCompanyName={setCompanyName}
                   addActivity={addActivity}
+                  canEdit={hasWritePermission(currentUser, 'settings')}
                 />
               ) : <UnauthorizedView />
             )}
@@ -1404,7 +1435,7 @@ function UserForm({ initialData, onSave }) {
   );
 }
 
-function UsersView({ users, onAddClick, onEditClick, onDeleteClick, onToggleAccess, searchQuery, roleFilter }) {
+function UsersView({ users, onAddClick, onEditClick, onDeleteClick, onToggleAccess, searchQuery, roleFilter, canEdit }) {
   const filteredUsers = users.filter((u) => {
     const matchesSearch = u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1420,9 +1451,11 @@ function UsersView({ users, onAddClick, onEditClick, onDeleteClick, onToggleAcce
           <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1.5px' }}>Team <span className="gradient-text">Directory</span></h2>
           <p style={{ color: '#94A3B8', marginTop: 10, fontSize: 16 }}>Manage authentication and security modules.</p>
         </div>
-        <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
-          <UserPlus size={22} /> Add Member
-        </button>
+        {canEdit && (
+          <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
+            <UserPlus size={22} /> Add Member
+          </button>
+        )}
       </div>
 
       {filteredUsers.length === 0 ? (
@@ -1453,10 +1486,10 @@ function UsersView({ users, onAddClick, onEditClick, onDeleteClick, onToggleAcce
                       <div style={{ color: '#F87171', fontSize: 10, fontWeight: 900, display: 'flex', alignItems: 'center', gap: 4 }}><X size={12} /> LOCKED</div>
                     )}
                     <div
-                      onClick={() => onToggleAccess && onToggleAccess(user)}
+                      onClick={() => canEdit && onToggleAccess && onToggleAccess(user)}
                       style={{
                         width: 36, height: 18, borderRadius: 20, background: user.isAuthorized ? '#6366F1' : 'rgba(255,255,255,0.1)',
-                        position: 'relative', cursor: 'pointer', transition: '0.3s', display: 'inline-block'
+                        position: 'relative', cursor: canEdit ? 'pointer' : 'not-allowed', transition: '0.3s', display: 'inline-block', opacity: canEdit ? 1 : 0.6
                       }}
                     >
                       <motion.div animate={{ x: user.isAuthorized ? 20 : 2 }} style={{ width: 14, height: 14, borderRadius: '50%', background: 'white', position: 'absolute', top: 2 }} />
@@ -1472,10 +1505,12 @@ function UsersView({ users, onAddClick, onEditClick, onDeleteClick, onToggleAcce
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
-                <button onClick={() => onEditClick(user)} style={{ flex: 1, padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', fontSize: 13, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><Edit2 size={16} /> Modify</button>
-                <button onClick={() => onDeleteClick(user.id)} style={{ width: 52, height: 52, borderRadius: 16, background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#F87171', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={20} /></button>
-              </div>
+              {canEdit && (
+                <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
+                  <button onClick={() => onEditClick(user)} style={{ flex: 1, padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', fontSize: 13, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><Edit2 size={16} /> Modify</button>
+                  <button onClick={() => onDeleteClick(user.id)} style={{ width: 52, height: 52, borderRadius: 16, background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#F87171', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Trash2 size={20} /></button>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
@@ -1599,7 +1634,7 @@ function ProjectForm({ initialData, teamMembers, onSave }) {
 }
 
 
-function ProjectsView({ projects, onAddClick, onEditClick, onDeleteClick, searchQuery, statusFilter }) {
+function ProjectsView({ projects, onAddClick, onEditClick, onDeleteClick, searchQuery, statusFilter, canEdit }) {
   const filteredProjects = projects.filter((p) => {
     const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.client.toLowerCase().includes(searchQuery.toLowerCase());
@@ -1623,9 +1658,11 @@ function ProjectsView({ projects, onAddClick, onEditClick, onDeleteClick, search
           <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1.5px' }}>Project <span className="gradient-text">Control</span></h2>
           <p style={{ color: '#94A3B8', marginTop: 10, fontSize: 18 }}>Manage high-impact initiatives and milestones.</p>
         </div>
-        <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
-          <Plus size={22} /> Initiate Project
-        </button>
+        {canEdit && (
+          <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
+            <Plus size={22} /> Initiate Project
+          </button>
+        )}
       </div>
 
       {filteredProjects.length === 0 ? (
@@ -1677,12 +1714,14 @@ function ProjectsView({ projects, onAddClick, onEditClick, onDeleteClick, search
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
-                <button onClick={() => onEditClick(p)} style={{ flex: 1, padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><Edit2 size={16} /> Manage</button>
-                <button onClick={() => onDeleteClick(p.id)} style={{ width: 48, height: 48, borderRadius: 16, background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#F87171', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Trash2 size={18} />
-                </button>
-              </div>
+              {canEdit && (
+                <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
+                  <button onClick={() => onEditClick(p)} style={{ flex: 1, padding: '14px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><Edit2 size={16} /> Manage</button>
+                  <button onClick={() => onDeleteClick(p.id)} style={{ width: 48, height: 48, borderRadius: 16, background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#F87171', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
@@ -1691,7 +1730,7 @@ function ProjectsView({ projects, onAddClick, onEditClick, onDeleteClick, search
   );
 }
 
-function BlogsView({ blogs, onAddClick, onEditClick, onDeleteClick, searchQuery, categoryFilter }) {
+function BlogsView({ blogs, onAddClick, onEditClick, onDeleteClick, searchQuery, categoryFilter, canEdit }) {
   const filteredBlogs = blogs.filter((b) => {
     const matchesSearch = b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       b.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1707,9 +1746,11 @@ function BlogsView({ blogs, onAddClick, onEditClick, onDeleteClick, searchQuery,
           <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1.5px' }}>Insight <span className="gradient-text">Engine</span></h2>
           <p style={{ color: '#94A3B8', marginTop: 10, fontSize: 18 }}>Publish thought leadership and company milestones.</p>
         </div>
-        <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
-          <Plus size={22} /> Draft Article
-        </button>
+        {canEdit && (
+          <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
+            <Plus size={22} /> Draft Article
+          </button>
+        )}
       </div>
 
       {filteredBlogs.length === 0 ? (
@@ -1763,14 +1804,16 @@ function BlogsView({ blogs, onAddClick, onEditClick, onDeleteClick, searchQuery,
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
-                  <button onClick={() => onEditClick(blog)} style={{ flex: 1, padding: '12px', borderRadius: 14, background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', fontSize: 13, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                    <Edit2 size={16} /> Edit
-                  </button>
-                  <button onClick={() => onDeleteClick(blog.id)} style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#F87171', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                {canEdit && (
+                  <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+                    <button onClick={() => onEditClick(blog)} style={{ flex: 1, padding: '12px', borderRadius: 14, background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', fontSize: 13, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                      <Edit2 size={16} /> Edit
+                    </button>
+                    <button onClick={() => onDeleteClick(blog.id)} style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#F87171', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
@@ -1970,7 +2013,8 @@ function SettingsView({
   maintenanceMode, setMaintenanceMode,
   platformLogo, setPlatformLogo,
   companyName, setCompanyName,
-  addActivity
+  addActivity,
+  canEdit
 }) {
   const [activeSection, setActiveSection] = useState('Interface');
   const [saveStatus, setSaveStatus] = useState(null);
@@ -1988,6 +2032,7 @@ function SettingsView({
   ];
 
   const handleSave = () => {
+    if (!canEdit) return;
     setSaveStatus('Configuring system parameters...');
     setTimeout(() => {
       setSaveStatus('Settings updated successfully.');
@@ -2040,8 +2085,8 @@ function SettingsView({
                 <p style={{ fontSize: 11, color: '#94A3B8', marginTop: 4 }}>Gate client-side access.</p>
               </div>
               <div
-                onClick={() => setMaintenanceMode(!maintenanceMode)}
-                style={{ width: 44, height: 22, borderRadius: 20, background: maintenanceMode ? '#EF4444' : 'rgba(255,255,255,0.1)', position: 'relative', cursor: 'pointer', transition: '0.3s' }}
+                onClick={() => canEdit && setMaintenanceMode(!maintenanceMode)}
+                style={{ width: 44, height: 22, borderRadius: 20, background: maintenanceMode ? '#EF4444' : 'rgba(255,255,255,0.1)', position: 'relative', cursor: canEdit ? 'pointer' : 'not-allowed', transition: '0.3s', opacity: canEdit ? 1 : 0.6 }}
               >
                 <motion.div animate={{ x: maintenanceMode ? 24 : 4 }} style={{ width: 14, height: 14, borderRadius: '50%', background: 'white', position: 'absolute', top: 4 }} />
               </div>
@@ -2050,7 +2095,7 @@ function SettingsView({
         </div>
 
         {/* Settings Content Area */}
-        <div style={{ flex: 1, background: 'rgba(15, 23, 42, 0.4)', borderRadius: 40, border: '1px solid rgba(255,255,255,0.05)', padding: 48, overflowY: 'auto' }}>
+        <div style={{ flex: 1, background: 'rgba(15, 23, 42, 0.4)', borderRadius: 40, border: '1px solid rgba(255,255,255,0.05)', padding: 48, overflowY: 'auto', pointerEvents: canEdit ? 'auto' : 'none', opacity: canEdit ? 1 : 0.8 }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSection}
@@ -2064,7 +2109,7 @@ function SettingsView({
                   <h2 style={{ fontSize: 32, fontWeight: 900, marginBottom: 12 }}>{activeSection} <span className="gradient-text">Configuration</span></h2>
                   <p style={{ color: '#94A3B8', fontSize: 16 }}>{sections.find(s => s.name === activeSection)?.desc}</p>
                 </div>
-                <button onClick={handleSave} className="btn-primary" style={{ padding: '14px 28px', borderRadius: 14, fontSize: 13 }}>SAVE CHANGES</button>
+                {canEdit && <button onClick={handleSave} className="btn-primary" style={{ padding: '14px 28px', borderRadius: 14, fontSize: 13 }}>SAVE CHANGES</button>}
               </div>
 
               {activeSection === 'Interface' && (
