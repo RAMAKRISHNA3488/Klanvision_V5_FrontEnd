@@ -880,7 +880,22 @@ export default function AdminPanel() {
         </div>
 
         <nav style={{ padding: '20px 16px', flex: 1 }}>
-          {navItems.filter(item => currentUser?.permissions.includes(item.label)).map((item) => (
+          {navItems.filter(item => {
+            const perms = currentUser?.permissions || [];
+            // Super admin or ALL_ACCESS bypasses all checks
+            if (perms.includes('ALL_ACCESS') || perms.includes('SUPER_ADMIN')) return true;
+            // Map each nav tab to its required permission
+            const permMap = {
+              dashboard:  null,             // always visible
+              users:      'MANAGE_USERS',
+              projects:   'MANAGE_PROJECTS',
+              blogs:      'MANAGE_BLOGS',
+              settings:   'MANAGE_SEO',
+              activity:   'MANAGE_ACTIVITIES',
+            };
+            const required = permMap[item.id];
+            return required === null || perms.includes(required);
+          }).map((item) => (
             <button key={item.id} onClick={() => setActiveTab(item.id)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 16, padding: '14px 18px', borderRadius: 16, border: 'none', background: activeTab === item.id ? item.gradient : 'transparent', color: activeTab === item.id ? 'white' : '#94A3B8', cursor: 'pointer', transition: 'all 0.3s', marginBottom: 8, fontWeight: 700, fontSize: 14 }}>
               <item.icon size={20} />
               {isSidebarOpen && <span style={{ flex: 1, textAlign: 'left' }}>{item.label}</span>}

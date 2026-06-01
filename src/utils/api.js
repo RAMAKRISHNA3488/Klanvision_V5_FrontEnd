@@ -44,7 +44,7 @@ export const api = {
     // SEO
     getSEO: () => fetch(`${API_BASE_URL}/seo`).then(handleResponse),
     updateSEO: (data) => fetch(`${API_BASE_URL}/seo`, {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     }).then(handleResponse),
@@ -89,7 +89,7 @@ export const api = {
     downloadResume: (id) => `${API_BASE_URL}/applications/resume/${id}`,
 
     // Jobs
-    getJobs: () => fetch(`${API_BASE_URL}/jobs/all`).then(handleResponse),
+    getJobs: () => fetch(`${API_BASE_URL}/jobs`).then(handleResponse),
     getActiveJobs: () => fetch(`${API_BASE_URL}/jobs`).then(handleResponse),
     createJob: (data) => fetch(`${API_BASE_URL}/jobs`, {
         method: 'POST',
