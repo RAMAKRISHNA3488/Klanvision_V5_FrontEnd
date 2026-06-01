@@ -60,6 +60,81 @@ const formatTimestamp = (ts) => {
   }
 };
 
+const normalizePermission = (p) => {
+  if (p === 'MANAGE_USERS') return 'Users';
+  if (p === 'MANAGE_PROJECTS' || p === 'MANAGE_JOBS') return 'Projects';
+  if (p === 'MANAGE_BLOGS') return 'Blogs';
+  if (p === 'MANAGE_SEO') return 'Settings';
+  if (p === 'MANAGE_ACTIVITIES') return 'Activity Log';
+  return p;
+};
+
+const hasTabPermission = (user, tabId) => {
+  if (!user) return false;
+  const role = (user.role || '').toUpperCase();
+  if (role === 'SUPER_ADMIN' || role === 'SUPER ADMIN' || role === 'ADMIN' || role === 'ADMINISTRATOR') {
+    return true;
+  }
+  const perms = (user.permissions || []).map(normalizePermission);
+  if (perms.includes('ALL_ACCESS') || perms.includes('SUPER_ADMIN')) {
+    return true;
+  }
+  const permMap = {
+    dashboard:  null,             // always visible
+    users:      'Users',
+    projects:   'Projects',
+    blogs:      'Blogs',
+    settings:   'Settings',
+    activity:   'Activity Log',
+  };
+  const required = permMap[tabId];
+  if (required === undefined) return false; // unknown tab
+  if (required === null) return true;       // no permission required
+  return perms.includes(required);
+};
+
+function UnauthorizedView() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '80px 40px',
+        textAlign: 'center',
+        background: 'rgba(30, 41, 59, 0.3)',
+        backdropFilter: 'blur(20px)',
+        borderRadius: 32,
+        border: '1px solid rgba(239, 68, 68, 0.2)',
+        maxWidth: 600,
+        margin: '40px auto'
+      }}
+    >
+      <div style={{
+        width: 80,
+        height: 80,
+        borderRadius: 24,
+        background: 'rgba(239, 68, 68, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#F87171',
+        marginBottom: 24,
+        boxShadow: '0 10px 30px rgba(239, 68, 68, 0.2)'
+      }}>
+        <Lock size={40} />
+      </div>
+      <h3 style={{ fontSize: 24, fontWeight: 900, color: 'white', marginBottom: 12 }}>Access Restricted</h3>
+      <p style={{ color: '#94A3B8', fontSize: 15, lineHeight: 1.6, maxWidth: 400, marginBottom: 32 }}>
+        Your account profile does not possess the required module privileges to access this section. Please contact your system administrator to adjust your credentials.
+      </p>
+    </motion.div>
+  );
+}
+
 // --- Types ---
 
 
@@ -880,22 +955,7 @@ export default function AdminPanel() {
         </div>
 
         <nav style={{ padding: '20px 16px', flex: 1 }}>
-          {navItems.filter(item => {
-            const perms = currentUser?.permissions || [];
-            // Super admin or ALL_ACCESS bypasses all checks
-            if (perms.includes('ALL_ACCESS') || perms.includes('SUPER_ADMIN')) return true;
-            // Map each nav tab to its required permission
-            const permMap = {
-              dashboard:  null,             // always visible
-              users:      'MANAGE_USERS',
-              projects:   'MANAGE_PROJECTS',
-              blogs:      'MANAGE_BLOGS',
-              settings:   'MANAGE_SEO',
-              activity:   'MANAGE_ACTIVITIES',
-            };
-            const required = permMap[item.id];
-            return required === null || perms.includes(required);
-          }).map((item) => (
+          {navItems.filter(item => hasTabPermission(currentUser, item.id)).map((item) => (
             <button key={item.id} onClick={() => setActiveTab(item.id)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 16, padding: '14px 18px', borderRadius: 16, border: 'none', background: activeTab === item.id ? item.gradient : 'transparent', color: activeTab === item.id ? 'white' : '#94A3B8', cursor: 'pointer', transition: 'all 0.3s', marginBottom: 8, fontWeight: 700, fontSize: 14 }}>
               <item.icon size={20} />
               {isSidebarOpen && <span style={{ flex: 1, textAlign: 'left' }}>{item.label}</span>}
@@ -967,7 +1027,7 @@ export default function AdminPanel() {
                     { icon: LayoutPanelLeft, label: 'View Projects', tab: 'projects' },
                     { icon: FileText, label: 'Edit Blogs', tab: 'blogs' },
                     { icon: Activity, label: 'System Audit', tab: 'activity' }
-                  ].filter(item => item.label.toLowerCase().includes(commandQuery.toLowerCase())).map((item) => (
+                  ].filter(item => hasTabPermission(currentUser, item.tab) && item.label.toLowerCase().includes(commandQuery.toLowerCase())).map((item) => (
                     <button
                       key={item.tab}
                       onClick={() => { setActiveTab(item.tab); setIsCommandPaletteOpen(false); setCommandQuery(''); }}
@@ -1000,67 +1060,79 @@ export default function AdminPanel() {
           <AnimatePresence mode="wait">
             {activeTab === 'dashboard' && <DashboardView projects={projects} users={users} blogs={blogs} activities={activities} setActiveTab={setActiveTab} />}
             {activeTab === 'users' && (
-              <UsersView
-                users={users}
-                onAddClick={() => { setEditingUser(null); setIsUserModalOpen(true); }}
-                onEditClick={(user) => { setEditingUser(user); setIsUserModalOpen(true); }}
-                onDeleteClick={(id) => {
-                  api.deleteUser(id).then(() => {
-                    const user = users.find(u => u.id === id);
-                    setUsers(prev => prev.filter(u => u.id !== id));
-                    if (user) addActivity(currentUser?.name || 'Admin', 'User Removed', 'security', 'warning', `Deleted account for ${user.name}`);
-                  }).catch(err => console.error("Error deleting user:", err));
-                }}
-                onToggleAccess={handleToggleUserAccess}
-                searchQuery={globalSearchQuery}
-                roleFilter={userRoleFilter}
-              />
+              hasTabPermission(currentUser, 'users') ? (
+                <UsersView
+                  users={users}
+                  onAddClick={() => { setEditingUser(null); setIsUserModalOpen(true); }}
+                  onEditClick={(user) => { setEditingUser(user); setIsUserModalOpen(true); }}
+                  onDeleteClick={(id) => {
+                    api.deleteUser(id).then(() => {
+                      const user = users.find(u => u.id === id);
+                      setUsers(prev => prev.filter(u => u.id !== id));
+                      if (user) addActivity(currentUser?.name || 'Admin', 'User Removed', 'security', 'warning', `Deleted account for ${user.name}`);
+                    }).catch(err => console.error("Error deleting user:", err));
+                  }}
+                  onToggleAccess={handleToggleUserAccess}
+                  searchQuery={globalSearchQuery}
+                  roleFilter={userRoleFilter}
+                />
+              ) : <UnauthorizedView />
             )}
             {activeTab === 'projects' && (
-              <ProjectsView
-                projects={projects}
-                onAddClick={() => { setEditingProject(null); setIsProjectModalOpen(true); }}
-                onEditClick={(project) => { setEditingProject(project); setIsProjectModalOpen(true); }}
-                onDeleteClick={(id) => {
-                  api.deleteProject(id).then(() => {
-                    const project = projects.find(p => p.id === id);
-                    setProjects(prev => prev.filter(p => p.id !== id));
-                    if (project) addActivity(currentUser?.name || 'Admin', 'Project Terminated', 'project', 'warning', `Removed project "${project.title}"`);
-                  }).catch(err => console.error("Error deleting project:", err));
-                }}
-                searchQuery={globalSearchQuery}
-                statusFilter={projectStatusFilter}
-              />
+              hasTabPermission(currentUser, 'projects') ? (
+                <ProjectsView
+                  projects={projects}
+                  onAddClick={() => { setEditingProject(null); setIsProjectModalOpen(true); }}
+                  onEditClick={(project) => { setEditingProject(project); setIsProjectModalOpen(true); }}
+                  onDeleteClick={(id) => {
+                    api.deleteProject(id).then(() => {
+                      const project = projects.find(p => p.id === id);
+                      setProjects(prev => prev.filter(p => p.id !== id));
+                      if (project) addActivity(currentUser?.name || 'Admin', 'Project Terminated', 'project', 'warning', `Removed project "${project.title}"`);
+                    }).catch(err => console.error("Error deleting project:", err));
+                  }}
+                  searchQuery={globalSearchQuery}
+                  statusFilter={projectStatusFilter}
+                />
+              ) : <UnauthorizedView />
             )}
             {activeTab === 'blogs' && (
-              <BlogsView
-                blogs={blogs}
-                onAddClick={() => { setEditingBlog(null); setIsBlogModalOpen(true); }}
-                onEditClick={(blog) => { setEditingBlog(blog); setIsBlogModalOpen(true); }}
-                onDeleteClick={(id) => {
-                  api.deleteBlog(id).then(() => {
-                    const blog = blogs.find(b => b.id === id);
-                    setBlogs(prev => prev.filter(b => b.id !== id));
-                    if (blog) addActivity(currentUser?.name || 'Admin', 'Blog Deleted', 'content', 'warning', `Removed article "${blog.title}"`);
-                  }).catch(err => console.error("Error deleting blog:", err));
-                }}
-                searchQuery={globalSearchQuery}
-                categoryFilter={blogCategoryFilter}
-              />
+              hasTabPermission(currentUser, 'blogs') ? (
+                <BlogsView
+                  blogs={blogs}
+                  onAddClick={() => { setEditingBlog(null); setIsBlogModalOpen(true); }}
+                  onEditClick={(blog) => { setEditingBlog(blog); setIsBlogModalOpen(true); }}
+                  onDeleteClick={(id) => {
+                    api.deleteBlog(id).then(() => {
+                      const blog = blogs.find(b => b.id === id);
+                      setBlogs(prev => prev.filter(b => b.id !== id));
+                      if (blog) addActivity(currentUser?.name || 'Admin', 'Blog Deleted', 'content', 'warning', `Removed article "${blog.title}"`);
+                    }).catch(err => console.error("Error deleting blog:", err));
+                  }}
+                  searchQuery={globalSearchQuery}
+                  categoryFilter={blogCategoryFilter}
+                />
+              ) : <UnauthorizedView />
             )}
             {activeTab === 'settings' && (
-              <SettingsView
-                theme={theme} setTheme={setTheme}
-                accentColor={accentColor} setAccentColor={setAccentColor}
-                glassIntensity={glassIntensity} setGlassIntensity={setGlassIntensity}
-                twoFactor={twoFactor} setTwoFactor={setTwoFactor}
-                maintenanceMode={maintenanceMode} setMaintenanceMode={setMaintenanceMode}
-                platformLogo={platformLogo} setPlatformLogo={setPlatformLogo}
-                companyName={companyName} setCompanyName={setCompanyName}
-                addActivity={addActivity}
-              />
+              hasTabPermission(currentUser, 'settings') ? (
+                <SettingsView
+                  theme={theme} setTheme={setTheme}
+                  accentColor={accentColor} setAccentColor={setAccentColor}
+                  glassIntensity={glassIntensity} setGlassIntensity={setGlassIntensity}
+                  twoFactor={twoFactor} setTwoFactor={setTwoFactor}
+                  maintenanceMode={maintenanceMode} setMaintenanceMode={setMaintenanceMode}
+                  platformLogo={platformLogo} setPlatformLogo={setPlatformLogo}
+                  companyName={companyName} setCompanyName={setCompanyName}
+                  addActivity={addActivity}
+                />
+              ) : <UnauthorizedView />
             )}
-            {activeTab === 'activity' && <ActivityView activities={activities} />}
+            {activeTab === 'activity' && (
+              hasTabPermission(currentUser, 'activity') ? (
+                <ActivityView activities={activities} />
+              ) : <UnauthorizedView />
+            )}
           </AnimatePresence>
         </div>
       </main>
@@ -1189,7 +1261,7 @@ function UserForm({ initialData, onSave }) {
     email: initialData?.email || '',
     password: initialData?.password || '',
     role: initialData?.role || 'Viewer',
-    permissions: initialData?.permissions || [],
+    permissions: (initialData?.permissions || []).map(normalizePermission),
     isAuthorized: initialData?.isAuthorized ?? true,
     is2FAEnabled: true
   });
