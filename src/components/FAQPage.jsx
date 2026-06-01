@@ -99,15 +99,9 @@ export default function FAQPage() {
     title: 'Frequently Asked Questions | Klanvision Support',
     description: 'Find answers to common questions about Klanvision services, project timelines, pricing, NDAs, SLAs, tech stack, cloud migration and post-delivery support.',
     keywords: 'FAQ, Klanvision support, IT services questions, pricing, project timeline, NDA, SLA',
-<<<<<<< HEAD:src/components/FAQPage.jsx
     canonical: '/faq',
   });
   const [openIndex, setOpenIndex] = useState(0);
-=======
-    canonical: 'https://www.klanvision.com/faq',
-  });
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/FAQPage.tsx
 
   return (
     <div style={{ background: 'var(--bg-main)', minHeight: '100vh', paddingBottom: 80 }}>

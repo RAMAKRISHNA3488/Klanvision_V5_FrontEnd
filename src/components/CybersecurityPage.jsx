@@ -8,11 +8,7 @@ export default function CybersecurityPage() {
     title: 'Cybersecurity Solutions | Zero-Trust Protection – Klanvision',
     description: 'Klanvision delivers enterprise-grade cybersecurity: penetration testing, zero-trust architecture, 24/7 SOC monitoring, compliance (ISO 27001, SOC2, GDPR) and threat intelligence.',
     keywords: 'cybersecurity, zero trust, penetration testing, SOC monitoring, ISO 27001, GDPR compliance, Klanvision',
-<<<<<<< HEAD:src/components/CybersecurityPage.jsx
     canonical: '/cybersecurity',
-=======
-    canonical: 'https://www.klanvision.com/cybersecurity',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/CybersecurityPage.tsx
   });
 
   const containerRef = useRef(null);

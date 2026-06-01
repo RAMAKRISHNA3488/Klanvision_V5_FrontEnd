@@ -8,11 +8,7 @@ export default function ConsultationPage() {
     title: 'IT Consultation & Strategy | Expert Technology Advisory – Klanvision',
     description: 'Klanvision\'s IT consultation services align your technology with business goals. Infrastructure audits, digital transformation advisory, ROI optimization and strategic roadmaps.',
     keywords: 'IT consultation, technology advisory, digital transformation, IT strategy, infrastructure audit, Klanvision',
-<<<<<<< HEAD:src/components/ConsultationPage.jsx
     canonical: '/it-consultation',
-=======
-    canonical: 'https://www.klanvision.com/it-consultation',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/ConsultationPage.tsx
   });
 
   const containerRef = useRef(null);

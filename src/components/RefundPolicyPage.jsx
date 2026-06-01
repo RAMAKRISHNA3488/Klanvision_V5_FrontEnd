@@ -7,11 +7,7 @@ export default function RefundPolicyPage() {
     title: 'Cancellation & Refund Policy | Klanvision',
     description: 'Read Klanvision\'s Cancellation and Refund Policy. Understand our terms for project cancellation, refund eligibility, billing timelines, and approved refund processing.',
     keywords: 'refund policy, cancellation policy, Klanvision refund, billing terms',
-<<<<<<< HEAD:src/components/RefundPolicyPage.jsx
     canonical: '/refund-policy',
-=======
-    canonical: 'https://www.klanvision.com/refund-policy',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/RefundPolicyPage.tsx
   });
   return (
     <div style={{ background: 'var(--bg-main)', minHeight: '100vh', paddingBottom: 80 }}>

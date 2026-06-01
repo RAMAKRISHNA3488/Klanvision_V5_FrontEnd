@@ -8,11 +8,7 @@ export default function MobileAppPage() {
     title: 'Mobile App Development | iOS & Android Apps – Klanvision',
     description: 'Klanvision develops native and cross-platform mobile apps for iOS and Android using Swift, Kotlin, and React Native. From UI/UX to App Store deployment and ASO.',
     keywords: 'mobile app development, iOS app, Android app, React Native, Flutter, cross-platform, Klanvision',
-<<<<<<< HEAD:src/components/MobileAppPage.jsx
     canonical: '/mobile-app',
-=======
-    canonical: 'https://www.klanvision.com/mobile-app',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/MobileAppPage.tsx
   });
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({

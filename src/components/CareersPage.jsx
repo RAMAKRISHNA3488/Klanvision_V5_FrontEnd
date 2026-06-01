@@ -65,7 +65,6 @@ export default function CareersPage() {
     title: 'Careers at Klanvision | Join Our Global Tech Team',
     description: 'Explore career opportunities at Klanvision. We are hiring Frontend Developers, Backend Developers, Full Stack, Mobile App, Data Engineers and DevSecOps engineers.',
     keywords: 'careers, jobs, Klanvision hiring, developer jobs, tech careers, remote jobs',
-<<<<<<< HEAD:src/components/CareersPage.jsx
     canonical: '/careers',
   });
   const [jobs, setJobs] = useState(jobListings);
@@ -74,11 +73,6 @@ export default function CareersPage() {
   useEffect(() => {
     setJobs(jobListings);
   }, []);
-=======
-    canonical: 'https://www.klanvision.com/careers',
-  });
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/CareersPage.tsx
 
   return (
     <div style={{ background: 'var(--bg-main)', minHeight: '100vh', paddingBottom: 80 }}>

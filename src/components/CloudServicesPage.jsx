@@ -8,11 +8,7 @@ export default function CloudServicesPage() {
     title: 'Cloud Services | AWS Infrastructure & Migration – Klanvision',
     description: 'Klanvision delivers agile cloud solutions on AWS including EC2, Lambda, S3, cloud migration, cost optimization, and 99.99% uptime SLA for growing enterprises.',
     keywords: 'cloud services, AWS, cloud migration, serverless, EC2, infrastructure management, Klanvision',
-<<<<<<< HEAD:src/components/CloudServicesPage.jsx
     canonical: '/cloud-services',
-=======
-    canonical: 'https://www.klanvision.com/cloud-services',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/CloudServicesPage.tsx
   });
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({

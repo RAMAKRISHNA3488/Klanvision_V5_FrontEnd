@@ -7,11 +7,7 @@ export default function APIIntegrationPage() {
     title: 'API Integration Services | Connect Your Systems – Klanvision',
     description: 'Klanvision provides seamless API integration: custom REST & GraphQL APIs, third-party platform connections (Stripe, Salesforce, Shopify), real-time data sync, and OAuth2 security.',
     keywords: 'API integration, REST API, GraphQL, Salesforce integration, Stripe API, webhook, Klanvision',
-<<<<<<< HEAD:src/components/APIIntegrationPage.jsx
     canonical: '/api-integration',
-=======
-    canonical: 'https://www.klanvision.com/api-integration',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/APIIntegrationPage.tsx
   });
   const integrationFeatures = [
     {

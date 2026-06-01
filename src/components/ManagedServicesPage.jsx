@@ -7,11 +7,7 @@ export default function ManagedServicesPage() {
     title: 'Managed IT Services | 24/7 IT Operations – Klanvision',
     description: 'Klanvision provides 24/7 Managed IT Services including proactive monitoring, infrastructure maintenance, performance optimization and 99.9% uptime SLA for enterprises.',
     keywords: 'managed IT services, IT operations, 24/7 monitoring, infrastructure management, Klanvision',
-<<<<<<< HEAD:src/components/ManagedServicesPage.jsx
     canonical: '/managed-services',
-=======
-    canonical: 'https://www.klanvision.com/managed-services',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/ManagedServicesPage.tsx
   });
   const managedFeatures = [
     {

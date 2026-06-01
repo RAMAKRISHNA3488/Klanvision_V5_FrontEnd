@@ -8,11 +8,7 @@ export default function WebDevelopmentPage() {
     title: 'Web Development Services | Scalable & Modern Web Apps – Klanvision',
     description: 'Klanvision builds high-performance, scalable web applications using React, Next.js & Node.js. Enterprise architecture, UX/UI design, SEO-ready and Lighthouse 100 performance.',
     keywords: 'web development, React, Next.js, enterprise web app, scalable websites, UX design, Klanvision',
-<<<<<<< HEAD:src/components/WebDevelopmentPage.jsx
     canonical: '/web-development',
-=======
-    canonical: 'https://www.klanvision.com/web-development',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/WebDevelopmentPage.tsx
   });
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({

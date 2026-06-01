@@ -7,11 +7,7 @@ export default function PrivacyPolicyPage() {
     title: 'Privacy Policy | How Klanvision Protects Your Data',
     description: "Klanvision's Privacy Policy explains how we collect, use, protect and share your personal data. We are committed to GDPR compliance and data security.",
     keywords: 'privacy policy, data protection, GDPR, Klanvision data security',
-<<<<<<< HEAD:src/components/PrivacyPolicyPage.jsx
     canonical: '/privacy-policy',
-=======
-    canonical: 'https://www.klanvision.com/privacy-policy',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/PrivacyPolicyPage.tsx
   });
   return (
     <div style={{ background: 'var(--bg-main)', minHeight: '100vh', paddingBottom: 80 }}>

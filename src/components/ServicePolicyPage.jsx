@@ -7,11 +7,7 @@ export default function ServicePolicyPage() {
     title: 'Service Policy | Klanvision Service Delivery Standards',
     description: "Klanvision's Service Policy outlines our service delivery approach, quality standards, SLA commitments, 5-phase methodology and professional governance framework.",
     keywords: 'service policy, SLA, service delivery, Klanvision standards, IT services terms',
-<<<<<<< HEAD:src/components/ServicePolicyPage.jsx
     canonical: '/service-policy',
-=======
-    canonical: 'https://www.klanvision.com/service-policy',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/ServicePolicyPage.tsx
   });
   const offerings = [
     { icon: Globe, label: 'Web Development', desc: 'Crafting responsive, high-performance websites.' },

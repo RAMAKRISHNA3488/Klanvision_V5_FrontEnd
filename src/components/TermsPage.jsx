@@ -7,11 +7,7 @@ export default function TermsPage() {
     title: 'Terms & Conditions | Klanvision Legal Agreement',
     description: 'Read Klanvision\'s Terms and Conditions covering service delivery, client responsibilities, prohibited use, project timelines, ownership rights and payment terms.',
     keywords: 'terms and conditions, legal, Klanvision agreement, service terms, payment terms',
-<<<<<<< HEAD:src/components/TermsPage.jsx
     canonical: '/terms',
-=======
-    canonical: 'https://www.klanvision.com/terms',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/TermsPage.tsx
   });
   const terms = [
     {

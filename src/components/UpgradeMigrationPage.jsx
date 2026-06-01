@@ -7,11 +7,7 @@ export default function UpgradeMigrationPage() {
     title: 'Website Upgrade & Migration | Zero-Downtime Modernization – Klanvision',
     description: 'Klanvision modernizes legacy systems and executes zero-downtime migrations with SEO-safe 301 redirects, data integrity checks, and blue-green deployments.',
     keywords: 'website upgrade, system migration, legacy modernization, zero downtime migration, SEO migration, Klanvision',
-<<<<<<< HEAD:src/components/UpgradeMigrationPage.jsx
     canonical: '/upgrade-migration',
-=======
-    canonical: 'https://www.klanvision.com/upgrade-migration',
->>>>>>> b70467160406218c6232d18ab92b44a9125aa980:src/components/UpgradeMigrationPage.tsx
   });
   const upgradeFeatures = [
     {
