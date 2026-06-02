@@ -107,6 +107,7 @@ export const api = {
 
     // Applications
     getApplications: () => fetchWithAuth(`${API_BASE_URL}/applications`),
+    createApplication: (formData) => fetch(`${API_BASE_URL}/applications`, { method: 'POST', body: formData }),
     deleteApplication: (id) => fetchWithAuth(`${API_BASE_URL}/applications/${id}`, { method: 'DELETE' }),
     downloadResume: (id) => `${API_BASE_URL}/applications/resume/${id}`,
 

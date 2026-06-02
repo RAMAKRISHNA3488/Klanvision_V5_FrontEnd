@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Send, Upload, User, Mail, Phone, GraduationCap, Calendar, Briefcase, Link, CheckCircle, ShieldCheck } from 'lucide-react';
+import { api } from '../utils/api';
 
 export default function JobApplicationPage() {
   const [jobTitle, setJobTitle] = useState('');
@@ -57,10 +58,38 @@ export default function JobApplicationPage() {
       fd.append('portfolio', form.portfolio || '');
       if (resume) fd.append('resume', resume);
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/applications`, {
-        method: 'POST',
-        body: fd
-      });
+      // --- EMAIL NOTIFICATION VIA FORMSUBMIT ---
+      const emailFd = new FormData();
+      emailFd.append('Job Role Applied', jobTitle);
+      emailFd.append('Candidate Name', form.name);
+      emailFd.append('Date of Birth', form.dob);
+      emailFd.append('Email Address', form.email);
+      emailFd.append('Phone Number', form.phone);
+      emailFd.append('Gender', form.gender);
+      emailFd.append('Highest Qualification', form.qualification);
+      emailFd.append('Years of Experience', form.experience);
+      emailFd.append('Key Skills', form.skills);
+      if (form.linkedin) emailFd.append('LinkedIn Profile', form.linkedin);
+      if (form.portfolio) emailFd.append('Portfolio / GitHub', form.portfolio);
+      if (resume) emailFd.append('Resume Attachment', resume);
+      
+      // FormSubmit Configuration
+      emailFd.append('_subject', `🚀 New Job Application: ${form.name} for ${jobTitle}`);
+      emailFd.append('_captcha', 'false');
+      emailFd.append('_template', 'table');
+
+      try {
+        await fetch('https://formsubmit.co/ajax/klanphs.solutions@gmail.com', {
+          method: 'POST',
+          body: emailFd
+        });
+      } catch (emailErr) {
+        console.error('Email forwarding failed:', emailErr);
+        // Continue to save to database even if email fails
+      }
+
+      // --- DATABASE SUBMISSION ---
+      const res = await api.createApplication(fd);
 
       if (res.ok) {
         setSubmitted(true);
