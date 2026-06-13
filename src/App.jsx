@@ -28,6 +28,7 @@ import WhatsAppAssistant from './components/WhatsAppAssistant';
 import CareersPage from './components/CareersPage';
 import JobApplicationPage from './components/JobApplicationPage';
 import AdminPanel from './components/AdminPanel';
+import Engine from './components/TestEngine/Engine';
 import FAQPage from './components/FAQPage';
 import RefundPolicyPage from './components/RefundPolicyPage';
 import PrivacyPolicyPage from './components/PrivacyPolicyPage';
@@ -336,6 +337,9 @@ function App() {
   }
   if (window.location.pathname === '/admin') {
     return <AdminPanel />;
+  }
+  if (window.location.pathname.startsWith('/test/')) {
+    return <Engine />;
   }
 
   return (

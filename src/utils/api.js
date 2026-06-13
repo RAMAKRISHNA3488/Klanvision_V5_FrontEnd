@@ -128,4 +128,60 @@ export const api = {
 
     // Health Check
     checkHealth: () => fetch(`${API_BASE_URL}/health`).then(r => r.ok),
+
+    // Exams
+    getExams: () => fetch(`${API_BASE_URL}/exams`).then(handleResponse),
+    getExam: (id) => fetch(`${API_BASE_URL}/exams/${id}`).then(handleResponse),
+    createExam: (data) => fetchWithAuth(`${API_BASE_URL}/exams`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    updateExam: (id, data) => fetchWithAuth(`${API_BASE_URL}/exams/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    deleteExam: (id) => fetchWithAuth(`${API_BASE_URL}/exams/${id}`, { method: 'DELETE' }),
+
+    // Exam Engine & Attempts
+    upsertProfile: (data) => fetch(`${API_BASE_URL}/exam-profiles`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).then(handleResponse),
+    getAttempts: (testId, studentId, status, countOnly = false) => {
+        let url = `${API_BASE_URL}/attempts?testId=${encodeURIComponent(testId)}&studentId=${encodeURIComponent(studentId)}`;
+        if (status) url += `&status=${encodeURIComponent(status)}`;
+        if (countOnly) url += `&count=exact`;
+        return fetch(url).then(handleResponse);
+    },
+    createAttempt: (data) => fetch(`${API_BASE_URL}/attempts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).then(handleResponse),
+    getAttemptAnswers: (attemptId) => fetch(`${API_BASE_URL}/attempt-answers?attemptId=${encodeURIComponent(attemptId)}`).then(handleResponse),
+    upsertAttemptAnswers: (data) => fetch(`${API_BASE_URL}/attempt-answers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).then(handleResponse),
+    getExamQuestions: (id) => fetch(`${API_BASE_URL}/exams/${id}/questions`).then(handleResponse),
+    submitAttempt: (id, timeTaken) => fetch(`${API_BASE_URL}/attempts/${id}/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ timeTaken })
+    }).then(handleResponse),
+    createQuestion: (examId, data) => fetchWithAuth(`${API_BASE_URL}/exams/${examId}/questions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    updateQuestion: (questionId, data) => fetchWithAuth(`${API_BASE_URL}/questions/${questionId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    deleteQuestion: (questionId) => fetchWithAuth(`${API_BASE_URL}/questions/${questionId}`, { method: 'DELETE' }),
 };
