@@ -5,7 +5,7 @@ import { api } from '../../utils/api';
 import {
   LayoutDashboard, Users, FileText,
   Settings, LogOut, Search, Bell, Plus,
-  Mail, ShieldCheck, UserPlus, LayoutPanelLeft,
+  Mail, ShieldCheck, Shield, UserPlus, LayoutPanelLeft,
   Activity, Zap, Rocket, Check, X, Lock, Eye,
   EyeOff, Upload, GraduationCap
 } from 'lucide-react';
