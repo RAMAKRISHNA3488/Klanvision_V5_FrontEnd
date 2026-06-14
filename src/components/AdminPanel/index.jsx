@@ -433,8 +433,10 @@ export default function AdminPanel() {
           setVerifyingUser(null);
           setAuthCode(['', '', '', '', '', '']);
           setLoginError('');
-          addActivity(authenticatedUser.name, '2FA Verified', 'security', 'success', `Identity verified via mobile authenticator.`);
           localStorage.setItem('klanvision_admin_session', JSON.stringify({ user: authenticatedUser, loginTime: Date.now() }));
+          setTimeout(() => {
+            addActivity(authenticatedUser.name, '2FA Verified', 'security', 'success', `Identity verified via mobile authenticator.`);
+          }, 50);
         } catch (err) {
           const newFailCount = (verifyingUser.failed2FAAttempts || 0) + 1;
           try {
@@ -486,8 +488,10 @@ export default function AdminPanel() {
           setVerifyingUser(null);
           setAuthCode(['', '', '', '', '', '']);
           setLoginError('');
-          addActivity(verifyingUser.name, '2FA Configured', 'security', 'success', `Initial 2FA setup completed for ${verifyingUser.email}. Now verifying.`);
           localStorage.setItem('klanvision_admin_session', JSON.stringify({ user: finalUser, loginTime: Date.now() }));
+          setTimeout(() => {
+            addActivity(verifyingUser.name, '2FA Configured', 'security', 'success', `Initial 2FA setup completed for ${verifyingUser.email}. Now verifying.`);
+          }, 50);
         } catch (err) {
           setLoginError('Verification failed. Use the code shown in your app.');
         }

@@ -174,7 +174,7 @@ export default function BlogsView({ blogs, onAddClick, onEditClick, onDeleteClic
       {filteredBlogs.length === 0 ? (
         <NoResults query={searchQuery} />
       ) : (
-        <div className="admin-grid-cards-380" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: 28 }}>
+        <div className="admin-grid-cards-380 admin-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28 }}>
           {filteredBlogs.map((blog) => (
             <motion.div
               key={blog.id}
