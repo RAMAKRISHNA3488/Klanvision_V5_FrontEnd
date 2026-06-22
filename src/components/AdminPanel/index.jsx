@@ -31,7 +31,7 @@ import InternshipModule from './InternshipModule';
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 1024 : true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isResetMode, setIsResetMode] = useState(false);
@@ -811,7 +811,7 @@ export default function AdminPanel() {
 
         <nav style={{ padding: '20px 16px', flex: 1 }}>
           {navItems.filter(item => hasTabPermission(currentUser, item.id)).map((item) => (
-            <button key={item.id} onClick={() => setActiveTab(item.id)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 16, padding: '14px 18px', borderRadius: 16, border: 'none', background: activeTab === item.id ? item.gradient : 'transparent', color: activeTab === item.id ? 'white' : '#94A3B8', cursor: 'pointer', transition: 'all 0.3s', marginBottom: 8, fontWeight: 700, fontSize: 14 }}>
+            <button key={item.id} onClick={() => { setActiveTab(item.id); if (typeof window !== 'undefined' && window.innerWidth <= 1024) setIsSidebarOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 16, padding: '14px 18px', borderRadius: 16, border: 'none', background: activeTab === item.id ? item.gradient : 'transparent', color: activeTab === item.id ? 'white' : '#94A3B8', cursor: 'pointer', transition: 'all 0.3s', marginBottom: 8, fontWeight: 700, fontSize: 14 }}>
               <item.icon size={20} />
               {isSidebarOpen && <span style={{ flex: 1, textAlign: 'left' }}>{item.label}</span>}
             </button>
@@ -819,12 +819,32 @@ export default function AdminPanel() {
         </nav>
 
         <div style={{ padding: '24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <button onClick={handleLogout} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 16, padding: '14px', borderRadius: 16, border: 'none', background: 'rgba(239, 68, 68, 0.1)', color: '#F87171', cursor: 'pointer', fontSize: 14, fontWeight: 700 }}>
+          <button onClick={() => { handleLogout(); if (typeof window !== 'undefined' && window.innerWidth <= 1024) setIsSidebarOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 16, padding: '14px', borderRadius: 16, border: 'none', background: 'rgba(239, 68, 68, 0.1)', color: '#F87171', cursor: 'pointer', fontSize: 14, fontWeight: 700 }}>
             <LogOut size={20} />
             {isSidebarOpen && <span>Sign Out</span>}
           </button>
         </div>
       </motion.aside>
+
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {isSidebarOpen && typeof window !== 'undefined' && window.innerWidth <= 1024 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSidebarOpen(false)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.5)',
+              backdropFilter: 'blur(4px)',
+              zIndex: 49,
+              cursor: 'pointer'
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       <main className="admin-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh', overflowY: 'auto' }}>
         <header className="admin-header" style={{ height: 90, background: 'rgba(15, 23, 42, 0.8)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', position: 'sticky', top: 0, zIndex: 40 }}>

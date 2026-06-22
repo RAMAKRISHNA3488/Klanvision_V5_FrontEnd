@@ -2,12 +2,23 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, ShieldAlert, Award, Calendar, User, Search, RefreshCw } from 'lucide-react';
 import { api } from '../../utils/api';
+import { useSEO } from '../../hooks/useSEO';
 
 export default function VerificationPortal({ certificateNumber }) {
   const [certId, setCertId] = useState(certificateNumber || '');
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
+
+  useSEO({
+    title: data
+      ? `Verified Certificate: ${data.name} - ${data.role} | Klanvision`
+      : (error ? 'Invalid Certificate - Klanvision' : 'Certificate Verification Portal - Klanvision'),
+    description: data
+      ? `Verify ${data.name}'s successful completion of ${data.domain} internship at Klanvision. Certificate Number: ${data.certificate_number || data.certificateNumber}.`
+      : 'Verify your Klanvision internship completion certificates online. Instant credential validation powered by digital signatures.',
+    canonical: certificateNumber ? `/verify/${certificateNumber}` : '/verify',
+  });
 
   const verify = async (idToVerify) => {
     if (!idToVerify.trim()) return;
@@ -162,6 +173,18 @@ export default function VerificationPortal({ certificateNumber }) {
               <div>
                 <div style={{ fontSize: 16, fontWeight: 900, color: '#10B981' }}>Certificate Verified ✅</div>
                 <div style={{ fontSize: 12, color: '#94A3B8', marginTop: 2 }}>Secure record matches administrative log.</div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 32 }}>
+              <img 
+                src={data.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=1E293B&color=fff&size=96`} 
+                style={{ width: 96, height: 96, borderRadius: 24, border: '2px solid rgba(255,255,255,0.1)', objectFit: 'cover' }} 
+                alt="Candidate Portrait"
+              />
+              <div style={{ textAlign: 'center' }}>
+                <h3 style={{ fontSize: 20, fontWeight: 900, color: 'white', margin: 0 }}>{data.name}</h3>
+                <span style={{ fontSize: 11, fontWeight: 800, color: '#6366F1', letterSpacing: '1px', textTransform: 'uppercase', marginTop: 4, display: 'inline-block' }}>{data.candidate_id || data.candidateId}</span>
               </div>
             </div>
 

@@ -9,9 +9,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Sun, Moon } from 'lucide-react';
 
 
-// Navigation items – label shown in nav, id used for scrollTo target
+// Navigation items – label shown in nav, id used for routing path
 const navItems = [
-  { label: 'HOME',      id: 'hero'      },
+  { label: 'HOME',      id: 'home'      },
   { label: 'SERVICES',  id: 'services'  },
   { label: 'PORTFOLIO', id: 'portfolio' },
   { label: 'BLOG',      id: 'blog'      },
@@ -31,27 +31,42 @@ export default function Navbar({ theme, toggleTheme }) {
   const [searchResults, setSearchResults] = useState([]);
   const [activeSection, setActiveSection] = useState('hero');  // currently visible section
 
-  // Track active section on scroll – highlights nav item whose section top
-  // is at or above the midpoint of the viewport
+  // Track active section on scroll or pathname
   useEffect(() => {
-    const handleScroll = () => {
-      // Track Active Section
-      const current = [...navItems]
-        .reverse()
-        .map(item => ({ id: item.id, el: document.getElementById(item.id) }))
-        .find(section => {
-          if (!section.el) return false;
-          const rect = section.el.getBoundingClientRect();
-          return rect.top <= window.innerHeight / 2; // Active if top is above middle of screen
-        });
+    const path = window.location.pathname;
+    const cleanPath = path === '/' ? 'home' : path.substring(1);
 
-      if (current) {
-        setActiveSection(current.id);
-      }
-    };
+    if (cleanPath === 'home' || cleanPath === '') {
+      const handleScroll = () => {
+        const homeSections = [
+          { label: 'HOME',      id: 'hero'      },
+          { label: 'SERVICES',  id: 'services'  },
+          { label: 'PORTFOLIO', id: 'portfolio' },
+          { label: 'BLOG',      id: 'blog'      },
+          { label: 'ABOUT',     id: 'about'     },
+          { label: 'CONTACT',   id: 'contact'   },
+        ];
+        const current = [...homeSections]
+          .reverse()
+          .map(item => ({ id: item.id, el: document.getElementById(item.id) }))
+          .find(section => {
+            if (!section.el) return false;
+            const rect = section.el.getBoundingClientRect();
+            return rect.top <= window.innerHeight / 2;
+          });
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+        if (current) {
+          const activeId = current.id === 'hero' ? 'home' : current.id;
+          setActiveSection(activeId);
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll);
+      handleScroll();
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setActiveSection(cleanPath);
+    }
   }, []);
 
   // Build search results from nav labels + DOM text nodes on each query change
@@ -104,17 +119,17 @@ export default function Navbar({ theme, toggleTheme }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Smooth scroll to a section by id and close mobile menu
+  // Smooth scroll to a section by id or route and close mobile menu
   const scrollTo = (id) => {
     if (id === 'careers') {
       window.location.href = '/careers';
       return;
     }
-    if (window.location.pathname !== '/') {
-      window.location.href = `/#${id}`;
+    if (id === 'home') {
+      window.location.href = '/';
       return;
     }
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    window.location.href = `/${id}`;
     setMobileOpen(false);
   };
 

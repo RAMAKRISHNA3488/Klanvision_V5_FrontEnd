@@ -330,3 +330,118 @@
 .cancel-logout-btn:hover {
   color: white;
 }
+
+/* ── ADDITIONAL DEVICE RESPONSIVENESS OVERRIDES ── */
+
+/* Force all tables inside admin panel to scroll horizontally rather than overflow the main viewport layout */
+.admin-main table {
+  min-width: 850px;
+}
+.admin-main div:has(> table),
+.admin-main div:has(table) {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+/* Modal dialogue container adjustments for mobile screen widths */
+@media (max-width: 768px) {
+  div[style*="position: fixed"] > div[style*="width: 100%"] {
+    width: 95% !important;
+    max-width: 95% !important;
+    border-radius: 24px !important;
+  }
+  
+  div[style*="position: fixed"] > div[style*="width: 100%"] > div,
+  div[style*="position: fixed"] > div[style*="width: 100%"] form > div {
+    padding: 20px !important;
+  }
+  
+  div[style*="position: fixed"] h3 {
+    font-size: 20px !important;
+    margin-bottom: 20px !important;
+  }
+}
+
+/* Adjust general container margins, gaps, paddings, and select fields on mobile */
+@media (max-width: 768px) {
+  .admin-main > div {
+    padding: 16px !important;
+  }
+  
+  .admin-main select {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Force stack toolbar filters and query fields vertically on compact mobile screens */
+  .admin-main div[style*="display: flex"][style*="justify-content: space-between"],
+  .admin-main div[style*="display:flex"][style*="justify-content:space-between"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+  }
+  
+  .admin-main div[style*="display: flex"][style*="gap: 16"],
+  .admin-main div[style*="display:flex"][style*="gap:16"] {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Stack all complex multi-column grids in the Admin Panel on mobile */
+  div[style*="grid-template-columns: 1.5fr 1fr 1fr"],
+  div[style*="grid-template-columns:1.5fr 1fr 1fr"],
+  div[style*="grid-template-columns: repeat(4, 1fr)"],
+  div[style*="grid-template-columns:repeat(4,1fr)"],
+  div[style*="grid-template-columns: 1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr"],
+  div[style*="grid-template-columns: 1.2fr 1fr"],
+  div[style*="grid-template-columns: 2.5fr 1fr"],
+  div[style*="grid-template-columns: repeat(3, 1fr)"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Stack SettingRows vertically and make controls full width on mobile/tablet */
+  .admin-settings-layout div[style*="display: flex"][style*="justify-content: space-between"][style*="gap: 48"],
+  .admin-settings-layout div[style*="display:flex"][style*="justify-content:space-between"][style*="gap:48"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+  }
+  
+  .admin-settings-layout input[style*="width: 400"],
+  .admin-settings-layout input[style*="width:400"],
+  .admin-settings-layout select[style*="width: 400"],
+  .admin-settings-layout select[style*="width:400"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Reset right-aligned text when components stack vertically */
+  .admin-main div[style*="text-align: right"],
+  .admin-main div[style*="text-align:right"] {
+    text-align: left !important;
+  }
+
+  /* Optimize cards padding on dashboard */
+  .admin-grid-4 > div {
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+  
+  /* Shrink large container paddings in DashboardView */
+  .admin-main div[style*="padding: 56px"],
+  .admin-main div[style*="padding: 48px"] {
+    padding: 24px !important;
+    border-radius: 28px !important;
+  }
+  
+  .admin-main div[style*="margin-bottom: 56px"] {
+    margin-bottom: 24px !important;
+  }
+  
+  .admin-main div[style*="margin-bottom: 40px"] {
+    margin-bottom: 20px !important;
+  }
+}

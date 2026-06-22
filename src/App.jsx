@@ -44,6 +44,12 @@ import CloudServicesPage from './components/CloudServicesPage';
 import UpgradeMigrationPage from './components/UpgradeMigrationPage';
 import APIIntegrationPage from './components/APIIntegrationPage';
 
+import ServicesPage from './components/ServicesPage';
+import PortfolioPage from './components/PortfolioPage';
+import BlogPage from './components/BlogPage';
+import AboutPage from './components/AboutPage';
+import ContactPage from './components/ContactPage';
+
 // ── Loader Component ─────────────────────────────────────────
 // Full-screen branded splash screen displayed for 2.4 seconds
 // on first load. Fades out with a slight scale-up exit animation.
@@ -342,8 +348,8 @@ function App() {
   if (window.location.pathname.startsWith('/test/')) {
     return <Engine />;
   }
-  if (window.location.pathname.startsWith('/verify/')) {
-    const certNum = window.location.pathname.substring(8);
+  if (window.location.pathname === '/verify' || window.location.pathname === '/verify/' || window.location.pathname === '/verify-certificate' || window.location.pathname.startsWith('/verify/')) {
+    const certNum = window.location.pathname.startsWith('/verify/') ? window.location.pathname.substring(8) : '';
     return <VerificationPortal certificateNumber={certNum} />;
   }
 
@@ -367,15 +373,24 @@ function App() {
 
           {/* Page sections in scroll order */}
           <main>
-            <Hero />                  {/* Full-screen hero with heading, CTA, and image */}
-            <StrategicServices />     {/* 8-card digital services overview grid */}
-            <ServicesSection />       {/* Detailed 8-card service offerings */}
-            <WhyPartner />            {/* Reasons to partner + animated stats + CTA banner */}
-            <PortfolioSection />      {/* Filterable project portfolio grid */}
-            <TestimonialsSection />   {/* Client testimonials + trust badges */}
-            <BlogSection />           {/* 6 blog article cards */}
-            <AboutSection />          {/* Company info, milestones, and highlights */}
-            <ContactSection />        {/* Contact form + info card + support image */}
+            {window.location.pathname === '/services' && <ServicesPage />}
+            {window.location.pathname === '/portfolio' && <PortfolioPage />}
+            {window.location.pathname === '/blog' && <BlogPage />}
+            {window.location.pathname === '/about' && <AboutPage />}
+            {window.location.pathname === '/contact' && <ContactPage />}
+            {(window.location.pathname === '/' || window.location.pathname === '/home') && (
+              <>
+                <Hero />                  {/* Full-screen hero with heading, CTA, and image */}
+                <StrategicServices />     {/* 8-card digital services overview grid */}
+                <ServicesSection />       {/* Detailed 8-card service offerings */}
+                <WhyPartner />            {/* Reasons to partner + animated stats + CTA banner */}
+                <PortfolioSection />      {/* Filterable project portfolio grid */}
+                <TestimonialsSection />   {/* Client testimonials + trust badges */}
+                <BlogSection />           {/* 6 blog article cards */}
+                <AboutSection />          {/* Company info, milestones, and highlights */}
+                <ContactSection />        {/* Contact form + info card + support image */}
+              </>
+            )}
           </main>
 
           {/* Site footer with brand, links, legal, and contact info */}

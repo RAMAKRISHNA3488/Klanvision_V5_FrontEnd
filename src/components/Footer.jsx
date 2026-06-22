@@ -19,7 +19,8 @@ const quickLinks = [
   { label: 'Portfolio', id: 'portfolio' },
   { label: 'About', id: 'about' },
   { label: 'Contact', id: 'contact' },
-  { label: 'Careers', id: 'careers' }
+  { label: 'Careers', id: 'careers' },
+  { label: 'Verify Certificate', id: 'verify' }
 ];
 
 // Legal policy links - strictly matching the updated documented info
@@ -171,6 +172,10 @@ export default function Footer() {
   const scrollTo = (id) => {
     if (id === 'careers') {
       window.location.href = '/careers';
+      return;
+    }
+    if (id === 'verify') {
+      window.location.href = '/verify';
       return;
     }
     if (window.location.pathname !== '/') {

@@ -143,7 +143,8 @@ function CandidatesView({ interns, onSave, onDelete, canEdit }) {
   const [form, setForm] = useState({
     name: '', email: '', phone: '', dob: '', gender: 'Male', address: '',
     collegeName: '', university: '', degree: '', branch: '', graduationYear: '', cgpa: '',
-    domain: 'Software Development', role: 'Intern', startDate: '', endDate: '', duration: '6 Months', mentorName: ''
+    domain: 'Software Development', role: 'Intern', startDate: '', endDate: '', duration: '6 Months', mentorName: '',
+    image: ''
   });
 
   const domains = [
@@ -174,7 +175,8 @@ function CandidatesView({ interns, onSave, onDelete, canEdit }) {
       startDate: intern.start_date || '',
       endDate: intern.end_date || '',
       duration: intern.duration || '6 Months',
-      mentorName: intern.mentor_name || ''
+      mentorName: intern.mentor_name || '',
+      image: intern.image || ''
     });
     setIsModalOpen(true);
   };
@@ -184,7 +186,8 @@ function CandidatesView({ interns, onSave, onDelete, canEdit }) {
     setForm({
       name: '', email: '', phone: '', dob: '', gender: 'Male', address: '',
       collegeName: '', university: '', degree: '', branch: '', graduationYear: '', cgpa: '',
-      domain: 'Software Development', role: 'Intern', startDate: '', endDate: '', duration: '6 Months', mentorName: ''
+      domain: 'Software Development', role: 'Intern', startDate: '', endDate: '', duration: '6 Months', mentorName: '',
+      image: ''
     });
     setIsModalOpen(true);
   };
@@ -273,8 +276,17 @@ function CandidatesView({ interns, onSave, onDelete, canEdit }) {
                 <tr key={intern.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', transition: 'background 0.2s' }}>
                   <td style={{ padding: '18px 24px', fontWeight: 800, color: '#CBD5E1' }}>{intern.candidate_id}</td>
                   <td style={{ padding: '18px 24px' }}>
-                    <div style={{ fontWeight: 800, color: 'white' }}>{intern.name}</div>
-                    <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>{intern.email}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <img 
+                        src={intern.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(intern.name)}&background=1E293B&color=fff&size=32`} 
+                        style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} 
+                        alt=""
+                      />
+                      <div>
+                        <div style={{ fontWeight: 800, color: 'white' }}>{intern.name}</div>
+                        <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>{intern.email}</div>
+                      </div>
+                    </div>
                   </td>
                   <td style={{ padding: '18px 24px' }}>
                     <div style={{ fontWeight: 700, color: '#6366F1', fontSize: 13 }}>{intern.domain}</div>
@@ -356,6 +368,52 @@ function CandidatesView({ interns, onSave, onDelete, canEdit }) {
                 </div>
 
                 <div style={{ padding: '32px 40px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: 28 }}>
+                  {/* Candidate Image Upload */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+                    <div style={{ position: 'relative', width: 90, height: 90, borderRadius: '50%', overflow: 'hidden', border: '2px dashed rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <img
+                        src={form.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(form.name || 'Intern')}&background=1E293B&color=fff&size=90`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        alt="Profile Preview"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => document.getElementById('candidate-image-upload')?.click()}
+                      style={{
+                        padding: '6px 16px',
+                        borderRadius: 10,
+                        background: 'rgba(99, 102, 241, 0.1)',
+                        border: '1px solid rgba(99, 102, 241, 0.3)',
+                        color: '#818CF8',
+                        fontWeight: 800,
+                        fontSize: 12,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                    >
+                      <Plus size={14} /> Upload Portrait
+                    </button>
+                    <input
+                      id="candidate-image-upload"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setForm({ ...form, image: reader.result });
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </div>
+
                   {/* Personal Information */}
                   <div>
                     <h4 style={{ fontSize: 13, fontWeight: 900, color: '#6366F1', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 16 }}>Personal Information</h4>
@@ -484,7 +542,7 @@ function CandidatesView({ interns, onSave, onDelete, canEdit }) {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 40 }}>
-                <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(viewingIntern.name)}&background=1E293B&color=fff&size=96`} style={{ width: 96, height: 96, borderRadius: 24 }} />
+                <img src={viewingIntern.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(viewingIntern.name)}&background=1E293B&color=fff&size=96`} style={{ width: 96, height: 96, borderRadius: 24, objectFit: 'cover' }} />
                 <div style={{ textAlign: 'center' }}>
                   <h4 style={{ fontSize: 20, fontWeight: 900, color: 'white' }}>{viewingIntern.name}</h4>
                   <p style={{ color: '#6366F1', fontSize: 13, fontWeight: 800, marginTop: 4 }}>{viewingIntern.candidate_id}</p>
@@ -565,8 +623,17 @@ function ParticipationView({ interns, downloadDoc }) {
               <tr key={intern.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                 <td style={{ padding: '18px 24px', fontWeight: 800, color: '#CBD5E1' }}>{intern.candidate_id}</td>
                 <td style={{ padding: '18px 24px' }}>
-                  <div style={{ fontWeight: 800, color: 'white' }}>{intern.name}</div>
-                  <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>{intern.email}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <img 
+                      src={intern.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(intern.name)}&background=1E293B&color=fff&size=32`} 
+                      style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} 
+                      alt=""
+                    />
+                    <div>
+                      <div style={{ fontWeight: 800, color: 'white' }}>{intern.name}</div>
+                      <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>{intern.email}</div>
+                    </div>
+                  </div>
                 </td>
                 <td style={{ padding: '18px 24px', fontWeight: 700, color: '#6366F1', fontSize: 13 }}>{intern.domain}</td>
                 <td style={{ padding: '18px 24px', color: '#94A3B8', fontSize: 13 }}>{intern.start_date}</td>
@@ -637,8 +704,17 @@ function CompletionView({ interns, downloadDoc, onMarkComplete, canEdit }) {
                 <tr key={intern.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                   <td style={{ padding: '18px 24px', fontWeight: 800, color: '#CBD5E1' }}>{intern.candidate_id}</td>
                   <td style={{ padding: '18px 24px' }}>
-                    <div style={{ fontWeight: 800, color: 'white' }}>{intern.name}</div>
-                    <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>{intern.email}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <img 
+                        src={intern.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(intern.name)}&background=1E293B&color=fff&size=32`} 
+                        style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} 
+                        alt=""
+                      />
+                      <div>
+                        <div style={{ fontWeight: 800, color: 'white' }}>{intern.name}</div>
+                        <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>{intern.email}</div>
+                      </div>
+                    </div>
                   </td>
                   <td style={{ padding: '18px 24px', fontWeight: 700, color: '#6366F1', fontSize: 13 }}>{intern.domain}</td>
                   <td style={{ padding: '18px 24px', color: '#94A3B8', fontSize: 13 }}>{intern.end_date}</td>
@@ -768,8 +844,17 @@ function CertificatesView({ certificates, downloadDoc, onRegenerate, onSendEmail
                 <tr key={cert.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                   <td style={{ padding: '18px 24px', fontWeight: 900, color: '#EC4899', letterSpacing: '1px' }}>{cert.certificate_number}</td>
                   <td style={{ padding: '18px 24px' }}>
-                    <div style={{ fontWeight: 800, color: 'white' }}>{cert.name}</div>
-                    <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>{cert.candidate_id}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <img 
+                        src={cert.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(cert.name)}&background=1E293B&color=fff&size=32`} 
+                        style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} 
+                        alt=""
+                      />
+                      <div>
+                        <div style={{ fontWeight: 800, color: 'white' }}>{cert.name}</div>
+                        <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>{cert.candidate_id}</div>
+                      </div>
+                    </div>
                   </td>
                   <td style={{ padding: '18px 24px', fontWeight: 700, color: '#6366F1', fontSize: 13 }}>{cert.domain}</td>
                   <td style={{ padding: '18px 24px', color: '#CBD5E1', fontSize: 13 }}>{cert.certificate_date}</td>
