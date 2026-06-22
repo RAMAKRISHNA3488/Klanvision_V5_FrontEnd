@@ -27,6 +27,7 @@ import BlogsView, { BlogForm } from './BlogsView';
 import SettingsView from './SettingsView';
 import ActivityView from './ActivityView';
 import ExamsView from './ExamsView';
+import InternshipModule from './InternshipModule';
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -127,9 +128,14 @@ export default function AdminPanel() {
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [editingProject, setEditingProject] = useState(null);
-  const [editingBlog, setEditingBlog] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
   const [notification, setNotification] = useState(null);
+
+  const triggerToast = (msg, user = 'System') => {
+    setNotification({ show: true, msg, user });
+    setTimeout(() => setNotification(null), 4000);
+  };
+
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
   const [userRoleFilter, setUserRoleFilter] = useState('All');
   const [projectStatusFilter, setProjectStatusFilter] = useState('All');
@@ -247,6 +253,7 @@ export default function AdminPanel() {
     { id: 'users', label: 'Users', icon: Users, gradient: 'linear-gradient(135deg, #EC4899, #F472B6)' },
     { id: 'projects', label: 'Projects', icon: LayoutPanelLeft, gradient: 'linear-gradient(135deg, #7C3AED, #A78BFA)', sub: ['All Projects', 'Delivered Projects', 'Future Projects'] },
     { id: 'exams', label: 'Examination', icon: GraduationCap, gradient: 'linear-gradient(135deg, #8B5CF6, #A78BFA)' },
+    { id: 'internship', label: 'Internships', icon: ShieldCheck, gradient: 'linear-gradient(135deg, #10B981, #34D399)' },
     { id: 'blogs', label: 'Blogs', icon: FileText, gradient: 'linear-gradient(135deg, #F59E0B, #FBBF24)' },
     { id: 'settings', label: 'Settings', icon: Settings, gradient: 'linear-gradient(135deg, #64748B, #94A3B8)' },
     { id: 'activity', label: 'Activity Log', icon: Activity, gradient: 'linear-gradient(135deg, #3B82F6, #60A5FA)' },
@@ -283,6 +290,7 @@ export default function AdminPanel() {
           setCurrentUser(user);
           setLoginError('');
           localStorage.setItem('klanvision_admin_session', JSON.stringify({ user, loginTime: Date.now() }));
+          triggerToast(`Authorized session initialized for ${user.name || user.email}.`, 'Access Granted');
           // Give local storage a tiny moment to save before triggering a network request that reads it
           setTimeout(() => {
             addActivity(user.name || user.email, 'System Login', 'security', 'success', `Successful login from ${user.email}`);
@@ -290,15 +298,18 @@ export default function AdminPanel() {
         }
       } else {
         setLoginError('This account is not authorized to access the Panel.');
+        triggerToast('Account authorization mismatch.', 'Access Blocked');
       }
     } catch (err) {
       setLoginError('Invalid security credentials provided.');
+      triggerToast('Authentication credentials mismatch.', 'Access Denied');
     }
   };
 
   const handleLogout = () => {
     if (currentUser) {
       addActivity(currentUser.name, 'System Logout', 'security', 'info', `${currentUser.name} signed out of the admin panel.`);
+      triggerToast('Active session terminated successfully.', currentUser.name);
     }
     // Delay removing session to allow the activity fetch to read the token
     setTimeout(() => {
@@ -339,7 +350,11 @@ export default function AdminPanel() {
       api.updateUser(editingUser.id, updatedUser).then(updated => {
         setUsers(prev => prev.map(u => u.id === editingUser.id ? updated : u));
         addActivity(currentUser?.name || 'Admin', 'Modified User', 'security', 'info', `Updated profile for ${userData.name}`);
-      }).catch(err => console.error("Error updating user:", err));
+        triggerToast(`Modified credentials for ${userData.name}.`, 'Directory Update');
+      }).catch(err => {
+        console.error("Error updating user:", err);
+        triggerToast('Failed to modify user credentials.', 'Directory Error');
+      });
     } else {
       const newUser = {
         ...userData,
@@ -355,7 +370,11 @@ export default function AdminPanel() {
       api.createUser(newUser).then(created => {
         setUsers(prev => [...prev, created]);
         addActivity(currentUser?.name || 'Admin', 'New User Created', 'security', 'success', `Added ${userData.name} to the directory.`);
-      }).catch(err => console.error("Error creating user:", err));
+        triggerToast(`Added ${userData.name} to security directory.`, 'Directory Update');
+      }).catch(err => {
+        console.error("Error creating user:", err);
+        triggerToast('Failed to enroll new member.', 'Directory Error');
+      });
     }
     setIsUserModalOpen(false);
     setEditingUser(null);
@@ -369,7 +388,11 @@ export default function AdminPanel() {
     api.updateUser(user.id, updatedUser).then(updated => {
       setUsers(prev => prev.map(u => u.id === user.id ? updated : u));
       addActivity(currentUser?.name || 'Admin', 'User Access Changed', 'security', updated.isAuthorized ? 'success' : 'warning', `${updated.isAuthorized ? 'Granted' : 'Revoked'} access for ${user.name}`);
-    }).catch(err => console.error("Error toggling user access:", err));
+      triggerToast(`Access privileges ${updated.isAuthorized ? 'granted to' : 'revoked from'} ${user.name}.`, 'Security Access');
+    }).catch(err => {
+      console.error("Error toggling user access:", err);
+      triggerToast('Failed to toggle member authorization.', 'Security Error');
+    });
   };
 
   const handleSaveProject = (projectData) => {
@@ -377,7 +400,11 @@ export default function AdminPanel() {
       api.updateProject(editingProject.id, projectData).then(updated => {
         setProjects(prev => prev.map(p => p.id === editingProject.id ? updated : p));
         addActivity(currentUser?.name || 'Admin', 'Project Updated', 'project', 'info', `Modified details for "${projectData.title}"`);
-      }).catch(err => console.error("Error updating project:", err));
+        triggerToast(`Updated project registry: "${projectData.title}".`, 'Project Directory');
+      }).catch(err => {
+        console.error("Error updating project:", err);
+        triggerToast('Failed to modify project registry.', 'Project Error');
+      });
     } else {
       const newProject = {
         ...projectData,
@@ -386,7 +413,11 @@ export default function AdminPanel() {
       api.createProject(newProject).then(created => {
         setProjects(prev => [...prev, created]);
         addActivity(currentUser?.name || 'Admin', 'Project Launched', 'project', 'success', `New project "${projectData.title}" initialized.`);
-      }).catch(err => console.error("Error creating project:", err));
+        triggerToast(`New project initialized: "${projectData.title}".`, 'Project Directory');
+      }).catch(err => {
+        console.error("Error creating project:", err);
+        triggerToast('Failed to launch project venture.', 'Project Error');
+      });
     }
     setIsProjectModalOpen(false);
     setEditingProject(null);
@@ -397,7 +428,11 @@ export default function AdminPanel() {
       api.updateBlog(editingBlog.id, blogData).then(updated => {
         setBlogs(prev => prev.map(b => b.id === editingBlog.id ? updated : b));
         addActivity(blogData.author, 'Blog Updated', 'content', 'info', `Refined "${blogData.title}"`);
-      }).catch(err => console.error("Error updating blog:", err));
+        triggerToast(`Updated blog article: "${blogData.title}".`, 'Blog Manager');
+      }).catch(err => {
+        console.error("Error updating blog:", err);
+        triggerToast('Failed to update blog article.', 'Blog Error');
+      });
     } else {
       const newBlog = {
         ...blogData,
@@ -409,7 +444,11 @@ export default function AdminPanel() {
         addActivity(blogData.author, 'Blog Published', 'content', 'success', `Launched new article: "${blogData.title}"`);
         setShowCelebration(true);
         setTimeout(() => setShowCelebration(false), 4000);
-      }).catch(err => console.error("Error creating blog:", err));
+        triggerToast(`Article published: "${blogData.title}".`, 'Blog Manager');
+      }).catch(err => {
+        console.error("Error creating blog:", err);
+        triggerToast('Failed to publish blog article.', 'Blog Error');
+      });
     }
     setIsBlogModalOpen(false);
     setEditingBlog(null);
@@ -885,8 +924,14 @@ export default function AdminPanel() {
                     api.deleteUser(id).then(() => {
                       const user = users.find(u => u.id === id);
                       setUsers(prev => prev.filter(u => u.id !== id));
-                      if (user) addActivity(currentUser?.name || 'Admin', 'User Removed', 'security', 'warning', `Deleted account for ${user.name}`);
-                    }).catch(err => console.error("Error deleting user:", err));
+                      if (user) {
+                        addActivity(currentUser?.name || 'Admin', 'User Removed', 'security', 'warning', `Deleted account for ${user.name}`);
+                        triggerToast(`Removed member ${user.name} from security directory.`, 'Directory Update');
+                      }
+                    }).catch(err => {
+                      console.error("Error deleting user:", err);
+                      triggerToast('Failed to remove member.', 'Directory Error');
+                    });
                   }}
                   onToggleAccess={handleToggleUserAccess}
                   searchQuery={globalSearchQuery}
@@ -905,8 +950,14 @@ export default function AdminPanel() {
                     api.deleteProject(id).then(() => {
                       const project = projects.find(p => p.id === id);
                       setProjects(prev => prev.filter(p => p.id !== id));
-                      if (project) addActivity(currentUser?.name || 'Admin', 'Project Terminated', 'project', 'warning', `Removed project "${project.title}"`);
-                    }).catch(err => console.error("Error deleting project:", err));
+                      if (project) {
+                        addActivity(currentUser?.name || 'Admin', 'Project Terminated', 'project', 'warning', `Removed project "${project.title}"`);
+                        triggerToast(`Terminated project venture: "${project.title}".`, 'Project Directory');
+                      }
+                    }).catch(err => {
+                      console.error("Error deleting project:", err);
+                      triggerToast('Failed to terminate project.', 'Project Error');
+                    });
                   }}
                   searchQuery={globalSearchQuery}
                   statusFilter={projectStatusFilter}
@@ -924,8 +975,14 @@ export default function AdminPanel() {
                     api.deleteBlog(id).then(() => {
                       const blog = blogs.find(b => b.id === id);
                       setBlogs(prev => prev.filter(b => b.id !== id));
-                      if (blog) addActivity(currentUser?.name || 'Admin', 'Blog Deleted', 'content', 'warning', `Removed article "${blog.title}"`);
-                    }).catch(err => console.error("Error deleting blog:", err));
+                      if (blog) {
+                        addActivity(currentUser?.name || 'Admin', 'Blog Deleted', 'content', 'warning', `Removed article "${blog.title}"`);
+                        triggerToast(`Deleted blog article: "${blog.title}".`, 'Blog Manager');
+                      }
+                    }).catch(err => {
+                      console.error("Error deleting blog:", err);
+                      triggerToast('Failed to delete blog article.', 'Blog Error');
+                    });
                   }}
                   searchQuery={globalSearchQuery}
                   categoryFilter={blogCategoryFilter}
@@ -955,7 +1012,12 @@ export default function AdminPanel() {
             )}
             {activeTab === 'exams' && (
               hasTabPermission(currentUser, 'exams') ? (
-                <ExamsView />
+                <ExamsView triggerToast={triggerToast} />
+              ) : <UnauthorizedView />
+            )}
+            {activeTab === 'internship' && (
+              hasTabPermission(currentUser, 'projects') ? (
+                <InternshipModule currentUser={currentUser} addActivity={addActivity} />
               ) : <UnauthorizedView />
             )}
           </AnimatePresence>
@@ -1004,6 +1066,7 @@ export default function AdminPanel() {
                     <BlogForm
                       initialData={editingBlog}
                       onSave={handleSaveBlog}
+                      triggerToast={triggerToast}
                     />
                   </div>
                 </div>
@@ -1040,6 +1103,7 @@ export default function AdminPanel() {
                   initialData={editingProject}
                   teamMembers={users}
                   onSave={handleSaveProject}
+                  triggerToast={triggerToast}
                 />
               </div>
             </motion.div>
@@ -1068,6 +1132,7 @@ export default function AdminPanel() {
                 <UserForm
                   initialData={editingUser}
                   onSave={handleSaveUser}
+                  triggerToast={triggerToast}
                 />
               </div>
             </motion.div>

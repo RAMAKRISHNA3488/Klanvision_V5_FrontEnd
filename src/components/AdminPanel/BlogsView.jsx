@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Users, Star, Plus, Edit2, Trash2, Calendar, Clock, Activity, Link2, Globe, Upload, Zap } from 'lucide-react';
 import { NoResults } from './SharedComponents';
 
-export function BlogForm({ initialData, onSave }) {
+export function BlogForm({ initialData, onSave, triggerToast }) {
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     category: initialData?.category || 'Technology',
@@ -21,7 +21,7 @@ export function BlogForm({ initialData, onSave }) {
 
   const handleAction = () => {
     if (!formData.title || !formData.content || !formData.author) {
-      alert('Title, Author, and Content are mandatory for saving.');
+      triggerToast('Title, Author, and Content are mandatory for saving.', 'Blog Manager');
       return;
     }
     onSave(formData);

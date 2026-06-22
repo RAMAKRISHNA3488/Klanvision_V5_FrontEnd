@@ -129,7 +129,7 @@ const socials = [
   { icon: FaFacebook, label: 'Facebook', color: '#1877F2', url: 'https://www.facebook.com/profile.php?id=61574478992387' },
   { icon: FaTwitter, label: 'Twitter', color: '#1DA1F2', url: 'https://twitter.com/KlanSmteam' },
   { icon: FaInstagram, label: 'Instagram', color: '#E4405F', url: 'https://www.instagram.com/klanvision?utm_source=qr&igsh=MXU4ZWxuMWxlc2Ziag%3D%3D' },
-  { icon: FaLinkedin, label: 'LinkedIn', color: '#0A66C2', url: 'https://www.linkedin.com/in/klan-vision-823191358/' },
+  { icon: FaLinkedin, label: 'LinkedIn', color: '#0A66C2', url: 'https://www.linkedin.com/in/' },
   { icon: FaYoutube, label: 'YouTube', color: '#FF0000', url: 'https://www.youtube.com/channel/UClvuyWdO7rlNx0SHwcgMMsA' },
   { icon: Mail, label: 'Email', color: '#FF6B35', url: 'mailto:support@klanvision.com' },
 ];

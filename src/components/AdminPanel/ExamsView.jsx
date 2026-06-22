@@ -50,7 +50,7 @@ const jobs = [
 
 const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
-export default function ExamsView() {
+export default function ExamsView({ triggerToast }) {
   const [exams, setExams] = useState([]);
   const [loadingExams, setLoadingExams] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,7 +97,7 @@ export default function ExamsView() {
       const qs = await api.getExamQuestions(exam.id);
       setExamQuestions(qs || []);
     } catch (err) {
-      alert("Failed to load questions: " + err.message);
+      triggerToast("Failed to load questions: " + err.message, "Exam Manager");
     } finally {
       setLoadingQuestions(false);
     }
@@ -138,7 +138,7 @@ export default function ExamsView() {
   };
 
   const handleDeleteQuestion = async (qId) => {
-    if (!confirm("Are you sure you want to delete this question?")) return;
+    if (!confirm("Are you sure you want to remove this question?")) return;
     try {
       await api.deleteQuestion(qId);
       setExamQuestions(prev => prev.filter(q => q.id !== qId));
@@ -153,8 +153,9 @@ export default function ExamsView() {
         }
         return e;
       }));
+      triggerToast("Question deleted successfully.", "Exam Manager");
     } catch (err) {
-      alert("Failed to delete question: " + err.message);
+      triggerToast("Failed to delete question: " + err.message, "Exam Manager");
     }
   };
 
@@ -191,8 +192,9 @@ export default function ExamsView() {
         }));
       }
       setShowQuestionForm(false);
+      triggerToast(editingQuestion ? "Question updated." : "Question added successfully.", "Exam Manager");
     } catch (err) {
-      alert("Failed to save question: " + err.message);
+      triggerToast("Failed to save question: " + err.message, "Exam Manager");
     }
   };
 
@@ -238,8 +240,9 @@ export default function ExamsView() {
     try {
       await api.deleteExam(id);
       setExams(prev => prev.filter(e => e.id !== id));
+      triggerToast("Exam assessing blueprint terminated.", "Exam Manager");
     } catch (err) {
-      alert("Failed to delete exam: " + err.message);
+      triggerToast("Failed to delete exam: " + err.message, "Exam Manager");
     }
   };
 
@@ -252,15 +255,16 @@ export default function ExamsView() {
       } else {
         const slug = slugify(examForm.role);
         if (exams.some(e => e.id === slug)) {
-          alert("An exam for this role already exists! Please edit the existing one.");
+          triggerToast("An exam for this role already exists! Please edit the existing one.", "Exam Manager");
           return;
         }
         const created = await api.createExam(examForm);
         setExams(prev => [...prev, created]);
       }
       setIsModalOpen(false);
+      triggerToast(editingExam ? "Exam settings updated." : "New exam blueprint initiated.", "Exam Manager");
     } catch (err) {
-      alert("Failed to save exam: " + err.message);
+      triggerToast("Failed to save exam: " + err.message, "Exam Manager");
     }
   };
 

@@ -29,6 +29,7 @@ import CareersPage from './components/CareersPage';
 import JobApplicationPage from './components/JobApplicationPage';
 import AdminPanel from './components/AdminPanel';
 import Engine from './components/TestEngine/Engine';
+import VerificationPortal from './components/AdminPanel/VerificationPortal';
 import FAQPage from './components/FAQPage';
 import RefundPolicyPage from './components/RefundPolicyPage';
 import PrivacyPolicyPage from './components/PrivacyPolicyPage';
@@ -340,6 +341,10 @@ function App() {
   }
   if (window.location.pathname.startsWith('/test/')) {
     return <Engine />;
+  }
+  if (window.location.pathname.startsWith('/verify/')) {
+    const certNum = window.location.pathname.substring(8);
+    return <VerificationPortal certificateNumber={certNum} />;
   }
 
   return (

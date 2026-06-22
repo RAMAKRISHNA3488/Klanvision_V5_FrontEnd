@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Users, Mail, Shield, ShieldCheck, Eye, EyeOff, Check, X, UserPlus, Edit2, Trash2 } from 'lucide-react';
 import { NoResults, normalizePermission } from './SharedComponents';
 
-export function UserForm({ initialData, onSave }) {
+export function UserForm({ initialData, onSave, triggerToast }) {
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
     email: initialData?.email || '',
@@ -43,7 +43,7 @@ export function UserForm({ initialData, onSave }) {
 
   const handleAction = () => {
     if (!formData.name || !formData.email) {
-      alert('Please provide a name and email.');
+      triggerToast('Please provide a name and email.', 'User Directory');
       return;
     }
     onSave(formData);

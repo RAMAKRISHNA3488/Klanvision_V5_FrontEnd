@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Users, Rocket, Plus, Edit2, Trash2, Calendar } from 'lucide-react';
 import { NoResults } from './SharedComponents';
 
-export function ProjectForm({ initialData, teamMembers, onSave }) {
+export function ProjectForm({ initialData, teamMembers, onSave, triggerToast }) {
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     client: initialData?.client || '',
@@ -19,7 +19,7 @@ export function ProjectForm({ initialData, teamMembers, onSave }) {
 
   const handleAction = () => {
     if (!formData.title || !formData.client || !formData.deadline) {
-      alert('Project title, client, and deadline are required.');
+      triggerToast('Project title, client, and deadline are required.', 'Project Directory');
       return;
     }
     onSave(formData);

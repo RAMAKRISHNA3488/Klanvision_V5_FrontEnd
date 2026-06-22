@@ -38,6 +38,7 @@ export default function ContactSection() {
   const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);  // show success state
   const [loading, setLoading]     = useState(false);  // disable button while sending
+  const [submitError, setSubmitError] = useState('');
 
   // Generic change handler for all text inputs and textarea
   const handleChange = (e) => {
@@ -50,6 +51,7 @@ export default function ContactSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSubmitError('');
 
     try {
       // 1. Send Email Notification via FormSubmit
@@ -77,10 +79,10 @@ export default function ContactSection() {
       if (result.success) {
         setSubmitted(true); // show thank-you screen directly
       } else {
-        alert('Something went wrong. Please try again!');
+        setSubmitError('Something went wrong. Please try again!');
       }
     } catch (error) {
-      alert('Network error. Please try again later.');
+      setSubmitError('Network error. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -379,6 +381,25 @@ export default function ContactSection() {
                         style={{ flex: 1, minHeight: 120, resize: 'none' }} 
                       />
                     </div>
+
+                    {submitError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        style={{
+                          background: 'rgba(239, 68, 68, 0.1)',
+                          border: '1px solid rgba(239, 68, 68, 0.2)',
+                          color: '#F87171',
+                          padding: '12px 16px',
+                          borderRadius: 12,
+                          fontSize: 14,
+                          fontWeight: 700,
+                          textAlign: 'center'
+                        }}
+                      >
+                        {submitError}
+                      </motion.div>
+                    )}
 
                     {/* Submit button – positioned at the bottom */}
                     <motion.button

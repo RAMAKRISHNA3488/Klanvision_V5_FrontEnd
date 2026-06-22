@@ -184,4 +184,48 @@ export const api = {
         body: JSON.stringify(data)
     }),
     deleteQuestion: (questionId) => fetchWithAuth(`${API_BASE_URL}/questions/${questionId}`, { method: 'DELETE' }),
+
+    // Internship Management
+    getInterns: (filters = {}) => {
+        let url = `${API_BASE_URL}/interns?`;
+        if (filters.search) url += `search=${encodeURIComponent(filters.search)}&`;
+        if (filters.status) url += `status=${encodeURIComponent(filters.status)}&`;
+        if (filters.domain) url += `domain=${encodeURIComponent(filters.domain)}&`;
+        if (filters.startDate) url += `startDate=${encodeURIComponent(filters.startDate)}&`;
+        if (filters.endDate) url += `endDate=${encodeURIComponent(filters.endDate)}&`;
+        return fetchWithAuth(url);
+    },
+    createIntern: (data) => fetchWithAuth(`${API_BASE_URL}/interns`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    updateIntern: (id, data) => fetchWithAuth(`${API_BASE_URL}/interns/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    deleteIntern: (id) => fetchWithAuth(`${API_BASE_URL}/interns/${id}`, { method: 'DELETE' }),
+
+    // Certificates
+    getCertificates: () => fetchWithAuth(`${API_BASE_URL}/certificates`),
+    getCertificate: (id) => fetchWithAuth(`${API_BASE_URL}/certificates/${id}`),
+    regenerateCertificate: (id) => fetchWithAuth(`${API_BASE_URL}/certificates/regenerate/${id}`, { method: 'POST' }),
+
+    // Public Verification Portal (no token)
+    verifyCertificate: (certificateNumber) => fetch(`${API_BASE_URL}/verify/${encodeURIComponent(certificateNumber)}`).then(handleResponse),
+
+    // Document Downloads
+    downloadOfferLetterUrl: (id) => `${API_BASE_URL}/documents/offer-letter/${id}`,
+    downloadParticipationLetterUrl: (id) => `${API_BASE_URL}/documents/participation/${id}`,
+    downloadCompletionCertificateUrl: (id) => `${API_BASE_URL}/documents/completion/${id}`,
+    downloadRecommendationLetterUrl: (id) => `${API_BASE_URL}/documents/recommendation/${id}`,
+
+    // Email Templates
+    getEmailTemplates: () => fetchWithAuth(`${API_BASE_URL}/email-templates`),
+    updateEmailTemplate: (key, data) => fetchWithAuth(`${API_BASE_URL}/email-templates/${key}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
 };
