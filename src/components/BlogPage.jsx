@@ -22,6 +22,54 @@ export default function BlogPage() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
+  // Comments states
+  const [commenterName, setCommenterName] = useState('');
+  const [commentText, setCommentText] = useState('');
+  const [localComments, setLocalComments] = useState([]);
+
+  useEffect(() => {
+    if (selectedBlog) {
+      const stored = localStorage.getItem(`blog_comments_${selectedBlog.id}`);
+      if (stored) {
+        setLocalComments(JSON.parse(stored));
+      } else {
+        // Seed default sample comments for this blog to make it look active!
+        const defaultComments = [
+          {
+            id: 'c1',
+            name: 'Kiran Kumar',
+            text: 'This is a very insightful article. The architectural details are well explained.',
+            date: 'June 20, 2026'
+          },
+          {
+            id: 'c2',
+            name: 'Srinivas',
+            text: 'Thanks for sharing! Looking forward to implementing some of these practices.',
+            date: 'June 21, 2026'
+          }
+        ];
+        setLocalComments(defaultComments);
+      }
+    }
+  }, [selectedBlog]);
+
+  const handlePostComment = (e) => {
+    e.preventDefault();
+    if (!commenterName || !commentText || !selectedBlog) return;
+
+    const newComment = {
+      id: Date.now().toString(),
+      name: commenterName,
+      text: commentText,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+    };
+
+    const updated = [...localComments, newComment];
+    setLocalComments(updated);
+    localStorage.setItem(`blog_comments_${selectedBlog.id}`, JSON.stringify(updated));
+    setCommentText('');
+  };
+
   const categories = ['All', 'Cloud', 'Security', 'AI', 'Design', 'Web'];
 
   // Popular Tags
@@ -544,6 +592,124 @@ export default function BlogPage() {
                   whiteSpace: 'pre-line' 
                 }}>
                   {selectedBlog.content}
+                </div>
+
+                {/* Comments Section */}
+                <div style={{ borderTop: '1px solid var(--border-main)', marginTop: 40, paddingTop: 32 }}>
+                  <h4 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-main)', marginBottom: 20, fontFamily: "'Poppins', sans-serif" }}>
+                    Discussion & Comments
+                  </h4>
+
+                  {/* Add Comment Form */}
+                  <form onSubmit={handlePostComment} style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12 }}>
+                      <input 
+                        type="text" 
+                        required 
+                        placeholder="Your Name" 
+                        value={commenterName}
+                        onChange={(e) => setCommenterName(e.target.value)}
+                        style={{
+                          padding: '12px 16px',
+                          borderRadius: 10,
+                          border: '1.5px solid var(--border-main)',
+                          background: 'var(--bg-surface-soft)',
+                          color: 'var(--text-main)',
+                          fontSize: 14,
+                          outline: 'none',
+                          fontWeight: 500
+                        }}
+                      />
+                      <textarea 
+                        required 
+                        rows="3"
+                        placeholder="Write a comment..." 
+                        value={commentText}
+                        onChange={(e) => setCommentText(e.target.value)}
+                        style={{
+                          padding: '12px 16px',
+                          borderRadius: 10,
+                          border: '1.5px solid var(--border-main)',
+                          background: 'var(--bg-surface-soft)',
+                          color: 'var(--text-main)',
+                          fontSize: 14,
+                          outline: 'none',
+                          resize: 'vertical'
+                        }}
+                      />
+                    </div>
+                    <button 
+                      type="submit"
+                      style={{
+                        alignSelf: 'flex-start',
+                        padding: '10px 24px',
+                        borderRadius: 8,
+                        background: getCatColor(selectedBlog.category),
+                        color: 'white',
+                        fontWeight: 700,
+                        fontSize: 13,
+                        border: 'none',
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+                      onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                    >
+                      Post Comment
+                    </button>
+                  </form>
+
+                  {/* Comments List */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {localComments.length === 0 ? (
+                      <p style={{ color: 'var(--text-muted)', fontSize: 14, fontStyle: 'italic' }}>
+                        No comments yet. Be the first to share your thoughts!
+                      </p>
+                    ) : (
+                      localComments.map((comment) => (
+                        <div 
+                          key={comment.id}
+                          style={{
+                            background: 'var(--bg-surface-soft)',
+                            border: '1px solid var(--border-main)',
+                            borderRadius: 12,
+                            padding: 16,
+                            display: 'flex',
+                            gap: 12
+                          }}
+                        >
+                          {/* Avatar Circle */}
+                          <div style={{
+                            width: 36,
+                            height: 36,
+                            borderRadius: '50%',
+                            background: `${getCatColor(selectedBlog.category)}20`,
+                            color: getCatColor(selectedBlog.category),
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 700,
+                            fontSize: 14,
+                            flexShrink: 0
+                          }}>
+                            {comment.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                              <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-main)' }}>{comment.name}</span>
+                              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{comment.date}</span>
+                            </div>
+                            <p style={{ fontSize: 13, color: 'var(--text-main)', margin: 0, lineHeight: 1.5 }}>
+                              {comment.text}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               </div>
 
