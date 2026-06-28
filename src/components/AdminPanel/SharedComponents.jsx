@@ -38,16 +38,43 @@ export const getTOTP = async (secret) => {
 };
 
 // --- Helper Functions ---
+// IST Timezone constant for global use
+const IST_TIMEZONE = 'Asia/Kolkata';
+
 export const formatTimestamp = (ts) => {
   if (!ts) return '';
   if (ts === 'Just now') return ts;
   try {
     const d = new Date(ts);
     if (isNaN(d.getTime())) return ts;
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ' + d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    const timeStr = d.toLocaleTimeString('en-IN', { timeZone: IST_TIMEZONE, hour: '2-digit', minute: '2-digit' });
+    const dateStr = d.toLocaleDateString('en-IN', { timeZone: IST_TIMEZONE, month: 'short', day: 'numeric' });
+    return `${timeStr} ${dateStr} (IST)`;
   } catch (e) {
     return ts;
   }
+};
+
+// Utility: Format a date-only value in IST (e.g., for blog dates, issue dates)
+export const formatDateIST = (dateVal) => {
+  if (!dateVal) return '';
+  try {
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return dateVal;
+    return d.toLocaleDateString('en-IN', { timeZone: IST_TIMEZONE, day: '2-digit', month: 'long', year: 'numeric' });
+  } catch (e) {
+    return dateVal;
+  }
+};
+
+// Utility: Get the current date string in IST format
+export const currentDateIST = () => {
+  return new Date().toLocaleDateString('en-IN', { timeZone: IST_TIMEZONE, month: 'long', day: '2-digit', year: 'numeric' });
+};
+
+// Utility: Get the current short date string in IST format
+export const currentShortDateIST = () => {
+  return new Date().toLocaleDateString('en-IN', { timeZone: IST_TIMEZONE, month: 'short', day: '2-digit', year: 'numeric' });
 };
 
 export const normalizePermission = (p) => {

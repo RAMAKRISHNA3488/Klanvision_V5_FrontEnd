@@ -9,7 +9,7 @@ export function BlogForm({ initialData, onSave, triggerToast }) {
     category: initialData?.category || 'Technology',
     author: initialData?.author || '',
     authorRole: 'Chief Architect', // Simulated role field
-    date: initialData?.date || new Date().toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' }),
+    date: initialData?.date || new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'long', day: '2-digit', year: 'numeric' }),
     readTime: initialData?.readTime || '5 min',
     image: initialData?.image || '',
     featured: initialData?.featured || false,

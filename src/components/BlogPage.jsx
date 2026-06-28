@@ -61,7 +61,7 @@ export default function BlogPage() {
       id: Date.now().toString(),
       name: commenterName,
       text: commentText,
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+      date: new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: '2-digit', year: 'numeric' })
     };
 
     const updated = [...localComments, newComment];

@@ -1098,7 +1098,7 @@ function ReportsView({ interns, activities }) {
               ) : (
                 auditLogs.map(log => (
                   <tr key={log.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                    <td style={{ padding: '14px 20px', color: '#94A3B8' }}>{new Date(log.timestamp).toLocaleString()}</td>
+                    <td style={{ padding: '14px 20px', color: '#94A3B8' }}>{new Date(log.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })} IST</td>
                     <td style={{ padding: '14px 20px', fontWeight: 800, color: 'white' }}>{log.user}</td>
                     <td style={{ padding: '14px 20px' }}>
                       <span style={{

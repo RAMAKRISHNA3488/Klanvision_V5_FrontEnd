@@ -326,7 +326,7 @@ export default function WhatsAppAssistant({ isOpen, onToggle, isVisible }) {
                   >
                     {msg.text}
                     <div style={{ fontSize: 9, color: '#9CA3AF', textAlign: 'right', marginTop: 4 }}>
-                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {msg.timestamp.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST
                     </div>
                   </motion.div>
                   
