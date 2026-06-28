@@ -28,6 +28,7 @@ import WhatsAppAssistant from './components/WhatsAppAssistant';
 import CareersPage from './components/CareersPage';
 import JobApplicationPage from './components/JobApplicationPage';
 import AdminPanel from './components/AdminPanel';
+import ResetPassword from './components/AdminPanel/ResetPassword';
 import Engine from './components/TestEngine/Engine';
 import VerificationPortal from './components/AdminPanel/VerificationPortal';
 import FAQPage from './components/FAQPage';
@@ -43,6 +44,10 @@ import MobileAppPage from './components/MobileAppPage';
 import CloudServicesPage from './components/CloudServicesPage';
 import UpgradeMigrationPage from './components/UpgradeMigrationPage';
 import APIIntegrationPage from './components/APIIntegrationPage';
+import AuthenticVerificationPage from './components/AuthenticVerificationPage';
+import DataProtectionPage from './components/DataProtectionPage';
+import TrustedDatabasePage from './components/TrustedDatabasePage';
+import GlobalAcceptancePage from './components/GlobalAcceptancePage';
 
 import ServicesPage from './components/ServicesPage';
 import PortfolioPage from './components/PortfolioPage';
@@ -277,7 +282,7 @@ function App() {
   const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
   const [loading, setLoading] = useState(isHomePage);
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('klanvision_theme') || 'light';
+    return localStorage.getItem('klanvision_theme') || 'dark';
   });
   const [activeBot, setActiveBot] = useState(null);
 
@@ -299,54 +304,12 @@ function App() {
   }, []);
 
 
-  // Simple routing for FAQ and Refund Policy pages
-  if (window.location.pathname === '/faq') {
-    return <FAQPage />;
-  }
-  if (window.location.pathname === '/refund-policy') {
-    return <RefundPolicyPage />;
-  }
-  if (window.location.pathname === '/privacy-policy') {
-    return <PrivacyPolicyPage />;
-  }
-  if (window.location.pathname === '/service-policy') {
-    return <ServicePolicyPage />;
-  }
-  if (window.location.pathname === '/terms') {
-    return <TermsPage />;
-  }
-  if (window.location.pathname === '/it-consultation') {
-    return <ConsultationPage />;
-  }
-  if (window.location.pathname === '/managed-services') {
-    return <ManagedServicesPage />;
-  }
-  if (window.location.pathname === '/cybersecurity') {
-    return <CybersecurityPage />;
-  }
-  if (window.location.pathname === '/web-development') {
-    return <WebDevelopmentPage />;
-  }
-  if (window.location.pathname === '/mobile-app') {
-    return <MobileAppPage />;
-  }
-  if (window.location.pathname === '/cloud-services') {
-    return <CloudServicesPage />;
-  }
-  if (window.location.pathname === '/upgrade-migration') {
-    return <UpgradeMigrationPage />;
-  }
-  if (window.location.pathname === '/api-integration') {
-    return <APIIntegrationPage />;
-  }
-  if (window.location.pathname === '/careers') {
-    return <CareersPage />;
-  }
-  if (window.location.pathname === '/apply') {
-    return <JobApplicationPage />;
-  }
+
   if (window.location.pathname === '/admin') {
     return <AdminPanel />;
+  }
+  if (window.location.pathname === '/admin/reset-password') {
+    return <ResetPassword />;
   }
   if (window.location.pathname.startsWith('/test/')) {
     return <Engine />;
@@ -376,11 +339,30 @@ function App() {
 
           {/* Page sections in scroll order */}
           <main>
+            {window.location.pathname === '/faq' && <FAQPage />}
+            {window.location.pathname === '/refund-policy' && <RefundPolicyPage />}
+            {window.location.pathname === '/privacy-policy' && <PrivacyPolicyPage />}
+            {window.location.pathname === '/service-policy' && <ServicePolicyPage />}
+            {window.location.pathname === '/terms' && <TermsPage />}
+            {window.location.pathname === '/it-consultation' && <ConsultationPage />}
+            {window.location.pathname === '/managed-services' && <ManagedServicesPage />}
+            {window.location.pathname === '/cybersecurity' && <CybersecurityPage />}
+            {window.location.pathname === '/web-development' && <WebDevelopmentPage />}
+            {window.location.pathname === '/mobile-app' && <MobileAppPage />}
+            {window.location.pathname === '/cloud-services' && <CloudServicesPage />}
+            {window.location.pathname === '/upgrade-migration' && <UpgradeMigrationPage />}
+            {window.location.pathname === '/api-integration' && <APIIntegrationPage />}
+            {window.location.pathname === '/careers' && <CareersPage />}
+            {window.location.pathname === '/apply' && <JobApplicationPage />}
             {window.location.pathname === '/services' && <ServicesPage />}
             {window.location.pathname === '/portfolio' && <PortfolioPage />}
             {window.location.pathname === '/blog' && <BlogPage />}
             {window.location.pathname === '/about' && <AboutPage />}
             {window.location.pathname === '/contact' && <ContactPage />}
+            {window.location.pathname === '/verify-authentic' && <AuthenticVerificationPage />}
+            {window.location.pathname === '/verify-protection' && <DataProtectionPage />}
+            {window.location.pathname === '/verify-database' && <TrustedDatabasePage />}
+            {window.location.pathname === '/verify-global' && <GlobalAcceptancePage />}
             {(window.location.pathname === '/' || window.location.pathname === '/home') && (
               <>
                 <Hero />                  {/* Full-screen hero with heading, CTA, and image */}

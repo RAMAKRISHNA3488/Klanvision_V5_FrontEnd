@@ -51,10 +51,10 @@ export default function CloudServicesPage() {
   ];
 
   return (
-    <div ref={containerRef} style={{ background: '#0F172A', minHeight: '100vh', color: 'white', fontFamily: "'Poppins', sans-serif" }}>
+    <div ref={containerRef} style={{ background: 'var(--bg-main)', minHeight: '100vh', color: 'white', fontFamily: "'Poppins', sans-serif" }}>
       {/* ── Immersive 3D Cloud Hero Section ── */}
       <section style={{ 
-        height: '100vh',
+        minHeight: '100vh', paddingTop: '160px',
         display: 'flex',
         alignItems: 'center',
         background: 'radial-gradient(circle at top right, #1E293B 0%, #0F172A 100%)', 
@@ -150,7 +150,7 @@ export default function CloudServicesPage() {
       </section>
 
       {/* ── Cloud Pillars ── */}
-      <section style={{ padding: '140px 0', background: 'white', color: '#0F172A' }}>
+      <section style={{ padding: '140px 0', background: 'var(--bg-surface)', color: 'var(--text-main)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 100 }}>
             <motion.h2 
@@ -161,7 +161,7 @@ export default function CloudServicesPage() {
             >
               Enterprise <span style={{ color: '#0EA5E9' }}>Cloud Architecture</span>
             </motion.h2>
-            <p style={{ color: '#64748B', fontSize: 20, maxWidth: 800, margin: '0 auto', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 20, maxWidth: 800, margin: '0 auto', lineHeight: 1.6 }}>
               Scale your business with flexible and secure cloud solutions. We help you migrate, manage, and optimize your cloud infrastructure using world-class AWS technologies.
             </p>
           </div>
@@ -176,7 +176,7 @@ export default function CloudServicesPage() {
                 transition={{ delay: idx * 0.1, duration: 0.6 }}
                 whileHover={{ y: -10 }}
                 style={{ 
-                  background: '#F8FAFC', 
+                  background: 'var(--bg-surface-soft)', 
                   borderRadius: 40, 
                   padding: 56, 
                   boxShadow: '0 10px 40px rgba(0,0,0,0.02)',
@@ -198,13 +198,13 @@ export default function CloudServicesPage() {
                 
                 <div>
                   <h3 style={{ fontSize: 28, fontWeight: 800, marginBottom: 16 }}>{feature.title}</h3>
-                  <p style={{ color: '#64748B', fontSize: 18, lineHeight: 1.7 }}>{feature.desc}</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: 18, lineHeight: 1.7 }}>{feature.desc}</p>
                 </div>
                 
                 <div style={{ marginTop: 'auto', paddingTop: 32, borderTop: '1px solid #E2E8F0' }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
                     {feature.features.map(f => (
-                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 16, color: '#334155', fontWeight: 600 }}>
+                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 16, color: 'var(--text-main)', fontWeight: 600 }}>
                         <div style={{ width: 24, height: 24, borderRadius: '50%', background: feature.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                            <CheckCircle2 size={14} color="white" />
                         </div>
@@ -383,10 +383,10 @@ export default function CloudServicesPage() {
               </motion.a>
               
               <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginTop: 32 }}>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748B', fontWeight: 600 }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="#10B981" /> AWS Certified Partners
                  </div>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748B', fontWeight: 600 }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="#10B981" /> Zero-Downtime Migration
                  </div>
               </div>
@@ -397,3 +397,4 @@ export default function CloudServicesPage() {
     </div>
   );
 }
+

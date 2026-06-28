@@ -41,12 +41,12 @@ export default function APIIntegrationPage() {
   ];
 
   return (
-    <div style={{ background: '#FFF1F2', minHeight: '100vh', color: '#0F172A', fontFamily: "'Poppins', sans-serif" }}>
+    <div style={{ background: 'var(--bg-main)', minHeight: '100vh', color: 'var(--text-main)', transition: 'background 0.3s ease, color 0.3s ease', fontFamily: "'Poppins', sans-serif" }}>
       {/* ── Immersive API Hero Section ── */}
       <section style={{ 
         background: 'linear-gradient(135deg, #831843 0%, #9D174D 100%)', 
         color: 'white', 
-        padding: '120px 0 100px', 
+        padding: '160px 0 100px', 
         position: 'relative', 
         overflow: 'hidden' 
       }}>
@@ -169,7 +169,7 @@ export default function APIIntegrationPage() {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 80 }}>
             <h2 style={{ fontSize: 40, fontWeight: 800, marginBottom: 20 }}>Unified Data & <span style={{ color: '#EC4899' }}>Better Automation</span></h2>
-            <p style={{ color: '#64748B', fontSize: 18, maxWidth: 700, margin: '0 auto' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 18, maxWidth: 700, margin: '0 auto' }}>
               Connect systems for seamless communication and data flow. We enable secure and efficient integrations across platforms.
             </p>
           </div>
@@ -183,7 +183,7 @@ export default function APIIntegrationPage() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
                 style={{ 
-                  background: 'white', 
+                  background: 'var(--bg-surface)', 
                   borderRadius: 24, 
                   padding: 40, 
                   boxShadow: '0 10px 30px rgba(0,0,0,0.03)',
@@ -203,12 +203,12 @@ export default function APIIntegrationPage() {
                 </div>
                 
                 <h3 style={{ fontSize: 22, fontWeight: 700 }}>{feature.title}</h3>
-                <p style={{ color: '#64748B', lineHeight: 1.7 }}>{feature.desc}</p>
+                <p style={{ color: 'var(--text-muted)', lineHeight: 1.7 }}>{feature.desc}</p>
                 
                 <div style={{ marginTop: 'auto', paddingTop: 20, borderTop: '1px solid #F1F5F9' }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
                     {feature.features.map(f => (
-                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#334155', fontWeight: 600 }}>
+                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'var(--text-main)', fontWeight: 600 }}>
                         <CheckCircle2 size={16} style={{ color: '#10B981' }} /> {f}
                       </li>
                     ))}
@@ -307,7 +307,7 @@ export default function APIIntegrationPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             style={{ 
-              background: 'white', 
+              background: 'var(--bg-surface)', 
               borderRadius: 40, 
               padding: '80px 40px', 
               boxShadow: '0 20px 60px rgba(0,0,0,0.05)',
@@ -317,7 +317,7 @@ export default function APIIntegrationPage() {
             }}
           >
             <h2 style={{ fontSize: 36, fontWeight: 800, marginBottom: 16 }}>Ready to Connect Your <br /><span style={{ color: '#EC4899' }}>Digital Software Stack?</span></h2>
-            <p style={{ color: '#64748B', fontSize: 18, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 18, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
               Bridge the gaps between your applications and automate your business processes with our expert API integration services.
             </p>
             <a href="/#contact-form" className="btn-primary" style={{ textDecoration: 'none', padding: '20px 48px', fontSize: 18, borderRadius: 16, display: 'inline-block', background: '#EC4899' }}>
@@ -329,3 +329,4 @@ export default function APIIntegrationPage() {
     </div>
   );
 }
+

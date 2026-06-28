@@ -1,0 +1,19 @@
+.text-type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-type__content {
+  white-space: pre-wrap;
+}
+
+.text-type__cursor {
+  display: inline-block;
+  color: inherit;
+  margin-left: 2px;
+}
+
+.text-type__cursor--hidden {
+  opacity: 0 !important;
+}

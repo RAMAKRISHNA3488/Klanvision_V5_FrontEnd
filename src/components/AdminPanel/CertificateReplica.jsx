@@ -243,8 +243,8 @@ export default function CertificateReplica({ data }) {
           <div className="cert-sign-col">
             <div className="cert-sign-icon"><Code size={16} /></div>
             <div className="cert-sign-role">TECHNICAL LEAD</div>
-            <div className="cert-sign-name">S Priyanka DevOps</div>
-            <div className="cert-signature">S. Priyanka</div>
+            <div className="cert-sign-name">Nagaraju</div>
+            <div className="cert-signature">Nagaraju</div>
           </div>
           
           <div className="cert-sign-col">

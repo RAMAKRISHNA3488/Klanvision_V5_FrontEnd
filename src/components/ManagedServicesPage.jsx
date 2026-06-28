@@ -41,12 +41,12 @@ export default function ManagedServicesPage() {
   ];
 
   return (
-    <div style={{ background: '#F8FAFC', minHeight: '100vh', color: '#0F172A', fontFamily: "'Poppins', sans-serif" }}>
+    <div style={{ background: 'var(--bg-main)', minHeight: '100vh', color: 'var(--text-main)', transition: 'background 0.3s ease, color 0.3s ease', fontFamily: "'Poppins', sans-serif" }}>
       {/* ── Immersive Hero Section ── */}
       <section style={{ 
         background: 'linear-gradient(135deg, #1E1B4B 0%, #312E81 100%)', 
         color: 'white', 
-        padding: '120px 0 100px', 
+        padding: '160px 0 100px', 
         position: 'relative', 
         overflow: 'hidden' 
       }}>
@@ -110,7 +110,7 @@ export default function ManagedServicesPage() {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 80 }}>
             <h2 style={{ fontSize: 40, fontWeight: 800, marginBottom: 20 }}>Reliable IT <span style={{ color: '#4F46E5' }}>Operations Management</span></h2>
-            <p style={{ color: '#64748B', fontSize: 18, maxWidth: 700, margin: '0 auto' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 18, maxWidth: 700, margin: '0 auto' }}>
               Ensure smooth and reliable IT operations with proactive monitoring and maintenance. We manage your infrastructure so you can focus on business growth.
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function ManagedServicesPage() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
                 style={{ 
-                  background: 'white', 
+                  background: 'var(--bg-surface)', 
                   borderRadius: 24, 
                   padding: 40, 
                   boxShadow: '0 10px 30px rgba(0,0,0,0.04)',
@@ -144,12 +144,12 @@ export default function ManagedServicesPage() {
                 </div>
                 
                 <h3 style={{ fontSize: 22, fontWeight: 700 }}>{feature.title}</h3>
-                <p style={{ color: '#64748B', lineHeight: 1.7 }}>{feature.desc}</p>
+                <p style={{ color: 'var(--text-muted)', lineHeight: 1.7 }}>{feature.desc}</p>
                 
                 <div style={{ marginTop: 'auto', paddingTop: 20, borderTop: '1px solid #F1F5F9' }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
                     {feature.features.map(f => (
-                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#334155', fontWeight: 600 }}>
+                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'var(--text-main)', fontWeight: 600 }}>
                         <CheckCircle2 size={16} style={{ color: '#10B981' }} /> {f}
                       </li>
                     ))}
@@ -250,7 +250,7 @@ export default function ManagedServicesPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             style={{ 
-              background: 'white', 
+              background: 'var(--bg-surface)', 
               borderRadius: 40, 
               padding: '80px 40px', 
               boxShadow: '0 20px 60px rgba(0,0,0,0.05)',
@@ -260,7 +260,7 @@ export default function ManagedServicesPage() {
             }}
           >
             <h2 style={{ fontSize: 36, fontWeight: 800, marginBottom: 16 }}>Ready to Scale with <br /><span style={{ color: '#4F46E5' }}>Expert Management?</span></h2>
-            <p style={{ color: '#64748B', fontSize: 18, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 18, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
               Let Klanvision take the wheel of your IT infrastructure. Get a custom managed service proposal tailored to your enterprise.
             </p>
             <a href="/#contact-form" className="btn-primary" style={{ textDecoration: 'none', padding: '20px 48px', fontSize: 18, borderRadius: 16, display: 'inline-block', background: '#4F46E5' }}>
@@ -272,3 +272,4 @@ export default function ManagedServicesPage() {
     </div>
   );
 }
+

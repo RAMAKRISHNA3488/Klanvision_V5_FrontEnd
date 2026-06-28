@@ -27,14 +27,14 @@ import BlogsView, { BlogForm } from './BlogsView';
 import SettingsView from './SettingsView';
 import ActivityView from './ActivityView';
 import ExamsView from './ExamsView';
-import InternshipModule from './InternshipModule';
+import CertificationModule from './CertificationModule';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, gradient: 'linear-gradient(135deg, #6366F1, #818CF8)' },
   { id: 'users', label: 'Users', icon: Users, gradient: 'linear-gradient(135deg, #EC4899, #F472B6)' },
   { id: 'projects', label: 'Projects', icon: LayoutPanelLeft, gradient: 'linear-gradient(135deg, #7C3AED, #A78BFA)', sub: ['All Projects', 'Delivered Projects', 'Future Projects'] },
   { id: 'exams', label: 'Examination', icon: GraduationCap, gradient: 'linear-gradient(135deg, #8B5CF6, #A78BFA)' },
-  { id: 'internship', label: 'Internships', icon: ShieldCheck, gradient: 'linear-gradient(135deg, #10B981, #34D399)' },
+  { id: 'internship', label: 'Certification', icon: ShieldCheck, gradient: 'linear-gradient(135deg, #10B981, #34D399)' },
   { id: 'blogs', label: 'Blogs', icon: FileText, gradient: 'linear-gradient(135deg, #F59E0B, #FBBF24)' },
   { id: 'settings', label: 'Settings', icon: Settings, gradient: 'linear-gradient(135deg, #64748B, #94A3B8)' },
   { id: 'activity', label: 'Activity Log', icon: Activity, gradient: 'linear-gradient(135deg, #3B82F6, #60A5FA)' },
@@ -179,6 +179,71 @@ export default function AdminPanel() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // --- Session Timeout Logic ---
+  const handleLogoutRef = useRef(null);
+  
+  // Create a stable reference to handleLogout to avoid dependency cycle
+  useEffect(() => {
+    handleLogoutRef.current = () => {
+      if (currentUser) {
+        addActivity(currentUser.name, 'System Logout (Auto-Timeout)', 'security', 'info', `${currentUser.name} session expired due to timeout.`);
+        triggerToast('Session expired. You have been logged out.', currentUser.name);
+      }
+      setTimeout(() => {
+        localStorage.removeItem('klanvision_admin_session');
+        setIsAuthenticated(false);
+        setCurrentUser(null);
+      }, 100);
+    };
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const INACTIVITY_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
+    const ABSOLUTE_TIMEOUT = 10 * 60 * 60 * 1000; // 10 hours
+    
+    // Get login time from session, or default to now if missing
+    let loginTime = Date.now();
+    try {
+      const session = JSON.parse(localStorage.getItem('klanvision_admin_session') || '{}');
+      if (session.loginTime) loginTime = session.loginTime;
+    } catch(e) {}
+
+    let lastActivityTime = Date.now();
+
+    const checkTimeouts = () => {
+      const now = Date.now();
+      
+      // Check absolute timeout (10 hours since login)
+      if (now - loginTime >= ABSOLUTE_TIMEOUT) {
+        if (handleLogoutRef.current) handleLogoutRef.current();
+        return;
+      }
+      
+      // Check inactivity timeout (3 hours since last action)
+      if (now - lastActivityTime >= INACTIVITY_TIMEOUT) {
+        if (handleLogoutRef.current) handleLogoutRef.current();
+      }
+    };
+
+    const updateActivity = () => {
+      lastActivityTime = Date.now();
+    };
+
+    // Check timeouts every 1 minute
+    const intervalId = setInterval(checkTimeouts, 60 * 1000);
+    
+    // Track user activity
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(e => window.addEventListener(e, updateActivity, { passive: true }));
+
+    return () => {
+      clearInterval(intervalId);
+      events.forEach(e => window.removeEventListener(e, updateActivity));
+    };
+  }, [isAuthenticated]);
 
   // --- Database Fetching Effect ---
 
@@ -331,12 +396,10 @@ export default function AdminPanel() {
     }, 100);
   };
 
-  const handleResetRequest = (e) => {
+  const handleResetRequest = async (e) => {
     e.preventDefault();
-    const user = users.find(u => u.email === resetEmail);
-    if (user) {
-      console.log(`[Secure System] Mock Email dispatched to ${resetEmail} with reset token.`);
-
+    try {
+      await api.forgotPassword(resetEmail);
       setResetSuccess(`Secure reset link has been dispatched to ${resetEmail}. Please check your inbox.`);
       setLoginError('');
 
@@ -346,8 +409,8 @@ export default function AdminPanel() {
         setResetSuccess('');
         setResetEmail('');
       }, 4000);
-    } else {
-      setLoginError('Email not found in authorized personnel directory.');
+    } catch (err) {
+      setLoginError(err.message || 'Error requesting password reset.');
       setResetSuccess('');
     }
   };
@@ -471,7 +534,9 @@ export default function AdminPanel() {
     const code = authCode.join('');
     if (code.length === 6) {
       if (verifyingUser) {
-        if (!verifyingUser.isAuthorized || (verifyingUser.failed2FAAttempts || 0) >= 10) {
+        const isSuperAdminOrAdmin = verifyingUser.role === 'Admin' || verifyingUser.role === 'Super Admin';
+        const limit = isSuperAdminOrAdmin ? 7 : 5;
+        if (!verifyingUser.isAuthorized || (verifyingUser.failed2FAAttempts || 0) >= limit) {
           setLoginError('Account is BLOCKED. Contact system administrator.');
           return;
         }
@@ -490,23 +555,25 @@ export default function AdminPanel() {
           }, 50);
         } catch (err) {
           const newFailCount = (verifyingUser.failed2FAAttempts || 0) + 1;
+          const isSuperAdminOrAdmin = verifyingUser.role === 'Admin' || verifyingUser.role === 'Super Admin';
+          const limit = isSuperAdminOrAdmin ? 7 : 5;
           try {
             await api.updateUser(verifyingUser.id, {
               ...verifyingUser,
               failed2FAAttempts: newFailCount,
-              isAuthorized: newFailCount >= 10 ? false : verifyingUser.isAuthorized
+              isAuthorized: newFailCount >= limit ? false : verifyingUser.isAuthorized
             });
           } catch (updateErr) {
             console.error('Failed to update fail count:', updateErr);
           }
 
-          setUsers(prev => prev.map(u => u.id === verifyingUser.id ? { ...u, failed2FAAttempts: newFailCount, isAuthorized: newFailCount >= 10 ? false : u.isAuthorized } : u));
+          setUsers(prev => prev.map(u => u.id === verifyingUser.id ? { ...u, failed2FAAttempts: newFailCount, isAuthorized: newFailCount >= limit ? false : u.isAuthorized } : u));
 
-          if (newFailCount >= 10) {
+          if (newFailCount >= limit) {
             setLoginError('Account BLOCKED due to security violations.');
-            addActivity(verifyingUser.name, 'System Lockout', 'security', 'warning', `${verifyingUser.email} blocked after 10 failures.`);
+            addActivity(verifyingUser.name, 'System Lockout', 'security', 'warning', `${verifyingUser.email} blocked after ${limit} failures.`);
           } else {
-            setLoginError(`Invalid Security Code. ${10 - newFailCount} attempts remaining.`);
+            setLoginError(`Invalid Security Code. ${limit - newFailCount} attempts remaining.`);
           }
         }
       }
@@ -707,14 +774,32 @@ export default function AdminPanel() {
                   <label style={{ display: 'block', fontSize: 13, fontWeight: 900, color: '#CBD5E1', marginBottom: 12, letterSpacing: '1px' }}>SYSTEM EMAIL OR USERNAME</label>
                   <div style={{ position: 'relative' }}>
                     <Mail size={18} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
-                    <input type="text" name="email" autoComplete="username" value={loginForm.email} onChange={e => setLoginForm({ ...loginForm, email: e.target.value })} placeholder="e.g. admin or admin@klanvision.com" style={{ width: '100%', padding: '16px 16px 16px 48px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', outline: 'none' }} required />
+                    <input type="text" name="email" autoComplete="username" value={loginForm.email} onChange={e => setLoginForm({ ...loginForm, email: e.target.value })} placeholder="Enter your email..." style={{ width: '100%', padding: '16px 16px 16px 48px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', outline: 'none' }} required />
                   </div>
                 </div>
 
                 <div className="form-group">
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                     <label style={{ fontSize: 13, fontWeight: 900, color: '#CBD5E1', letterSpacing: '1px' }}>SECURITY PASSWORD</label>
-                    <button type="button" onClick={() => { setIsResetMode(true); setLoginError(''); }} style={{ background: 'none', border: 'none', color: '#6366F1', fontSize: 11, fontWeight: 800, cursor: 'pointer' }}>FORGOT?</button>
+                    <motion.button 
+                      type="button" 
+                      onClick={() => { setIsResetMode(true); setLoginError(''); }} 
+                      whileHover={{ scale: 1.1, textShadow: "0px 0px 10px rgba(236, 72, 153, 0.8)" }}
+                      whileTap={{ scale: 0.95 }}
+                      style={{ 
+                        background: 'linear-gradient(90deg, #60a5fa, #f472b6)', 
+                        WebkitBackgroundClip: 'text', 
+                        WebkitTextFillColor: 'transparent', 
+                        border: 'none', 
+                        fontSize: 12, 
+                        fontWeight: 900, 
+                        cursor: 'pointer',
+                        letterSpacing: '1px',
+                        outline: 'none'
+                      }}
+                    >
+                      FORGOT?
+                    </motion.button>
                   </div>
                   <div style={{ position: 'relative' }}>
                     <Shield size={18} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
@@ -741,7 +826,7 @@ export default function AdminPanel() {
             ) : (
               <motion.form key="reset" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} onSubmit={handleResetRequest} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                 <div className="form-group">
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 900, color: '#CBD5E1', marginBottom: 12, letterSpacing: '1px' }}>RECOVERY EMAIL</label>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 900, color: '#CBD5E1', marginBottom: 12, letterSpacing: '1px' }}>EMAIL</label>
                   <div style={{ position: 'relative' }}>
                     <Mail size={18} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
                     <input type="email" value={resetEmail} onChange={e => setResetEmail(e.target.value)} placeholder="Enter your system email" style={{ width: '100%', padding: '16px 16px 16px 48px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', outline: 'none' }} required />
@@ -752,7 +837,7 @@ export default function AdminPanel() {
                 {resetSuccess && <div style={{ color: '#10B981', fontSize: 13, fontWeight: 700, textAlign: 'center' }}>{resetSuccess}</div>}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <button type="submit" className="btn-primary" style={{ width: '100%', padding: 20, borderRadius: 18 }}>SEND RESET LINK</button>
+                  <button type="submit" className="btn-primary" style={{ width: '100%', padding: 20, borderRadius: 18, textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>SEND RESET LINK</button>
                   <button type="button" onClick={() => { setIsResetMode(false); setLoginError(''); setResetSuccess(''); }} style={{ background: 'none', border: 'none', color: '#94A3B8', fontSize: 13, fontWeight: 700, cursor: 'pointer', padding: 10 }}>Back to Login</button>
                 </div>
               </motion.form>
@@ -1042,7 +1127,7 @@ export default function AdminPanel() {
             )}
             {activeTab === 'internship' && (
               hasTabPermission(currentUser, 'projects') ? (
-                <InternshipModule currentUser={currentUser} addActivity={addActivity} />
+                <CertificationModule currentUser={currentUser} addActivity={addActivity} />
               ) : <UnauthorizedView />
             )}
           </AnimatePresence>

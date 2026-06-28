@@ -41,12 +41,12 @@ export default function UpgradeMigrationPage() {
   ];
 
   return (
-    <div style={{ background: '#EEF2FF', minHeight: '100vh', color: '#0F172A', fontFamily: "'Poppins', sans-serif" }}>
+    <div style={{ background: 'var(--bg-main)', minHeight: '100vh', color: 'var(--text-main)', transition: 'background 0.3s ease, color 0.3s ease', fontFamily: "'Poppins', sans-serif" }}>
       {/* ── Immersive Upgrade Hero Section ── */}
       <section style={{ 
         background: 'linear-gradient(135deg, #312E81 0%, #4338CA 100%)', 
         color: 'white', 
-        padding: '120px 0 100px', 
+        padding: '160px 0 100px', 
         position: 'relative', 
         overflow: 'hidden' 
       }}>
@@ -148,7 +148,7 @@ export default function UpgradeMigrationPage() {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 80 }}>
             <h2 style={{ fontSize: 40, fontWeight: 800, marginBottom: 20 }}>Better Performance & <span style={{ color: '#6366F1' }}>Enhanced Scalability</span></h2>
-            <p style={{ color: '#64748B', fontSize: 18, maxWidth: 700, margin: '0 auto' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 18, maxWidth: 700, margin: '0 auto' }}>
               We ensure smooth and efficient migrations with minimal downtime. Transition your business to the next level of digital excellence.
             </p>
           </div>
@@ -162,7 +162,7 @@ export default function UpgradeMigrationPage() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
                 style={{ 
-                  background: 'white', 
+                  background: 'var(--bg-surface)', 
                   borderRadius: 24, 
                   padding: 40, 
                   boxShadow: '0 10px 30px rgba(0,0,0,0.03)',
@@ -182,12 +182,12 @@ export default function UpgradeMigrationPage() {
                 </div>
                 
                 <h3 style={{ fontSize: 22, fontWeight: 700 }}>{feature.title}</h3>
-                <p style={{ color: '#64748B', lineHeight: 1.7 }}>{feature.desc}</p>
+                <p style={{ color: 'var(--text-muted)', lineHeight: 1.7 }}>{feature.desc}</p>
                 
                 <div style={{ marginTop: 'auto', paddingTop: 20, borderTop: '1px solid #F1F5F9' }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
                     {feature.features.map(f => (
-                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#334155', fontWeight: 600 }}>
+                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'var(--text-main)', fontWeight: 600 }}>
                         <CheckCircle2 size={16} style={{ color: '#10B981' }} /> {f}
                       </li>
                     ))}
@@ -352,10 +352,10 @@ export default function UpgradeMigrationPage() {
               </motion.a>
               
               <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginTop: 32 }}>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748B', fontWeight: 600 }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="#10B981" /> 100% Data Integrity
                  </div>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748B', fontWeight: 600 }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="#10B981" /> Zero Downtime
                  </div>
               </div>
@@ -366,3 +366,4 @@ export default function UpgradeMigrationPage() {
     </div>
   );
 }
+

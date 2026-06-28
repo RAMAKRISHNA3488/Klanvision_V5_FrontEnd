@@ -52,10 +52,10 @@ export default function CybersecurityPage() {
   ];
 
   return (
-    <div ref={containerRef} style={{ background: '#020617', minHeight: '100vh', color: 'white', fontFamily: "'Poppins', sans-serif" }}>
+    <div ref={containerRef} style={{ background: 'var(--bg-main)', minHeight: '100vh', color: 'white', fontFamily: "'Poppins', sans-serif" }}>
       {/* ── Immersive 3D Security Hero Section ── */}
       <section style={{ 
-        height: '100vh',
+        minHeight: '100vh', paddingTop: '160px',
         display: 'flex',
         alignItems: 'center',
         background: 'radial-gradient(circle at top right, #0F172A 0%, #020617 100%)', 
@@ -160,7 +160,7 @@ export default function CybersecurityPage() {
       </section>
 
       {/* ── Security Pillars ── */}
-      <section style={{ padding: '140px 0', background: 'white', color: '#020617' }}>
+      <section style={{ padding: '140px 0', background: 'var(--bg-surface)', color: '#020617' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 100 }}>
             <motion.h2 
@@ -171,7 +171,7 @@ export default function CybersecurityPage() {
             >
               Advanced <span style={{ color: '#EF4444' }}>Security Framework</span>
             </motion.h2>
-            <p style={{ color: '#64748B', fontSize: 20, maxWidth: 800, margin: '0 auto', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 20, maxWidth: 800, margin: '0 auto', lineHeight: 1.6 }}>
               Protect your systems with advanced security and compliance solutions. We safeguard your data and ensure a secure IT environment using world-class methodology.
             </p>
           </div>
@@ -186,7 +186,7 @@ export default function CybersecurityPage() {
                 transition={{ delay: idx * 0.1, duration: 0.6 }}
                 whileHover={{ y: -10 }}
                 style={{ 
-                  background: '#F8FAFC', 
+                  background: 'var(--bg-surface-soft)', 
                   borderRadius: 40, 
                   padding: 56, 
                   boxShadow: '0 10px 40px rgba(0,0,0,0.02)',
@@ -208,13 +208,13 @@ export default function CybersecurityPage() {
                 
                 <div>
                   <h3 style={{ fontSize: 28, fontWeight: 800, marginBottom: 16 }}>{feature.title}</h3>
-                  <p style={{ color: '#64748B', fontSize: 18, lineHeight: 1.7 }}>{feature.desc}</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: 18, lineHeight: 1.7 }}>{feature.desc}</p>
                 </div>
                 
                 <div style={{ marginTop: 'auto', paddingTop: 32, borderTop: '1px solid #E2E8F0' }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
                     {feature.features.map(f => (
-                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 16, color: '#334155', fontWeight: 600 }}>
+                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 16, color: 'var(--text-main)', fontWeight: 600 }}>
                         <div style={{ width: 24, height: 24, borderRadius: '50%', background: feature.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                            <CheckCircle2 size={14} color="white" />
                         </div>
@@ -379,3 +379,4 @@ export default function CybersecurityPage() {
     </div>
   );
 }
+

@@ -52,10 +52,10 @@ export default function ConsultationPage() {
   ];
 
   return (
-    <div ref={containerRef} style={{ background: '#0F172A', minHeight: '100vh', color: 'white', fontFamily: "'Poppins', sans-serif" }}>
+    <div ref={containerRef} style={{ background: 'var(--bg-main)', minHeight: '100vh', color: 'white', fontFamily: "'Poppins', sans-serif" }}>
       {/* ── Immersive 3D Hero Section ── */}
       <section style={{ 
-        height: '100vh',
+        minHeight: '100vh', paddingTop: '160px',
         display: 'flex',
         alignItems: 'center',
         background: 'radial-gradient(circle at top right, #1E293B 0%, #0F172A 100%)', 
@@ -164,7 +164,7 @@ export default function ConsultationPage() {
       </section>
 
       {/* ── Advanced Pillars ── */}
-      <section style={{ padding: '140px 0', background: 'white', color: '#0F172A' }}>
+      <section style={{ padding: '140px 0', background: 'var(--bg-surface)', color: 'var(--text-main)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 100 }}>
             <motion.h2 
@@ -175,7 +175,7 @@ export default function ConsultationPage() {
             >
               Strategic <span style={{ color: '#F97316' }}>IT Blueprints</span>
             </motion.h2>
-            <p style={{ color: '#64748B', fontSize: 20, maxWidth: 800, margin: '0 auto', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 20, maxWidth: 800, margin: '0 auto', lineHeight: 1.6 }}>
               Our IT consulting services help businesses make informed technology decisions aligned with their goals. We analyze your current infrastructure, identify gaps, and recommend scalable solutions.
             </p>
           </div>
@@ -190,7 +190,7 @@ export default function ConsultationPage() {
                 transition={{ delay: idx * 0.1, duration: 0.6 }}
                 whileHover={{ y: -10 }}
                 style={{ 
-                  background: '#F8FAFC', 
+                  background: 'var(--bg-surface-soft)', 
                   borderRadius: 40, 
                   padding: 56, 
                   boxShadow: '0 10px 40px rgba(0,0,0,0.02)',
@@ -212,13 +212,13 @@ export default function ConsultationPage() {
                 
                 <div>
                   <h3 style={{ fontSize: 28, fontWeight: 800, marginBottom: 16 }}>{service.title}</h3>
-                  <p style={{ color: '#64748B', fontSize: 18, lineHeight: 1.7 }}>{service.desc}</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: 18, lineHeight: 1.7 }}>{service.desc}</p>
                 </div>
                 
                 <div style={{ marginTop: 'auto', paddingTop: 32, borderTop: '1px solid #E2E8F0' }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
                     {service.features.map(f => (
-                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 16, color: '#334155', fontWeight: 600 }}>
+                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 16, color: 'var(--text-main)', fontWeight: 600 }}>
                         <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#F97316', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                            <CheckCircle2 size={14} color="white" />
                         </div>
@@ -327,11 +327,11 @@ export default function ConsultationPage() {
                 {/* Additional Micro-stats */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginTop: 48 }}>
                    <div style={{ padding: 20, background: 'rgba(255,255,255,0.02)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.05)' }}>
-                      <div style={{ fontSize: 10, color: '#64748B', fontWeight: 800, letterSpacing: 1, marginBottom: 4 }}>AVG. RESPONSE</div>
+                      <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 800, letterSpacing: 1, marginBottom: 4 }}>AVG. RESPONSE</div>
                       <div style={{ fontSize: 24, fontWeight: 900, color: 'white' }}>12ms</div>
                    </div>
                    <div style={{ padding: 20, background: 'rgba(255,255,255,0.02)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.05)' }}>
-                      <div style={{ fontSize: 10, color: '#64748B', fontWeight: 800, letterSpacing: 1, marginBottom: 4 }}>Uptime SLA</div>
+                      <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 800, letterSpacing: 1, marginBottom: 4 }}>Uptime SLA</div>
                       <div style={{ fontSize: 24, fontWeight: 900, color: '#10B981' }}>99.99%</div>
                    </div>
                 </div>
@@ -407,10 +407,10 @@ export default function ConsultationPage() {
               </motion.a>
               
               <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginTop: 32 }}>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748B', fontWeight: 600 }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="#10B981" /> Confidential Audit
                  </div>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748B', fontWeight: 600 }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="#10B981" /> Expert Counsel
                  </div>
               </div>
@@ -421,3 +421,4 @@ export default function ConsultationPage() {
     </div>
   );
 }
+

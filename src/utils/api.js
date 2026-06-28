@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+export const API_BASE_URL = 'http://127.0.0.1:8787';
 
 const handleResponse = async (response) => {
     if (!response.ok) {
@@ -63,6 +63,20 @@ export const api = {
     }),
     deleteBlog: (id) => fetchWithAuth(`${API_BASE_URL}/blogs/${id}`, { method: 'DELETE' }),
 
+    // Certifications
+    getCertifications: () => fetchWithAuth(`${API_BASE_URL}/certifications`),
+    createCertification: (data) => fetchWithAuth(`${API_BASE_URL}/certifications`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    updateCertification: (id, data) => fetchWithAuth(`${API_BASE_URL}/certifications/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    deleteCertification: (id) => fetchWithAuth(`${API_BASE_URL}/certifications/${id}`, { method: 'DELETE' }),
+
     // SEO
     getSEO: () => fetchWithAuth(`${API_BASE_URL}/seo`),
     updateSEO: (data) => fetchWithAuth(`${API_BASE_URL}/seo`, {
@@ -104,6 +118,16 @@ export const api = {
         method: 'POST'
     }).then(handleResponse),
     generate2FA: (email) => fetch(`${API_BASE_URL}/admin/generate-2fa?usernameOrEmail=${encodeURIComponent(email)}`).then(handleResponse),
+    forgotPassword: (email) => fetch(`${API_BASE_URL}/admin/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    }).then(handleResponse),
+    resetPassword: (token, newPassword) => fetch(`${API_BASE_URL}/admin/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, newPassword })
+    }).then(handleResponse),
 
     // Applications
     getApplications: () => fetchWithAuth(`${API_BASE_URL}/applications`),
@@ -212,8 +236,32 @@ export const api = {
     getCertificate: (id) => fetchWithAuth(`${API_BASE_URL}/certificates/${id}`),
     regenerateCertificate: (id) => fetchWithAuth(`${API_BASE_URL}/certificates/regenerate/${id}`, { method: 'POST' }),
 
+    // Certifications (CRUD for admin panel)
+    getCertifications: () => fetchWithAuth(`${API_BASE_URL}/certifications`),
+    createCertification: (data) => {
+        const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
+        const headers = isFormData ? {} : { 'Content-Type': 'application/json' };
+        return fetchWithAuth(`${API_BASE_URL}/certifications`, {
+            method: 'POST',
+            headers,
+            body: isFormData ? data : JSON.stringify(data)
+        });
+    },
+    updateCertification: (id, data) => {
+        const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
+        const headers = isFormData ? {} : { 'Content-Type': 'application/json' };
+        return fetchWithAuth(`${API_BASE_URL}/certifications/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers,
+            body: isFormData ? data : JSON.stringify(data)
+        });
+    },
+    deleteCertification: (id) => fetchWithAuth(`${API_BASE_URL}/certifications/${id}`, { method: 'DELETE' }),
+
     // Public Verification Portal (no token)
-    verifyCertificate: (certificateNumber) => fetch(`${API_BASE_URL}/verify/${encodeURIComponent(certificateNumber)}`).then(handleResponse),
+    verifyCertificate: (certificateNumber) => {
+        return fetch(`${API_BASE_URL}/verify/${encodeURIComponent(certificateNumber)}`).then(handleResponse);
+    },
 
     // Document Downloads
     downloadOfferLetterUrl: (id) => `${API_BASE_URL}/documents/offer-letter/${id}`,

@@ -183,7 +183,7 @@ export function UnauthorizedView() {
 }
 
 export function SearchCommander({ activeTab, query, setQuery, userRoleFilter, setUserRoleFilter, projectStatusFilter, setProjectStatusFilter, blogCategoryFilter, setBlogCategoryFilter }) {
-  if (activeTab === 'dashboard' || activeTab === 'settings' || activeTab === 'activity') return null;
+  if (activeTab === 'dashboard' || activeTab === 'settings' || activeTab === 'activity' || activeTab === 'internship') return null;
 
   const filters = {
     users: ['All', 'Admin', 'Editor', 'Viewer', 'Developer'],

@@ -17,9 +17,12 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       port: port,
+      watch: {
+        usePolling: true,
+      },
       proxy: {
         // Any request to /api/* is forwarded to the backend server
-        '/api': {
+        '^/api/': {
           target: backendOrigin,
           changeOrigin: true,
           secure: false

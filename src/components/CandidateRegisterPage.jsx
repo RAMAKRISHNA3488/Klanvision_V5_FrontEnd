@@ -88,7 +88,7 @@ export default function CandidateRegisterPage() {
         ))}
 
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', damping: 15 }}
-          style={{ maxWidth: 520, width: '100%', textAlign: 'center', padding: '60px 48px', background: 'white', borderRadius: 40, boxShadow: '0 30px 70px rgba(0,0,0,0.12)', position: 'relative', zIndex: 10 }}>
+          style={{ maxWidth: 520, width: '100%', textAlign: 'center', padding: '60px 48px', background: 'var(--bg-surface)', borderRadius: 40, boxShadow: '0 30px 70px rgba(0,0,0,0.12)', position: 'relative', zIndex: 10 }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
             style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg,#7C3AED,#EC4899)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 28px', boxShadow: '0 15px 30px rgba(124,58,237,0.35)' }}>
             <CheckCircle size={50} color="white" />
@@ -154,7 +154,7 @@ export default function CandidateRegisterPage() {
       {/* Form */}
       <section className="container" style={{ marginTop: -40, position: 'relative', zIndex: 3 }}>
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          style={{ maxWidth: 820, margin: '0 auto', background: 'white', padding: '44px 40px', borderRadius: 32, boxShadow: '0 15px 50px rgba(0,0,0,0.07)', border: '1px solid #F3F4F6' }}>
+          style={{ maxWidth: 820, margin: '0 auto', background: 'var(--bg-surface)', padding: '44px 40px', borderRadius: 32, boxShadow: '0 15px 50px rgba(0,0,0,0.07)', border: '1px solid #F3F4F6' }}>
 
           {error && (
             <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 12, padding: '14px 18px', marginBottom: 28, color: '#DC2626', fontSize: 14, fontWeight: 600 }}>
@@ -377,3 +377,4 @@ export default function CandidateRegisterPage() {
     </div>
   );
 }
+

@@ -84,7 +84,7 @@ export default function CandidateLoginPage() {
           <p style={{ color: '#6B7280', fontSize: 15, marginTop: 10, fontWeight: 500 }}>Welcome back Access your career dashboard.</p>
         </div>
 
-        <div style={{ background: 'white', padding: 40, borderRadius: 32, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6' }}>
+        <div style={{ background: 'var(--bg-surface)', padding: 40, borderRadius: 32, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6' }}>
           <AnimatePresence mode="wait">
             {success ? (
               <motion.div 
@@ -176,3 +176,4 @@ export default function CandidateLoginPage() {
     </div>
   );
 }
+
