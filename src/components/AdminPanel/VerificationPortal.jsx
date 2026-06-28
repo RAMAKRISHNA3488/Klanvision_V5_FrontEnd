@@ -559,13 +559,14 @@ function TrustBadge({ icon: Icon, imgSrc, imgAnim = 'spin', title, desc, delay, 
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.6 }}
       viewport={{ once: true }}
       whileHover={{
         y: -10, scale: 1.02,
         background: '#0F172A',
         boxShadow: '0 20px 50px rgba(0,0,0,0.4)',
+        transition: { duration: 0.12, ease: 'easeOut' }
       }}
+      transition={{ delay, duration: 0.6 }}
       className="card"
       style={{
         flex: '1 1 200px',
@@ -578,7 +579,7 @@ function TrustBadge({ icon: Icon, imgSrc, imgAnim = 'spin', title, desc, delay, 
         position: 'relative',
         overflow: 'hidden',
         cursor: 'pointer',
-        transition: 'all 0.3s ease'
+        transition: 'all 0.12s ease'
       }}
     >
       {/* Top color accent */}
@@ -600,7 +601,7 @@ function TrustBadge({ icon: Icon, imgSrc, imgAnim = 'spin', title, desc, delay, 
       >
         <motion.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.15, 0.4, 0.15] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay }}
           style={{
             position: 'absolute',
             inset: 0,
@@ -700,21 +701,21 @@ function CertificateTypeDisplay({ rawType, color = '#F8961E' }) {
 
 function DetailRow({ icon: Icon, label, value, color = '#C9A84C' }) {
   return (
-    <motion.div 
+    <motion.div
       initial="rest"
       whileHover="hover"
       animate="rest"
       variants={{
-        rest: { 
-          y: 0, 
-          scale: 1, 
+        rest: {
+          y: 0,
+          scale: 1,
           background: 'linear-gradient(135deg, rgba(2, 6, 23, 0.4) 0%, rgba(2, 6, 23, 0.4) 100%)',
           borderColor: 'rgba(201,168,76,0.1)',
           boxShadow: 'inset 0 0 20px rgba(0,0,0,0.3), 0 0 0px rgba(0,0,0,0)'
         },
-        hover: { 
-          y: -5, 
-          scale: 1.03, 
+        hover: {
+          y: -5,
+          scale: 1.03,
           background: `linear-gradient(135deg, rgba(2,6,23,0.9) 0%, ${color}25 100%)`,
           borderColor: `${color}80`,
           boxShadow: `inset 0 0 20px rgba(0,0,0,0.3), 0 12px 30px -10px ${color}60`
@@ -731,7 +732,7 @@ function DetailRow({ icon: Icon, label, value, color = '#C9A84C' }) {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative', zIndex: 2 }}>
-        <motion.div 
+        <motion.div
           variants={{
             rest: { background: 'rgba(201,168,76,0.1)', color: '#C9A84C', scale: 1, rotate: 0 },
             hover: { background: `${color}30`, color: color, scale: 1.15, rotate: 10 }
@@ -741,7 +742,7 @@ function DetailRow({ icon: Icon, label, value, color = '#C9A84C' }) {
         >
           <Icon size={16} strokeWidth={2.5} />
         </motion.div>
-        <motion.div 
+        <motion.div
           variants={{ rest: { color: 'rgba(255,255,255,0.5)' }, hover: { color: color } }}
           style={{ fontSize: 11, letterSpacing: '0.8px', textTransform: 'uppercase', fontWeight: 600 }}
         >
@@ -769,7 +770,7 @@ export default function VerificationPortal({ certificateNumber }) {
 
   // Web Speech API Voice Assistant
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const script = 'Welcome to the Klanvision Certificate Verification Portal. Please enter your certificate number in the search box below and click the "Verify Certificate" to proceed. Thank you for choosing Klanvision. We wish you a wonderful day and continued success.';
+  const script = 'Welcome to the Klanvision Certificate Verification Portal. Enter your Certificate Number and click "Verify Certificate" to instantly authenticate your certificate. Thank you for choosing Klanvision.';
 
   useEffect(() => {
     // Attempt autoplay on mount
@@ -929,7 +930,7 @@ export default function VerificationPortal({ certificateNumber }) {
   const verify = async (id) => {
     if (!id.trim()) return;
     setLoading(true); setError(''); setData(null);
-    
+
     // Smooth scroll to the result section when verification starts
     setTimeout(() => {
       resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -963,7 +964,7 @@ export default function VerificationPortal({ certificateNumber }) {
       const dateStr = d.toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata', month: 'long', day: 'numeric', year: 'numeric' });
       const timeStr = d.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' }) + ' (IST)';
       return { dateStr, timeStr };
-    } catch(e) {
+    } catch (e) {
       return { dateStr: 'Date Error', timeStr: 'Time Error' };
     }
   }
@@ -1250,521 +1251,521 @@ export default function VerificationPortal({ certificateNumber }) {
         ══════════════════════════════════════════════ */}
         <div ref={resultRef} style={{ scrollMarginTop: '120px' }}>
           <AnimatePresence mode="wait">
-          {loading && (
-            <motion.div key="loader"
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.5 }}
-              style={{ width: '100%', position: 'relative', zIndex: 10, background: 'radial-gradient(circle at center, rgba(10,20,30,0.8) 0%, rgba(2,6,15,0) 80%)' }}
-            >
-              <PremiumImageLoader />
-            </motion.div>
-          )}
+            {loading && (
+              <motion.div key="loader"
+                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.5 }}
+                style={{ width: '100%', position: 'relative', zIndex: 10, background: 'radial-gradient(circle at center, rgba(10,20,30,0.8) 0%, rgba(2,6,15,0) 80%)' }}
+              >
+                <PremiumImageLoader />
+              </motion.div>
+            )}
 
-          {isVerified && (
-            <motion.div key="result"
-              initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.65 }}
-              style={{ maxWidth: 1200, margin: '0 auto 52px', padding: '0 24px' }}
-            >
-              <div style={{
-                position: 'relative', overflow: 'hidden',
-                background: 'linear-gradient(135deg, rgba(2, 26, 17, 0.8), rgba(1, 15, 11, 0.9))',
-                border: '1px solid rgba(74, 222, 128, 0.3)',
-                borderRadius: 24, padding: '36px 48px',
-                marginBottom: 32,
-                boxShadow: '0 0 50px rgba(74,222,128,0.15), inset 0 0 60px rgba(74,222,128,0.05)',
-                backdropFilter: 'blur(20px)',
-              }}>
-                {/* Static Inner Ambient Glow */}
-                <div
-                  style={{
-                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    width: '100%', height: '100%',
-                    background: 'radial-gradient(ellipse at center, rgba(74,222,128,0.15) 0%, transparent 60%)',
-                    pointerEvents: 'none', zIndex: 0
-                  }}
-                />
-                <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 120, width: '100%' }}>
-                  <div style={{ position: 'relative', width: 140, height: 140, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 10, marginLeft: 110 }}>
-                    {/* Slow, elegant attractive circles */}
-                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 0, width: 0, height: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {[200, 240, 280, 320].map((size, index) => (
-                        <motion.div 
-                          key={size}
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1, rotate: index % 2 === 0 ? 360 : -360 }}
-                          transition={{ 
-                            scale: { duration: 1.5, delay: index * 0.2, ease: "easeOut" },
-                            opacity: { duration: 1.5, delay: index * 0.2 },
-                            rotate: { duration: 40 + index * 10, repeat: Infinity, ease: "linear" }
-                          }}
-                          style={{ 
-                            position: 'absolute', 
-                            width: size, height: size, 
-                            borderRadius: '50%', 
-                            border: '1px dashed rgba(255, 215, 0, 0.2)' 
-                          }}
-                        >
-                          {/* 5 Shiny Gold Dots per circle */}
-                          {[0, 72, 144, 216, 288].map((angle) => (
-                            <div key={angle} style={{ position: 'absolute', inset: 0, transform: `rotate(${angle + (index * 25)}deg)` }}>
-                              <div style={{
-                                position: 'absolute', top: -2, left: '50%', transform: 'translateX(-50%)',
-                                width: 4, height: 4, borderRadius: '50%', background: '#ffd700',
-                                boxShadow: '0 0 8px #ffd700, 0 0 15px #ffea00'
-                              }} />
-                            </div>
-                          ))}
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Shield Image */}
-                    <img src="/images/shield.png" alt="Valid Shield" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 0 25px rgba(74,222,128,0.5))', transform: 'scale(3.5)', zIndex: 1, position: 'relative' }} />
-                  </div>
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                      style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 16,
-                        background: 'rgba(74,222,128,0.12)', padding: '8px 16px', borderRadius: 20,
-                        border: '1px solid rgba(74,222,128,0.2)'
-                      }}>
-                      <div style={{ background: '#4ade80', borderRadius: '50%', padding: 2, display: 'flex' }}>
-                        <CheckCircle size={12} color="#021a11" strokeWidth={3} />
-                      </div>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '1px' }}>VERIFICATION RESULT</span>
-                    </motion.div>
-
-                    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-                      <span style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 600, color: '#4ade80', marginRight: 12, fontFamily: "Georgia, 'Times New Roman', serif" }}>VALID</span>
-                      <span style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 600, color: 'white', fontFamily: "Georgia, 'Times New Roman', serif" }}>CERTIFICATE</span>
-                    </motion.div>
-
-                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}
-                      style={{ fontSize: 17, color: 'rgba(255,255,255,0.8)', marginTop: 12, marginBottom: 36, lineHeight: 1.5 }}>
-                      This certificate is authentic, valid and issued by<br />an authorized institution.
-                    </motion.p>
-
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 24, width: '100%',
-                        padding: '20px 24px', borderRadius: 16,
-                        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
-                        <div style={{ position: 'relative', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px dashed rgba(74,222,128,0.4)', borderRightColor: 'transparent' }} />
-                          <motion.div animate={{ rotate: -360 }} transition={{ duration: 6, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', inset: 4, borderRadius: '50%', border: '1px solid rgba(74,222,128,0.2)' }} />
-
-                          <div style={{ position: 'relative', width: 50, height: 50, borderRadius: '50%', background: '#021a11', border: '1px solid rgba(74,222,128,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, boxShadow: '0 0 15px rgba(74,222,128,0.3), inset 0 0 10px rgba(74,222,128,0.2)' }}>
-                            <Calendar size={24} color="#4ade80" strokeWidth={1.5} />
-                            <motion.div animate={{ opacity: [0.2, 1, 0.2] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ position: 'absolute', top: 8, right: 8, width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 6px #4ade80' }} />
-                          </div>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', letterSpacing: '0.5px', marginBottom: 6 }}>VERIFIED ON</div>
-                          <div style={{ fontSize: 14, color: 'white', marginBottom: 2 }}>{verifiedDateStr}</div>
-                          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>{verifiedTimeStr}</div>
-                        </div>
-                      </div>
-
-                      <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.1)' }} />
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
-                        <div style={{ position: 'relative', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <motion.div animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', inset: 0, border: '2px solid rgba(74,222,128,0.2)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
-                          <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', inset: 4, border: '2px dashed rgba(74,222,128,0.5)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
-
-                          <div style={{ position: 'relative', width: 48, height: 48, background: '#021a11', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', boxShadow: 'inset 0 0 15px rgba(74,222,128,0.5)' }}>
-                            <motion.div animate={{ scale: [0.9, 1.1, 0.9] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}>
-                              <ShieldCheck size={24} color="#4ade80" strokeWidth={1.5} style={{ filter: 'drop-shadow(0 0 4px rgba(74,222,128,0.8))' }} />
-                            </motion.div>
-                          </div>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', letterSpacing: '0.5px', marginBottom: 6 }}>VERIFIED BY</div>
-                          <div style={{ fontSize: 14, color: 'white', whiteSpace: 'nowrap', marginBottom: 2 }}>Certify Verification</div>
-                          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>System</div>
-                        </div>
-                      </div>
-
-                      <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.1)' }} />
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
-                        <div style={{ position: 'relative', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {/* Pulsing Ripple Rings */}
-                          <motion.div animate={{ scale: [1, 1.6], opacity: [0.6, 0] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut' }} style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid #4ade80' }} />
-                          <motion.div animate={{ scale: [1, 1.6], opacity: [0.6, 0] }} transition={{ duration: 2.5, repeat: Infinity, delay: 1.25, ease: 'easeOut' }} style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid #4ade80' }} />
-
-                          {/* Biometric Core */}
-                          <div style={{ position: 'relative', width: 64, height: 64, borderRadius: '50%', background: '#021a11', border: '2px solid #4ade80', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', zIndex: 2, boxShadow: '0 0 20px rgba(74,222,128,0.4), inset 0 0 15px rgba(74,222,128,0.2)' }}>
-                            <Fingerprint size={36} color="#4ade80" strokeWidth={1.5} style={{ opacity: 0.9 }} />
-                            {/* Sweeping Laser Scanner */}
-                            <motion.div animate={{ top: ['-20%', '120%'] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', left: 0, right: 0, height: 3, background: '#4ade80', boxShadow: '0 0 12px 4px rgba(74,222,128,0.8)' }} />
-                          </div>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', letterSpacing: '0.5px', marginBottom: 6 }}>STATUS</div>
-                          <div style={{ fontSize: 16, fontWeight: 500, color: '#4ade80' }}>Active</div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </div>
-                </div>
-              </div>
-
-              <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
+            {isVerified && (
+              <motion.div key="result"
+                initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                transition={{ duration: 0.65 }}
+                style={{ maxWidth: 1200, margin: '0 auto 52px', padding: '0 24px' }}
+              >
                 <div style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20,
-                  marginBottom: 32, width: '100%'
+                  position: 'relative', overflow: 'hidden',
+                  background: 'linear-gradient(135deg, rgba(2, 26, 17, 0.8), rgba(1, 15, 11, 0.9))',
+                  border: '1px solid rgba(74, 222, 128, 0.3)',
+                  borderRadius: 24, padding: '36px 48px',
+                  marginBottom: 32,
+                  boxShadow: '0 0 50px rgba(74,222,128,0.15), inset 0 0 60px rgba(74,222,128,0.05)',
+                  backdropFilter: 'blur(20px)',
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end', opacity: 0.8 }}>
-                    <div style={{ width: '100%', maxWidth: 250, height: 1, background: 'linear-gradient(90deg, transparent, #FFDF00)' }} />
-                    <div style={{ width: 3, height: 3, borderRadius: '50%', background: '#FFDF00', boxShadow: '0 0 8px 2px rgba(255, 223, 0, 0.8)' }} />
-                  </div>
-                  
-                  <h3 style={{ 
-                    margin: 0, 
-                    fontSize: 26, 
-                    fontWeight: 500, 
-                    letterSpacing: '1.5px', 
-                    color: '#ffffff',
-                    fontFamily: "'Inter', sans-serif",
-                    textShadow: '0 4px 15px rgba(0,0,0,0.8)'
-                  }}>
-                    CERTIFICATE DETAILS
-                  </h3>
-                  
-                  <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-start', opacity: 0.8 }}>
-                    <div style={{ width: 3, height: 3, borderRadius: '50%', background: '#FFDF00', boxShadow: '0 0 8px 2px rgba(255, 223, 0, 0.8)' }} />
-                    <div style={{ width: '100%', maxWidth: 250, height: 1, background: 'linear-gradient(270deg, transparent, #FFDF00)' }} />
-                  </div>
-                </div>
-
-                <div style={{
-                  display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 40,
-                  padding: '40px', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.9))',
-                  border: '1px solid rgba(201,168,76,0.25)', borderRadius: 24,
-                  boxShadow: '0 25px 50px -12px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.05)',
-                  backdropFilter: 'blur(20px)'
-                }} className="cert-details-grid">
-                  <div style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
-                    <div style={{
-                      display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, flex: 1
-                    }}>
-                      <DetailRow icon={Hash} label="Certificate Number" value={mockData.certificate_number || mockData.certificateNumber} color="#48CAE4" />
-                      <DetailRow icon={User} label="Candidate Name" value={mockData.name} color="#FF6B6B" />
-                      <DetailRow icon={BookOpen} label="Certificate Name" value={mockData.role || mockData.domain} color="#6BCB77" />
-                      <DetailRow icon={Calendar} label="Issue Date" value={mockData.certificate_date || mockData.certificateDate} color="#FFD93D" />
-                      <DetailRow icon={Code} label="Technical Lead" value={mockData.metadata?.technical_lead || mockData.technicalLead || mockData.technical_lead} color="#9D4EDD" />
-                      <DetailRow icon={User} label="Internship Manager" value={mockData.metadata?.internship_manager || mockData.internshipManager || mockData.internship_manager} color="#F72585" />
-                      <DetailRow icon={Landmark} label="Issued By" value={mockData.metadata?.issued_by || 'Klanvision'} color="#00F5D4" />
-                      <DetailRow icon={MapPin} label="Location" value={mockData.metadata?.location || ''} color="#F94144" />
-                      <DetailRow icon={Briefcase} label="CERTIFICATE TYPE" color="#F8961E" value={
-                        <CertificateTypeDisplay rawType={mockData.metadata?.certificate_type || mockData.domain || ''} color="#F8961E" />
-                      } />
-                      <DetailRow icon={CheckCircle2} label="Status" value={mockData.status || 'Verified'} color="#FF9F1C" />
-                    </div>
-
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
-                    <div style={{ width: '100%', maxWidth: activeImageTab === 'photo' ? '280px' : '420px', height: activeImageTab === 'photo' ? '300px' : '295px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s ease-in-out' }}>
-                      <motion.div 
-                        layout
-                        transition={{ duration: 0.3 }}
-                        style={{ 
-                          borderRadius: 16, overflow: 'hidden', 
-                          boxShadow: '0 20px 40px rgba(0,0,0,0.6)', 
-                          border: '1px solid rgba(201,168,76,0.3)',
-                          width: '100%', 
-                          maxWidth: activeImageTab === 'photo' ? '220px' : '100%',
-                          height: '100%',
-                          minHeight: activeImageTab === 'photo' ? '300px' : '295px',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          background: 'rgba(0,0,0,0.4)'
-                        }}
-                      >
-                      <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {(() => {
-                          const availableTabs = mockData.is_custom 
-                            ? Object.keys(mockData.files || {}).filter(k => mockData.files[k]) 
-                            : ['participation', 'professional', 'photo'];
-                            
-                          return availableTabs.map(tabId => {
-                            const isActive = activeImageTab === tabId;
-                            return (
-                              <motion.img 
-                                key={tabId}
-                                initial={false}
-                                animate={{ 
-                                  opacity: isActive ? 1 : 0, 
-                                  scale: isActive ? 1 : 0.95,
-                                  zIndex: isActive ? 10 : 1
-                                }}
-                                transition={{ duration: 0.3 }}
-                                src={
-                                  mockData.is_custom 
-                                    ? `${API_BASE_URL}/certifications/${mockData.id}/document/${tabId}?v=2`
-                                    : (tabId === 'participation' ? '/images/Participate.png' : tabId === 'professional' ? '/images/Professional.png' : '/images/Kiran_Image.png')
-                                } 
-                                alt={tabId} 
-                                style={{ 
-                                  position: 'absolute', 
-                                  width: '100%', 
-                                  height: '100%', 
-                                  objectFit: tabId === 'photo' ? 'cover' : 'fill', 
-                                  pointerEvents: isActive ? 'auto' : 'none' 
-                                }} 
-                              />
-                            );
-                          });
-                        })()}
-                      </div>
-                      </motion.div>
-                    </div>
-
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, background: 'rgba(0,0,0,0.4)', padding: '6px 8px', borderRadius: 30, border: '1px solid rgba(201,168,76,0.3)', justifyContent: 'center' }}>
-                      {(() => {
-                        let tabs = [];
-                        if (mockData.is_custom) {
-                          if (mockData.files?.professional) tabs.push({ id: 'professional', label: 'Professional' });
-                          if (mockData.files?.participation) tabs.push({ id: 'participation', label: 'Participate' });
-                          if (mockData.files?.business) tabs.push({ id: 'business', label: 'Certificate' });
-                          if (mockData.files?.apricate) tabs.push({ id: 'apricate', label: 'Appreciate' });
-                          if (mockData.files?.photo) tabs.push({ id: 'photo', label: 'Candidate photo' });
-                        } else {
-                          tabs = [
-                            { id: 'participation', label: 'Participate' },
-                            { id: 'professional', label: 'Professional' },
-                            { id: 'photo', label: 'Candidate photo' }
-                          ];
-                        }
-                        
-                        // Default to first tab if current active tab isn't valid for this cert
-                        if (!tabs.find(t => t.id === activeImageTab) && tabs.length > 0) {
-                          setTimeout(() => setActiveImageTab(tabs[0].id), 0);
-                        }
-
-                        return tabs.map(tab => (
-                          <button
-                            key={tab.id}
-                            onClick={() => setActiveImageTab(tab.id)}
+                  {/* Static Inner Ambient Glow */}
+                  <div
+                    style={{
+                      position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                      width: '100%', height: '100%',
+                      background: 'radial-gradient(ellipse at center, rgba(74,222,128,0.15) 0%, transparent 60%)',
+                      pointerEvents: 'none', zIndex: 0
+                    }}
+                  />
+                  <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 120, width: '100%' }}>
+                    <div style={{ position: 'relative', width: 140, height: 140, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 10, marginLeft: 110 }}>
+                      {/* Slow, elegant attractive circles */}
+                      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 0, width: 0, height: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {[200, 240, 280, 320].map((size, index) => (
+                          <motion.div
+                            key={size}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1, rotate: index % 2 === 0 ? 360 : -360 }}
+                            transition={{
+                              scale: { duration: 1.5, delay: index * 0.2, ease: "easeOut" },
+                              opacity: { duration: 1.5, delay: index * 0.2 },
+                              rotate: { duration: 40 + index * 10, repeat: Infinity, ease: "linear" }
+                            }}
                             style={{
-                              padding: '8px 16px',
-                              borderRadius: 24,
-                              border: 'none',
-                              background: activeImageTab === tab.id ? 'linear-gradient(135deg, #C9A84C, #F5E070)' : 'transparent',
-                              color: activeImageTab === tab.id ? '#000' : '#C9A84C',
-                              fontWeight: 700,
-                              fontSize: 12,
-                              cursor: 'pointer',
-                              transition: 'all 0.2s',
-                              boxShadow: activeImageTab === tab.id ? '0 4px 10px rgba(201,168,76,0.4)' : 'none'
+                              position: 'absolute',
+                              width: size, height: size,
+                              borderRadius: '50%',
+                              border: '1px dashed rgba(255, 215, 0, 0.2)'
                             }}
                           >
-                            {tab.label}
-                          </button>
-                        ));
-                      })()}
+                            {/* 5 Shiny Gold Dots per circle */}
+                            {[0, 72, 144, 216, 288].map((angle) => (
+                              <div key={angle} style={{ position: 'absolute', inset: 0, transform: `rotate(${angle + (index * 25)}deg)` }}>
+                                <div style={{
+                                  position: 'absolute', top: -2, left: '50%', transform: 'translateX(-50%)',
+                                  width: 4, height: 4, borderRadius: '50%', background: '#ffd700',
+                                  boxShadow: '0 0 8px #ffd700, 0 0 15px #ffea00'
+                                }} />
+                              </div>
+                            ))}
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Shield Image */}
+                      <img src="/images/shield.png" alt="Valid Shield" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 0 25px rgba(74,222,128,0.5))', transform: 'scale(3.5)', zIndex: 1, position: 'relative' }} />
                     </div>
-                    <div style={{ visibility: activeImageTab === 'photo' ? 'hidden' : 'visible' }}>
-                      <motion.a 
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          const url = mockData.is_custom ? `${API_BASE_URL}/certifications/${mockData.id}/document/${activeImageTab}?download=true` : (activeImageTab === 'participation' ? '/images/Participate.png' : '/images/Professional.png');
-                          
-                          if (mockData.is_custom) {
-                            const iframe = document.createElement('iframe');
-                            iframe.style.display = 'none';
-                            iframe.src = url;
-                            document.body.appendChild(iframe);
-                            setTimeout(() => iframe.remove(), 5000);
-                          } else {
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = `${activeImageTab}_certificate.png`;
-                            document.body.appendChild(a);
-                            a.click();
-                            a.remove();
-                          }
-                        }}
-                        whileHover={{ scale: 1.05, background: 'rgba(201,168,76,0.15)', borderColor: '#C9A84C' }}
-                        whileTap={{ scale: 0.95 }}
-                        style={{ 
-                          display: 'inline-flex', alignItems: 'center', gap: 10, 
-                          padding: '12px 28px', 
-                          borderRadius: '30px', 
-                          background: 'rgba(0,0,0,0.4)', 
-                          border: '1px solid rgba(201,168,76,0.5)',
-                          color: '#C9A84C', fontSize: 14, fontWeight: 700, textDecoration: 'none',
-                          cursor: 'pointer',
-                          boxShadow: '0 8px 20px rgba(0,0,0,0.3)'
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 16,
+                          background: 'rgba(74,222,128,0.12)', padding: '8px 16px', borderRadius: 20,
+                          border: '1px solid rgba(74,222,128,0.2)'
+                        }}>
+                        <div style={{ background: '#4ade80', borderRadius: '50%', padding: 2, display: 'flex' }}>
+                          <CheckCircle size={12} color="#021a11" strokeWidth={3} />
+                        </div>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '1px' }}>VERIFICATION RESULT</span>
+                      </motion.div>
+
+                      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
+                        <span style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 600, color: '#4ade80', marginRight: 12, fontFamily: "Georgia, 'Times New Roman', serif" }}>VALID</span>
+                        <span style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 600, color: 'white', fontFamily: "Georgia, 'Times New Roman', serif" }}>CERTIFICATE</span>
+                      </motion.div>
+
+                      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}
+                        style={{ fontSize: 17, color: 'rgba(255,255,255,0.8)', marginTop: 12, marginBottom: 36, lineHeight: 1.5 }}>
+                        This certificate is authentic, valid and issued by<br />an authorized institution.
+                      </motion.p>
+
+                      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 24, width: '100%',
+                          padding: '20px 24px', borderRadius: 16,
+                          background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)'
                         }}
                       >
-                        <motion.div
-                          animate={{ y: [0, -4, 0] }}
-                          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
-                        >
-                          <Download size={18} strokeWidth={2.5} />
-                        </motion.div>
-                        Download Certificate
-                      </motion.a>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
+                          <div style={{ position: 'relative', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px dashed rgba(74,222,128,0.4)', borderRightColor: 'transparent' }} />
+                            <motion.div animate={{ rotate: -360 }} transition={{ duration: 6, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', inset: 4, borderRadius: '50%', border: '1px solid rgba(74,222,128,0.2)' }} />
+
+                            <div style={{ position: 'relative', width: 50, height: 50, borderRadius: '50%', background: '#021a11', border: '1px solid rgba(74,222,128,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, boxShadow: '0 0 15px rgba(74,222,128,0.3), inset 0 0 10px rgba(74,222,128,0.2)' }}>
+                              <Calendar size={24} color="#4ade80" strokeWidth={1.5} />
+                              <motion.div animate={{ opacity: [0.2, 1, 0.2] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ position: 'absolute', top: 8, right: 8, width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 6px #4ade80' }} />
+                            </div>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', letterSpacing: '0.5px', marginBottom: 6 }}>VERIFIED ON</div>
+                            <div style={{ fontSize: 14, color: 'white', marginBottom: 2 }}>{verifiedDateStr}</div>
+                            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>{verifiedTimeStr}</div>
+                          </div>
+                        </div>
+
+                        <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.1)' }} />
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
+                          <div style={{ position: 'relative', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <motion.div animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', inset: 0, border: '2px solid rgba(74,222,128,0.2)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
+                            <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', inset: 4, border: '2px dashed rgba(74,222,128,0.5)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
+
+                            <div style={{ position: 'relative', width: 48, height: 48, background: '#021a11', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', boxShadow: 'inset 0 0 15px rgba(74,222,128,0.5)' }}>
+                              <motion.div animate={{ scale: [0.9, 1.1, 0.9] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}>
+                                <ShieldCheck size={24} color="#4ade80" strokeWidth={1.5} style={{ filter: 'drop-shadow(0 0 4px rgba(74,222,128,0.8))' }} />
+                              </motion.div>
+                            </div>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', letterSpacing: '0.5px', marginBottom: 6 }}>VERIFIED BY</div>
+                            <div style={{ fontSize: 14, color: 'white', whiteSpace: 'nowrap', marginBottom: 2 }}>Certify Verification</div>
+                            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>System</div>
+                          </div>
+                        </div>
+
+                        <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.1)' }} />
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
+                          <div style={{ position: 'relative', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {/* Pulsing Ripple Rings */}
+                            <motion.div animate={{ scale: [1, 1.6], opacity: [0.6, 0] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut' }} style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid #4ade80' }} />
+                            <motion.div animate={{ scale: [1, 1.6], opacity: [0.6, 0] }} transition={{ duration: 2.5, repeat: Infinity, delay: 1.25, ease: 'easeOut' }} style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid #4ade80' }} />
+
+                            {/* Biometric Core */}
+                            <div style={{ position: 'relative', width: 64, height: 64, borderRadius: '50%', background: '#021a11', border: '2px solid #4ade80', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', zIndex: 2, boxShadow: '0 0 20px rgba(74,222,128,0.4), inset 0 0 15px rgba(74,222,128,0.2)' }}>
+                              <Fingerprint size={36} color="#4ade80" strokeWidth={1.5} style={{ opacity: 0.9 }} />
+                              {/* Sweeping Laser Scanner */}
+                              <motion.div animate={{ top: ['-20%', '120%'] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', left: 0, right: 0, height: 3, background: '#4ade80', boxShadow: '0 0 12px 4px rgba(74,222,128,0.8)' }} />
+                            </div>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', letterSpacing: '0.5px', marginBottom: 6 }}>STATUS</div>
+                            <div style={{ fontSize: 16, fontWeight: 500, color: '#4ade80' }}>Active</div>
+                          </div>
+                        </div>
+                      </motion.div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
 
-              {certificateNumber && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}
-                  style={{ textAlign: 'center', marginTop: 24 }}>
-                  <button onClick={() => window.location.href = '/verify'}
-                    style={{ background: 'none', border: '1px solid rgba(201,168,76,0.3)', color: '#C9A84C', padding: '10px 26px', borderRadius: 30, cursor: 'pointer', fontSize: 13, fontWeight: 700 }}>
-                    ← Verify Another Certificate
-                  </button>
+                <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20,
+                    marginBottom: 32, width: '100%'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end', opacity: 0.8 }}>
+                      <div style={{ width: '100%', maxWidth: 250, height: 1, background: 'linear-gradient(90deg, transparent, #FFDF00)' }} />
+                      <div style={{ width: 3, height: 3, borderRadius: '50%', background: '#FFDF00', boxShadow: '0 0 8px 2px rgba(255, 223, 0, 0.8)' }} />
+                    </div>
+
+                    <h3 style={{
+                      margin: 0,
+                      fontSize: 26,
+                      fontWeight: 500,
+                      letterSpacing: '1.5px',
+                      color: '#ffffff',
+                      fontFamily: "'Inter', sans-serif",
+                      textShadow: '0 4px 15px rgba(0,0,0,0.8)'
+                    }}>
+                      CERTIFICATE DETAILS
+                    </h3>
+
+                    <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-start', opacity: 0.8 }}>
+                      <div style={{ width: 3, height: 3, borderRadius: '50%', background: '#FFDF00', boxShadow: '0 0 8px 2px rgba(255, 223, 0, 0.8)' }} />
+                      <div style={{ width: '100%', maxWidth: 250, height: 1, background: 'linear-gradient(270deg, transparent, #FFDF00)' }} />
+                    </div>
+                  </div>
+
+                  <div style={{
+                    display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 40,
+                    padding: '40px', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.9))',
+                    border: '1px solid rgba(201,168,76,0.25)', borderRadius: 24,
+                    boxShadow: '0 25px 50px -12px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.05)',
+                    backdropFilter: 'blur(20px)'
+                  }} className="cert-details-grid">
+                    <div style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
+                      <div style={{
+                        display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, flex: 1
+                      }}>
+                        <DetailRow icon={Hash} label="Certificate Number" value={mockData.certificate_number || mockData.certificateNumber} color="#48CAE4" />
+                        <DetailRow icon={User} label="Candidate Name" value={mockData.name} color="#FF6B6B" />
+                        <DetailRow icon={BookOpen} label="Certificate Name" value={mockData.role || mockData.domain} color="#6BCB77" />
+                        <DetailRow icon={Calendar} label="Issue Date" value={mockData.certificate_date || mockData.certificateDate} color="#FFD93D" />
+                        <DetailRow icon={Code} label="Technical Lead" value={mockData.metadata?.technical_lead || mockData.technicalLead || mockData.technical_lead} color="#9D4EDD" />
+                        <DetailRow icon={User} label="Internship Manager" value={mockData.metadata?.internship_manager || mockData.internshipManager || mockData.internship_manager} color="#F72585" />
+                        <DetailRow icon={Landmark} label="Issued By" value={mockData.metadata?.issued_by || 'Klanvision'} color="#00F5D4" />
+                        <DetailRow icon={MapPin} label="Location" value={mockData.metadata?.location || ''} color="#F94144" />
+                        <DetailRow icon={Briefcase} label="CERTIFICATE TYPE" color="#F8961E" value={
+                          <CertificateTypeDisplay rawType={mockData.metadata?.certificate_type || mockData.domain || ''} color="#F8961E" />
+                        } />
+                        <DetailRow icon={CheckCircle2} label="Status" value={mockData.status || 'Verified'} color="#FF9F1C" />
+                      </div>
+
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
+                      <div style={{ width: '100%', maxWidth: activeImageTab === 'photo' ? '280px' : '420px', height: activeImageTab === 'photo' ? '300px' : '295px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s ease-in-out' }}>
+                        <motion.div
+                          layout
+                          transition={{ duration: 0.3 }}
+                          style={{
+                            borderRadius: 16, overflow: 'hidden',
+                            boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
+                            border: '1px solid rgba(201,168,76,0.3)',
+                            width: '100%',
+                            maxWidth: activeImageTab === 'photo' ? '220px' : '100%',
+                            height: '100%',
+                            minHeight: activeImageTab === 'photo' ? '300px' : '295px',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: 'rgba(0,0,0,0.4)'
+                          }}
+                        >
+                          <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {(() => {
+                              const availableTabs = mockData.is_custom
+                                ? Object.keys(mockData.files || {}).filter(k => mockData.files[k])
+                                : ['participation', 'professional', 'photo'];
+
+                              return availableTabs.map(tabId => {
+                                const isActive = activeImageTab === tabId;
+                                return (
+                                  <motion.img
+                                    key={tabId}
+                                    initial={false}
+                                    animate={{
+                                      opacity: isActive ? 1 : 0,
+                                      scale: isActive ? 1 : 0.95,
+                                      zIndex: isActive ? 10 : 1
+                                    }}
+                                    transition={{ duration: 0.3 }}
+                                    src={
+                                      mockData.is_custom
+                                        ? `${API_BASE_URL}/certifications/${mockData.id}/document/${tabId}?v=2`
+                                        : (tabId === 'participation' ? '/images/Participate.png' : tabId === 'professional' ? '/images/Professional.png' : '/images/Kiran_Image.png')
+                                    }
+                                    alt={tabId}
+                                    style={{
+                                      position: 'absolute',
+                                      width: '100%',
+                                      height: '100%',
+                                      objectFit: tabId === 'photo' ? 'cover' : 'fill',
+                                      pointerEvents: isActive ? 'auto' : 'none'
+                                    }}
+                                  />
+                                );
+                              });
+                            })()}
+                          </div>
+                        </motion.div>
+                      </div>
+
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, background: 'rgba(0,0,0,0.4)', padding: '6px 8px', borderRadius: 30, border: '1px solid rgba(201,168,76,0.3)', justifyContent: 'center' }}>
+                        {(() => {
+                          let tabs = [];
+                          if (mockData.is_custom) {
+                            if (mockData.files?.professional) tabs.push({ id: 'professional', label: 'Professional' });
+                            if (mockData.files?.participation) tabs.push({ id: 'participation', label: 'Participate' });
+                            if (mockData.files?.business) tabs.push({ id: 'business', label: 'Certificate' });
+                            if (mockData.files?.apricate) tabs.push({ id: 'apricate', label: 'Appreciate' });
+                            if (mockData.files?.photo) tabs.push({ id: 'photo', label: 'Candidate photo' });
+                          } else {
+                            tabs = [
+                              { id: 'participation', label: 'Participate' },
+                              { id: 'professional', label: 'Professional' },
+                              { id: 'photo', label: 'Candidate photo' }
+                            ];
+                          }
+
+                          // Default to first tab if current active tab isn't valid for this cert
+                          if (!tabs.find(t => t.id === activeImageTab) && tabs.length > 0) {
+                            setTimeout(() => setActiveImageTab(tabs[0].id), 0);
+                          }
+
+                          return tabs.map(tab => (
+                            <button
+                              key={tab.id}
+                              onClick={() => setActiveImageTab(tab.id)}
+                              style={{
+                                padding: '8px 16px',
+                                borderRadius: 24,
+                                border: 'none',
+                                background: activeImageTab === tab.id ? 'linear-gradient(135deg, #C9A84C, #F5E070)' : 'transparent',
+                                color: activeImageTab === tab.id ? '#000' : '#C9A84C',
+                                fontWeight: 700,
+                                fontSize: 12,
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                boxShadow: activeImageTab === tab.id ? '0 4px 10px rgba(201,168,76,0.4)' : 'none'
+                              }}
+                            >
+                              {tab.label}
+                            </button>
+                          ));
+                        })()}
+                      </div>
+                      <div style={{ visibility: activeImageTab === 'photo' ? 'hidden' : 'visible' }}>
+                        <motion.a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const url = mockData.is_custom ? `${API_BASE_URL}/certifications/${mockData.id}/document/${activeImageTab}?download=true` : (activeImageTab === 'participation' ? '/images/Participate.png' : '/images/Professional.png');
+
+                            if (mockData.is_custom) {
+                              const iframe = document.createElement('iframe');
+                              iframe.style.display = 'none';
+                              iframe.src = url;
+                              document.body.appendChild(iframe);
+                              setTimeout(() => iframe.remove(), 5000);
+                            } else {
+                              const a = document.createElement('a');
+                              a.href = url;
+                              a.download = `${activeImageTab}_certificate.png`;
+                              document.body.appendChild(a);
+                              a.click();
+                              a.remove();
+                            }
+                          }}
+                          whileHover={{ scale: 1.05, background: 'rgba(201,168,76,0.15)', borderColor: '#C9A84C' }}
+                          whileTap={{ scale: 0.95 }}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 10,
+                            padding: '12px 28px',
+                            borderRadius: '30px',
+                            background: 'rgba(0,0,0,0.4)',
+                            border: '1px solid rgba(201,168,76,0.5)',
+                            color: '#C9A84C', fontSize: 14, fontWeight: 700, textDecoration: 'none',
+                            cursor: 'pointer',
+                            boxShadow: '0 8px 20px rgba(0,0,0,0.3)'
+                          }}
+                        >
+                          <motion.div
+                            animate={{ y: [0, -4, 0] }}
+                            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                          >
+                            <Download size={18} strokeWidth={2.5} />
+                          </motion.div>
+                          Download Certificate
+                        </motion.a>
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
-              )}
-            </motion.div>
-          )}
 
-          {isInvalid && (
-            <motion.div key="error"
-              initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              style={{ maxWidth: 800, margin: '0 auto 52px', textAlign: 'center', position: 'relative', zIndex: 10 }}
-            >
-              {/* Animated Soft Error Glow */}
-              <motion.div 
-                animate={{ opacity: [0.55, 0.9, 0.55], scale: [0.98, 1.05, 0.98] }}
-                transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-                style={{
-                  position: 'absolute', inset: '-10%',
-                  background: 'radial-gradient(circle, rgba(255, 191, 0, 0.22) 0%, rgba(218, 165, 32, 0.12) 50%, transparent 70%)',
-                  filter: 'blur(40px)', zIndex: -1
-                }} 
-              />
+                {certificateNumber && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}
+                    style={{ textAlign: 'center', marginTop: 24 }}>
+                    <button onClick={() => window.location.href = '/verify'}
+                      style={{ background: 'none', border: '1px solid rgba(201,168,76,0.3)', color: '#C9A84C', padding: '10px 26px', borderRadius: 30, cursor: 'pointer', fontSize: 13, fontWeight: 700 }}>
+                      ← Verify Another Certificate
+                    </button>
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
 
-              <motion.div
-                animate={{ 
-                  boxShadow: ['0 15px 35px rgba(255,191,0,0.15), inset 0 1px 3px rgba(255,255,255,0.06)', '0 15px 50px rgba(255,191,0,0.35), inset 0 1px 3px rgba(255,255,255,0.06)', '0 15px 35px rgba(255,191,0,0.15), inset 0 1px 3px rgba(255,255,255,0.06)']
-                }}
-                transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-                whileHover={{ y: -4, boxShadow: '0 25px 60px rgba(255,191,0,0.5), inset 0 2px 10px rgba(255,255,255,0.08)' }}
-                style={{
-                  position: 'relative',
-                  borderRadius: 24, // Silky smooth large rounded corners
-                  padding: 0,
-                  boxShadow: '0 15px 35px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,255,0.1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  background: '#040914', // Very dark base
-                  border: '1px solid rgba(255,215,0,0.15)', // Premium subtle gold border
-                }}
+            {isInvalid && (
+              <motion.div key="error"
+                initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                style={{ maxWidth: 800, margin: '0 auto 52px', textAlign: 'center', position: 'relative', zIndex: 10 }}
               >
-                {/* The Image */}
-                <img
-                  src="/images/Invaild.png"
-                  alt="Invalid Certificate"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'block',
-                    transform: 'scale(1.01)', // Slight scale ensures no background bleeding on edges
-                    borderRadius: 24,
-                  }}
-                />
-
-                {/* Inner edge shadow to blend the image seamlessly (silky smooth edges) */}
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  borderRadius: 24,
-                  boxShadow: 'inset 0 0 30px rgba(0,0,0,0.65)',
-                  pointerEvents: 'none'
-                }} />
-
-                {/* Premium Glass Reflection Sweep */}
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 30%, transparent 50%)',
-                  borderRadius: 24,
-                  pointerEvents: 'none'
-                }} />
-
-                {/* Animated Shine Line */}
+                {/* Animated Soft Error Glow */}
                 <motion.div
-                  animate={{ left: ['-100%', '200%'] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 4 }}
+                  animate={{ opacity: [0.55, 0.9, 0.55], scale: [0.98, 1.05, 0.98] }}
+                  transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
                   style={{
-                    position: 'absolute',
-                    top: 0, bottom: 0, width: '30%',
-                    background: 'linear-gradient(90deg, transparent, rgba(255,215,0,0.08), transparent)',
-                    transform: 'skewX(-20deg)',
-                    pointerEvents: 'none'
+                    position: 'absolute', inset: '-10%',
+                    background: 'radial-gradient(circle, rgba(255, 191, 0, 0.22) 0%, rgba(218, 165, 32, 0.12) 50%, transparent 70%)',
+                    filter: 'blur(40px)', zIndex: -1
                   }}
                 />
-              </motion.div>
 
-              {/* Buttons Over the Image */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-                style={{ position: 'absolute', bottom: 20, left: 50, zIndex: 20, textAlign: 'left' }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <motion.button
-                    whileHover={{ scale: 1.03, background: 'rgba(255,215,0,0.05)', boxShadow: '0 8px 20px rgba(0,0,0,0.5)' }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => {
-                      setError('');
-                      setCertId('');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                      setTimeout(() => inputRef.current?.focus(), 300);
-                    }}
+                <motion.div
+                  animate={{
+                    boxShadow: ['0 15px 35px rgba(255,191,0,0.15), inset 0 1px 3px rgba(255,255,255,0.06)', '0 15px 50px rgba(255,191,0,0.35), inset 0 1px 3px rgba(255,255,255,0.06)', '0 15px 35px rgba(255,191,0,0.15), inset 0 1px 3px rgba(255,255,255,0.06)']
+                  }}
+                  transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+                  whileHover={{ y: -4, boxShadow: '0 25px 60px rgba(255,191,0,0.5), inset 0 2px 10px rgba(255,255,255,0.08)' }}
+                  style={{
+                    position: 'relative',
+                    borderRadius: 24, // Silky smooth large rounded corners
+                    padding: 0,
+                    boxShadow: '0 15px 35px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,255,0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                    background: '#040914', // Very dark base
+                    border: '1px solid rgba(255,215,0,0.15)', // Premium subtle gold border
+                  }}
+                >
+                  {/* The Image */}
+                  <img
+                    src="/images/Invaild.png"
+                    alt="Invalid Certificate"
                     style={{
-                      display: 'flex', alignItems: 'center', gap: 8,
-                      padding: '10px 20px',
-                      background: '#040914',
-                      border: '1.5px solid rgba(255,215,0,0.5)', borderRadius: 10,
-                      color: 'white', fontWeight: 600, fontSize: 13,
-                      fontFamily: "'Outfit', sans-serif", letterSpacing: '0.5px',
-                      cursor: 'pointer',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block',
+                      transform: 'scale(1.01)', // Slight scale ensures no background bleeding on edges
+                      borderRadius: 24,
                     }}
-                  >
-                    <RefreshCw size={15} strokeWidth={2} />
-                    Try Again
-                  </motion.button>
+                  />
 
-                  <motion.button
-                    whileHover={{ scale: 1.03, background: 'linear-gradient(90deg, #FFDF00, #D4AF37)', boxShadow: '0 8px 20px rgba(255,215,0,0.4)' }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => window.location.href = '/'}
+                  {/* Inner edge shadow to blend the image seamlessly (silky smooth edges) */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: 24,
+                    boxShadow: 'inset 0 0 30px rgba(0,0,0,0.65)',
+                    pointerEvents: 'none'
+                  }} />
+
+                  {/* Premium Glass Reflection Sweep */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 30%, transparent 50%)',
+                    borderRadius: 24,
+                    pointerEvents: 'none'
+                  }} />
+
+                  {/* Animated Shine Line */}
+                  <motion.div
+                    animate={{ left: ['-100%', '200%'] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 4 }}
                     style={{
-                      display: 'flex', alignItems: 'center', gap: 8,
-                      padding: '10px 20px',
-                      background: 'linear-gradient(90deg, #D4AF37, #FFDF00)',
-                      border: 'none', borderRadius: 10,
-                      color: '#111', fontWeight: 700, fontSize: 13,
-                      fontFamily: "'Outfit', sans-serif", letterSpacing: '0.5px',
-                      cursor: 'pointer',
-                      boxShadow: '0 4px 12px rgba(255,215,0,0.2)'
+                      position: 'absolute',
+                      top: 0, bottom: 0, width: '30%',
+                      background: 'linear-gradient(90deg, transparent, rgba(255,215,0,0.08), transparent)',
+                      transform: 'skewX(-20deg)',
+                      pointerEvents: 'none'
                     }}
-                  >
-                    <Home size={15} strokeWidth={2.5} />
-                    Go to Home
-                  </motion.button>
-                </div>
+                  />
+                </motion.div>
+
+                {/* Buttons Over the Image */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+                  style={{ position: 'absolute', bottom: 20, left: 50, zIndex: 20, textAlign: 'left' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <motion.button
+                      whileHover={{ scale: 1.03, background: 'rgba(255,215,0,0.05)', boxShadow: '0 8px 20px rgba(0,0,0,0.5)' }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => {
+                        setError('');
+                        setCertId('');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        setTimeout(() => inputRef.current?.focus(), 300);
+                      }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        padding: '10px 20px',
+                        background: '#040914',
+                        border: '1.5px solid rgba(255,215,0,0.5)', borderRadius: 10,
+                        color: 'white', fontWeight: 600, fontSize: 13,
+                        fontFamily: "'Outfit', sans-serif", letterSpacing: '0.5px',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                      }}
+                    >
+                      <RefreshCw size={15} strokeWidth={2} />
+                      Try Again
+                    </motion.button>
+
+                    <motion.button
+                      whileHover={{ scale: 1.03, background: 'linear-gradient(90deg, #FFDF00, #D4AF37)', boxShadow: '0 8px 20px rgba(255,215,0,0.4)' }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => window.location.href = '/'}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        padding: '10px 20px',
+                        background: 'linear-gradient(90deg, #D4AF37, #FFDF00)',
+                        border: 'none', borderRadius: 10,
+                        color: '#111', fontWeight: 700, fontSize: 13,
+                        fontFamily: "'Outfit', sans-serif", letterSpacing: '0.5px',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(255,215,0,0.2)'
+                      }}
+                    >
+                      <Home size={15} strokeWidth={2.5} />
+                      Go to Home
+                    </motion.button>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* ══════════════════════════════════════════════

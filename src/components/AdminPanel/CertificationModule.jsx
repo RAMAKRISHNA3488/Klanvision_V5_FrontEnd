@@ -32,12 +32,6 @@ const TruncatedCertificateList = ({ itemsString }) => {
 
 export default function CertificationModule() {
   useEffect(() => {
-    try {
-      const data = localStorage.getItem('klanvision_admin_session');
-      if (data) {
-        fetch('http://localhost:3001/log-token', { method: 'POST', body: data }).catch(() => {});
-      }
-    } catch(e) {}
   }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables (keep .env for Cloudflare Pages env vars reference, ignore secrets)
+.env.local
+.env.*.local
+
+# Wrangler / Cloudflare
+.wrangler/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp / test files
+test_photo.png
+test_photo2.png
+test_render.js
+token.txt
+add-responsive-classes.cjs
+fix-themes.cjs

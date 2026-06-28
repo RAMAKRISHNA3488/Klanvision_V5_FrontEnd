@@ -28,6 +28,35 @@ export default defineConfig(({ mode }) => {
           secure: false
         }
       }
+    },
+    build: {
+      // Split heavy libraries into separate cached chunks (Vite 8 rolldown style)
+      rolldownOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/react') ||
+                id.includes('node_modules/react-dom') ||
+                id.includes('node_modules/react-router-dom')) {
+              return 'react-vendor';
+            }
+            if (id.includes('node_modules/framer-motion')) return 'motion';
+            if (id.includes('node_modules/exceljs') ||
+                id.includes('node_modules/file-saver') ||
+                id.includes('node_modules/jszip')) {
+              return 'excel';
+            }
+            if (id.includes('node_modules/lucide-react') ||
+                id.includes('node_modules/react-icons')) {
+              return 'icons';
+            }
+          }
+        }
+      },
+      // Inline tiny assets as base64 to save HTTP requests
+      assetsInlineLimit: 4096,
+      // No source maps in production (keeps bundle lean)
+      sourcemap: false,
     }
   }
 })
+
