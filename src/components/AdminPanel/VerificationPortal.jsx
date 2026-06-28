@@ -773,6 +773,15 @@ export default function VerificationPortal({ certificateNumber }) {
   const script = 'Welcome to the Klanvision Certificate Verification Portal. Enter your Certificate Number and click "Verify Certificate" to instantly authenticate your certificate. Thank you for choosing Klanvision.';
 
   useEffect(() => {
+    // Preload voices so they are ready when we need them
+    const preloadVoices = () => {
+      window.speechSynthesis.getVoices();
+    };
+    preloadVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = preloadVoices;
+    }
+
     // Attempt autoplay on mount
     const tryAutoplay = () => {
       if (!isPlayingAudio && !window.speechSynthesis.speaking) {
@@ -788,6 +797,9 @@ export default function VerificationPortal({ certificateNumber }) {
     return () => {
       clearTimeout(timer);
       window.speechSynthesis.cancel();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -860,16 +872,23 @@ export default function VerificationPortal({ certificateNumber }) {
     window.speechUtterance = utterance;
 
     let voices = window.speechSynthesis.getVoices();
-    const femaleVoice = voices.find(v =>
-      v.name.includes('Natural') ||
-      v.name.includes('Online') ||
-      v.name.includes('Google US English') ||
-      v.name.includes('Samantha') ||
-      v.name.includes('Tessa') ||
-      v.name.includes('Karen') ||
-      v.name.includes('Zira') ||
-      v.name.includes('Female')
+    
+    // Explicitly filter out known male voices to prevent the system from picking "Microsoft David" or "Mark"
+    let nonMaleVoices = voices.filter(v => 
+      !v.name.toLowerCase().includes('david') && 
+      !v.name.toLowerCase().includes('mark') && 
+      !v.name.toLowerCase().includes('male') &&
+      !v.name.toLowerCase().includes('george') &&
+      !v.name.toLowerCase().includes('arthur')
     );
+
+    // Prioritize high-quality female voices, then fallback to any English voice that isn't male
+    let femaleVoice = nonMaleVoices.find(v => v.name.includes('Zira')) ||
+                      nonMaleVoices.find(v => v.name.includes('Google US English')) ||
+                      nonMaleVoices.find(v => v.name.includes('Jenny') || v.name.includes('Aria')) ||
+                      nonMaleVoices.find(v => v.name.includes('Samantha') || v.name.includes('Tessa') || v.name.includes('Karen')) ||
+                      nonMaleVoices.find(v => v.name.includes('Female')) ||
+                      nonMaleVoices.find(v => v.lang.startsWith('en'));
 
     if (femaleVoice) utterance.voice = femaleVoice;
 
