@@ -764,7 +764,7 @@ export default function VerificationPortal({ certificateNumber }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
-  const [activeImageTab, setActiveImageTab] = useState('Participate');
+  const [activeImageTab, setActiveImageTab] = useState('participation');
   const inputRef = useRef(null);
   const resultRef = useRef(null);
 
