@@ -772,6 +772,8 @@ export default function VerificationPortal({ certificateNumber }) {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const script = 'Welcome to the Klanvision Certificate Verification Portal. Enter your Certificate Number and click "Verify Certificate" to instantly authenticate your certificate. Thank you for choosing Klanvision.';
 
+  const hasAutoplayedRef = useRef(false);
+
   useEffect(() => {
     // Preload voices so they are ready when we need them
     const preloadVoices = () => {
@@ -784,8 +786,10 @@ export default function VerificationPortal({ certificateNumber }) {
 
     // Attempt autoplay on mount
     const tryAutoplay = () => {
-      if (!isPlayingAudio && !window.speechSynthesis.speaking) {
+      if (hasAutoplayedRef.current) return;
+      if (!window.speechSynthesis.speaking) {
         toggleAudio();
+        hasAutoplayedRef.current = true;
       }
     };
 
@@ -794,8 +798,28 @@ export default function VerificationPortal({ certificateNumber }) {
       tryAutoplay();
     }, 1000);
 
+    // Workaround: Trigger audio on the very first user interaction if the browser blocked the autoplay
+    const unlockAudio = () => {
+      if (!hasAutoplayedRef.current) {
+        tryAutoplay();
+      }
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('scroll', unlockAudio);
+      document.removeEventListener('keydown', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
+    };
+
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('scroll', unlockAudio, { passive: true });
+    document.addEventListener('keydown', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio, { passive: true });
+
     return () => {
       clearTimeout(timer);
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('scroll', unlockAudio);
+      document.removeEventListener('keydown', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
       window.speechSynthesis.cancel();
       if (window.speechSynthesis.onvoiceschanged !== undefined) {
         window.speechSynthesis.onvoiceschanged = null;
