@@ -1579,10 +1579,28 @@ export default function CertificationModule() {
                   transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
                   style={{ position: 'absolute', top: '40%', right: '20%', width: 150, height: 150, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.3) 0%, transparent 70%)' }}
                 />
+                {/* Primary sweeping glow line — fast, thick, colorful */}
                 <motion.div
-                  animate={{ left: ['-100%', '200%'] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', repeatDelay: 5 }}
-                  style={{ position: 'absolute', top: 0, height: 1, width: '60%', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.8), rgba(16,185,129,0.6), transparent)', pointerEvents: 'none' }}
+                  animate={{ left: ['-70%', '130%'] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', repeatDelay: 2 }}
+                  style={{
+                    position: 'absolute', top: 0, height: 3, width: '70%',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.9) 25%, rgba(167,139,250,1) 50%, rgba(16,185,129,0.9) 75%, transparent 100%)',
+                    pointerEvents: 'none',
+                    filter: 'blur(0.5px)',
+                    boxShadow: '0 0 12px 2px rgba(139,92,246,0.7), 0 0 24px 4px rgba(16,185,129,0.4)'
+                  }}
+                />
+                {/* Secondary softer line — slightly slower for layered depth */}
+                <motion.div
+                  animate={{ left: ['-70%', '130%'] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.5, delay: 0.9 }}
+                  style={{
+                    position: 'absolute', top: 0, height: 2, width: '50%',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(245,158,11,0.5) 30%, rgba(99,102,241,0.8) 60%, transparent 100%)',
+                    pointerEvents: 'none',
+                    filter: 'blur(1px)'
+                  }}
                 />
               </div>
 
