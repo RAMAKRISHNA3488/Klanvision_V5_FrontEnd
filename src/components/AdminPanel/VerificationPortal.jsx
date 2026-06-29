@@ -898,21 +898,21 @@ export default function VerificationPortal({ certificateNumber }) {
     window.speechUtterance = utterance;
 
     let voices = window.speechSynthesis.getVoices();
-    
+
     // STRICT RULE: ONLY female voices. No generic fallbacks.
     let femaleVoice = voices.find(v => v.name.includes('Zira')) ||
-                      voices.find(v => v.name.includes('Google US English')) ||
-                      voices.find(v => v.name.includes('Jenny') || v.name.includes('Aria')) ||
-                      voices.find(v => v.name.includes('Samantha') || v.name.includes('Tessa') || v.name.includes('Karen')) ||
-                      voices.find(v => v.name.toLowerCase().includes('female')) ||
-                      voices.find(v => v.name.toLowerCase().match(/catherine|susan|linda|hazel|victoria|kyoko|amelia|elsa/));
+      voices.find(v => v.name.includes('Google US English')) ||
+      voices.find(v => v.name.includes('Jenny') || v.name.includes('Aria')) ||
+      voices.find(v => v.name.includes('Samantha') || v.name.includes('Tessa') || v.name.includes('Karen')) ||
+      voices.find(v => v.name.toLowerCase().includes('female')) ||
+      voices.find(v => v.name.toLowerCase().match(/catherine|susan|linda|hazel|victoria|kyoko|amelia|elsa/));
 
     if (femaleVoice) {
       utterance.voice = femaleVoice;
     } else {
       // STRICT RULE: If absolutely no female voice is installed, do not speak. Never use a male voice.
       window.speechSynthesis.cancel();
-      return; 
+      return;
     }
 
     // Normal Chrome speed for consistency across all browsers
@@ -984,7 +984,7 @@ export default function VerificationPortal({ certificateNumber }) {
       await new Promise(resolve => setTimeout(resolve, 5000));
       if (res.verified) {
         setData(res.certificate);
-        
+
         // Safely determine and set the active tab for the images based on the fetched data
         if (res.certificate.is_custom && res.certificate.files) {
           const files = res.certificate.files;
@@ -1548,8 +1548,6 @@ export default function VerificationPortal({ certificateNumber }) {
                             #F59E0B,
                             #F5E070,
                             #EC4899,
-                            #8B5CF6,
-                            #6366F1,
                             #F59E0B,
                             #C9A84C
                           );
@@ -1701,26 +1699,26 @@ export default function VerificationPortal({ certificateNumber }) {
                               whileTap={{ scale: 0.95 }}
                               style={{
 
-                            display: 'inline-flex', alignItems: 'center', gap: 10,
-                            padding: '12px 28px',
-                            borderRadius: '30px',
-                            background: 'rgba(0,0,0,0.4)',
-                            border: '1px solid rgba(201,168,76,0.5)',
-                            color: '#C9A84C', fontSize: 14, fontWeight: 700, textDecoration: 'none',
-                            cursor: 'pointer',
-                            boxShadow: '0 8px 20px rgba(0,0,0,0.3)'
-                          }}
-                        >
-                          <motion.div
-                            animate={{ y: [0, -4, 0] }}
-                            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
-                          >
-                            <Download size={18} strokeWidth={2.5} />
-                          </motion.div>
-                          Download Certificate
-                        </motion.a>
-                      </div>
-                      </>
+                                display: 'inline-flex', alignItems: 'center', gap: 10,
+                                padding: '12px 28px',
+                                borderRadius: '30px',
+                                background: 'rgba(0,0,0,0.4)',
+                                border: '1px solid rgba(201,168,76,0.5)',
+                                color: '#C9A84C', fontSize: 14, fontWeight: 700, textDecoration: 'none',
+                                cursor: 'pointer',
+                                boxShadow: '0 8px 20px rgba(0,0,0,0.3)'
+                              }}
+                            >
+                              <motion.div
+                                animate={{ y: [0, -4, 0] }}
+                                transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                              >
+                                <Download size={18} strokeWidth={2.5} />
+                              </motion.div>
+                              Download Certificate
+                            </motion.a>
+                          </div>
+                        </>
                       )}
                     </div>
                   </div>
