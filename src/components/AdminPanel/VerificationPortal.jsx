@@ -1530,18 +1530,31 @@ export default function VerificationPortal({ certificateNumber }) {
                       {/* CSS Keyframes for the elegant rotating border animation */}
                       <style>{`
                         @keyframes borderRotate {
-                          0% { background-position: 0% 50%; }
-                          50% { background-position: 100% 50%; }
+                          0%   { background-position: 0% 50%; }
+                          50%  { background-position: 100% 50%; }
                           100% { background-position: 0% 50%; }
+                        }
+                        @keyframes borderPulse {
+                          0%, 100% { box-shadow: 0 0 18px 4px rgba(201,168,76,0.5), 0 0 40px 10px rgba(139,92,246,0.2); }
+                          50%      { box-shadow: 0 0 28px 8px rgba(245,158,11,0.7), 0 0 60px 18px rgba(236,72,153,0.3); }
                         }
                         .premium-border-glow {
                           position: relative;
-                          border-radius: 16px;
-                          padding: 3px; /* border thickness */
-                          background: linear-gradient(135deg, #C9A84C, #F5E070, #4ade80, #C9A84C);
-                          background-size: 300% 300%;
-                          animation: borderRotate 4s ease infinite;
-                          box-shadow: 0 10px 30px rgba(201, 168, 76, 0.2);
+                          border-radius: 18px;
+                          padding: 3px;
+                          background: linear-gradient(
+                            135deg,
+                            #C9A84C,
+                            #F59E0B,
+                            #F5E070,
+                            #EC4899,
+                            #8B5CF6,
+                            #6366F1,
+                            #F59E0B,
+                            #C9A84C
+                          );
+                          background-size: 400% 400%;
+                          animation: borderRotate 3.5s ease infinite, borderPulse 3.5s ease-in-out infinite;
                           transition: all 0.3s ease-in-out;
                         }
                       `}</style>
