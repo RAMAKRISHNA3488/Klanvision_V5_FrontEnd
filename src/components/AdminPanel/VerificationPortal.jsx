@@ -1527,20 +1527,38 @@ export default function VerificationPortal({ certificateNumber }) {
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
-                      <div style={{ width: '100%', maxWidth: (activeImageTab === 'photo' && mockData?.status?.toLowerCase() === 'completed') ? '280px' : '420px', height: (activeImageTab === 'photo' && mockData?.status?.toLowerCase() === 'completed') ? '300px' : '350px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s ease-in-out' }}>
+                      {/* CSS Keyframes for the elegant rotating border animation */}
+                      <style>{`
+                        @keyframes borderRotate {
+                          0% { background-position: 0% 50%; }
+                          50% { background-position: 100% 50%; }
+                          100% { background-position: 0% 50%; }
+                        }
+                        .premium-border-glow {
+                          position: relative;
+                          border-radius: 16px;
+                          padding: 3px; /* border thickness */
+                          background: linear-gradient(135deg, #C9A84C, #F5E070, #4ade80, #C9A84C);
+                          background-size: 300% 300%;
+                          animation: borderRotate 4s ease infinite;
+                          box-shadow: 0 10px 30px rgba(201, 168, 76, 0.2);
+                          transition: all 0.3s ease-in-out;
+                        }
+                      `}</style>
+                      <div className="premium-border-glow" style={{
+                        width: '100%',
+                        maxWidth: (activeImageTab === 'photo' && mockData?.status?.toLowerCase() === 'completed') ? '220px' : '480px',
+                        height: (activeImageTab === 'photo' && mockData?.status?.toLowerCase() === 'completed') ? '270px' : '330px'
+                      }}>
                         <motion.div
                           layout
                           transition={{ duration: 0.3 }}
                           style={{
-                            borderRadius: 16, overflow: 'hidden',
-                            boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
-                            border: '1px solid rgba(201,168,76,0.3)',
+                            borderRadius: 13, overflow: 'hidden',
                             width: '100%',
-                            maxWidth: (activeImageTab === 'photo' && mockData?.status?.toLowerCase() === 'completed') ? '220px' : '100%',
                             height: '100%',
-                            minHeight: (activeImageTab === 'photo' && mockData?.status?.toLowerCase() === 'completed') ? '300px' : '350px',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: 'rgba(0,0,0,0.4)'
+                            background: '#040b19'
                           }}
                         >
                           <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1560,7 +1578,7 @@ export default function VerificationPortal({ certificateNumber }) {
                                       height: '100%',
                                       objectFit: 'contain',
                                       pointerEvents: 'none',
-                                      padding: '10px'
+                                      padding: '16px'
                                     }}
                                   />
                                 );
