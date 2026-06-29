@@ -442,13 +442,13 @@ export default function CertificationModule() {
     photoFile: null
   });
 
-  // Tracks which files already exist on a cert (for edit mode)
+  // Tracks existing filenames on a cert (for edit mode) — empty string means no file
   const [existingFiles, setExistingFiles] = useState({
-    participation: false,
-    professional: false,
-    business: false,
-    apricate: false,
-    photo: false
+    participation: '',
+    professional: '',
+    business: '',
+    apricate: '',
+    photo: ''
   });
 
   const participationRef = useRef(null);
@@ -991,7 +991,7 @@ export default function CertificationModule() {
               technicalLead: '', internshipManager: '', issuedBy: '', location: '', certificateType: []
             });
             setFiles({ participationFile: null, professionalFile: null, businessFile: null, apricateFile: null, photoFile: null });
-            setExistingFiles({ participation: false, professional: false, business: false, apricate: false, photo: false });
+            setExistingFiles({ participation: '', professional: '', business: '', apricate: '', photo: '' });
             setIsModalOpen(true);
           }}
           style={{ 
@@ -1273,13 +1273,13 @@ export default function CertificationModule() {
                               certificateType: parsedTypesEdit.length > 0 ? parsedTypesEdit : ['Business Certificate']
                             });
                             setFiles({ participationFile: null, professionalFile: null, businessFile: null, apricateFile: null, photoFile: null });
-                            // Populate existing file status so edit modal shows "Already Attached"
+                            // Populate existing filenames so edit modal shows the actual stored filename
                             setExistingFiles({
-                              participation: !!(cert.participationFileName || cert.participation_file_name),
-                              professional: !!(cert.professionalFileName || cert.professional_file_name),
-                              business: !!(cert.businessFileName || cert.business_file_name),
-                              apricate: !!(cert.apricateFileName || cert.apricate_file_name),
-                              photo: !!(cert.photoFileName || cert.photo_file_name),
+                              participation: cert.participationFileName || '',
+                              professional: cert.professionalFileName || '',
+                              business: cert.businessFileName || '',
+                              apricate: cert.apricateFileName || '',
+                              photo: cert.photoFileName || '',
                             });
                             setIsModalOpen(true);
                           }}
@@ -1716,7 +1716,8 @@ export default function CertificationModule() {
                       ].map(({ type, color, fileKey, existKey }) => {
                         const isChecked = Array.isArray(formData.certificateType) ? formData.certificateType.includes(type) : formData.certificateType === type;
                         const newFile = files[fileKey];
-                        const alreadyExists = existingFiles[existKey];
+                        const existingFileName = existingFiles[existKey]; // string filename or ''
+                        const hasExisting = !!existingFileName;
                         const colorRgb = color === '#6366F1' ? '99,102,241' : color === '#F59E0B' ? '245,158,11' : color === '#EC4899' ? '236,72,153' : '16,185,129';
                         return (
                           <div key={type} style={{
@@ -1752,7 +1753,7 @@ export default function CertificationModule() {
                                 style={{
                                   background: 'rgba(0,0,0,0.2)', borderRadius: 8, padding: '8px 10px',
                                   display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer',
-                                  border: newFile ? `1px solid ${color}55` : alreadyExists ? '1px solid rgba(16,185,129,0.3)' : '1px dashed rgba(255,255,255,0.1)',
+                                  border: newFile ? `1px solid ${color}55` : hasExisting ? '1px solid rgba(16,185,129,0.3)' : '1px dashed rgba(255,255,255,0.1)',
                                   transition: 'all 0.2s'
                                 }}
                               >
@@ -1760,13 +1761,16 @@ export default function CertificationModule() {
                                   ref={type === 'Participation Certificate' ? participationRef : type === 'Professional Certificate' ? professionalRef : type === 'Apricate Certificate' ? apricateRef : businessRef}
                                   onChange={(e) => handleFileChange(e, fileKey)}
                                 />
-                                <div style={{ padding: '4px 6px', borderRadius: 6, background: newFile ? `${color}22` : alreadyExists ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.05)', color: newFile ? color : alreadyExists ? '#34D399' : '#475569' }}>
-                                  {(newFile || alreadyExists) ? <CheckCircle size={13} /> : <FileText size={13} />}
+                                <div style={{ padding: '4px 6px', borderRadius: 6, background: newFile ? `${color}22` : hasExisting ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.05)', color: newFile ? color : hasExisting ? '#34D399' : '#475569' }}>
+                                  {(newFile || hasExisting) ? <CheckCircle size={13} /> : <FileText size={13} />}
                                 </div>
                                 <div style={{ flex: 1, overflow: 'hidden' }}>
-                                  <div style={{ fontSize: 11, color: newFile ? color : alreadyExists ? '#34D399' : '#64748B', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', fontWeight: 600 }}>
-                                    {newFile ? `📄 ${newFile.name}` : alreadyExists ? '✅ Already Attached — click to replace' : 'Click to upload file'}
+                                  <div style={{ fontSize: 11, color: newFile ? color : hasExisting ? '#34D399' : '#64748B', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', fontWeight: 600 }}>
+                                    {newFile ? `📄 ${newFile.name}` : hasExisting ? `📄 ${existingFileName}` : 'Click to upload file'}
                                   </div>
+                                  {hasExisting && !newFile && (
+                                    <div style={{ fontSize: 10, color: '#475569', marginTop: 1 }}>Existing file — click to replace</div>
+                                  )}
                                 </div>
                                 {newFile && (
                                   <div onClick={e => { e.stopPropagation(); setFiles(prev => ({ ...prev, [fileKey]: null })); }}
@@ -1806,9 +1810,13 @@ export default function CertificationModule() {
                       </div>
                       <div style={{ flex: 1, overflow: 'hidden' }}>
                         <div style={{ fontSize: 12, fontWeight: 700, color: files.photoFile ? '#F59E0B' : existingFiles.photo ? '#34D399' : '#94A3B8', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                          {files.photoFile ? `📸 ${files.photoFile.name}` : existingFiles.photo ? '✅ Already Attached — click to replace' : 'Upload candidate photo (JPG, PNG)'}
+                          {files.photoFile ? `📸 ${files.photoFile.name}` : existingFiles.photo ? `📸 ${existingFiles.photo}` : 'Upload candidate photo (JPG, PNG)'}
                         </div>
-                        <div style={{ fontSize: 10, color: '#475569', marginTop: 2 }}>Recommended: Clear portrait, max 2MB</div>
+                        {existingFiles.photo && !files.photoFile ? (
+                          <div style={{ fontSize: 10, color: '#475569', marginTop: 2 }}>Existing photo — click to replace</div>
+                        ) : (
+                          <div style={{ fontSize: 10, color: '#475569', marginTop: 2 }}>Recommended: Clear portrait, max 2MB</div>
+                        )}
                       </div>
                       {files.photoFile && (
                         <div onClick={e => { e.stopPropagation(); setFiles(prev => ({ ...prev, photoFile: null })); }}
