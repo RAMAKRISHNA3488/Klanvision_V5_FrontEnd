@@ -720,7 +720,7 @@ export default function CertificationModule() {
         { header: 'Certificate Name', key: 'certificateName', width: 30 },
         { header: 'Issue Date', key: 'issueDate', width: 15 },
         { header: 'Technical Lead', key: 'technicalLead', width: 25 },
-        { header: 'Internship Manager', key: 'internshipManager', width: 25 },
+        { header: 'Project Manager', key: 'internshipManager', width: 25 },
         { header: 'Issued By', key: 'issuedBy', width: 20 },
         { header: 'Location', key: 'location', width: 20 },
         { header: 'Certificate Type', key: 'certificateType', width: 20 },
@@ -1173,7 +1173,7 @@ export default function CertificationModule() {
                 <FilterDropdown columnKey="certificateName" title="Certificate Name" />
                 <IssueDateGridFilterDropdown columnKey="issueDate" title="Issue Date" />
                 <FilterDropdown columnKey="technicalLead" title="Technical Lead" />
-                <FilterDropdown columnKey="internshipManager" title="Internship Manager" />
+                <FilterDropdown columnKey="internshipManager" title="Project Manager" />
                 <FilterDropdown columnKey="issuedBy" title="Issued By" />
                 <FilterDropdown columnKey="location" title="Location" />
                 <FilterDropdown columnKey="certificateType" title="Certificate Type" />
@@ -1573,7 +1573,7 @@ export default function CertificationModule() {
                       { label: 'Issued By', value: formData.issuedBy, icon: <Award size={12} /> },
                       { label: 'Location', value: formData.location, icon: <MoveRight size={12} /> },
                       { label: 'Technical Lead', value: formData.technicalLead, icon: <ShieldCheck size={12} /> },
-                      { label: 'Internship Manager', value: formData.internshipManager, icon: <CheckCircle size={12} /> }
+                      { label: 'Project Manager', value: formData.internshipManager, icon: <CheckCircle size={12} /> }
                     ].map((item, idx) => (
                       <div key={idx} style={{ background: 'rgba(30, 41, 59, 0.4)', padding: '12px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: 4 }}>
                         <div style={{ color: '#94A3B8', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -1625,8 +1625,8 @@ export default function CertificationModule() {
                   <input disabled={modalMode === 'view'} type="text" name="technicalLead" value={formData.technicalLead} onChange={handleInputChange} placeholder="Enter technical lead name" style={{ width: '100%', background: 'rgba(30, 41, 59, 0.5)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '7px 10px', color: modalMode === 'view' ? '#94A3B8' : 'white', fontSize: 12, outline: 'none', transition: 'all 0.2s', opacity: modalMode === 'view' ? 0.8 : 1 }} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', color: '#CBD5E1', fontSize: 11, marginBottom: 4, fontWeight: 600 }}>Internship Manager <span style={{ color: '#EF4444' }}>*</span></label>
-                  <input disabled={modalMode === 'view'} type="text" name="internshipManager" value={formData.internshipManager} onChange={handleInputChange} placeholder="Enter internship manager name" style={{ width: '100%', background: 'rgba(30, 41, 59, 0.5)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '7px 10px', color: modalMode === 'view' ? '#94A3B8' : 'white', fontSize: 12, outline: 'none', transition: 'all 0.2s', opacity: modalMode === 'view' ? 0.8 : 1 }} />
+                  <label style={{ display: 'block', color: '#CBD5E1', fontSize: 11, marginBottom: 4, fontWeight: 600 }}>Project Manager <span style={{ color: '#EF4444' }}>*</span></label>
+                  <input disabled={modalMode === 'view'} type="text" name="internshipManager" value={formData.internshipManager} onChange={handleInputChange} placeholder="Enter project manager name" style={{ width: '100%', background: 'rgba(30, 41, 59, 0.5)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '7px 10px', color: modalMode === 'view' ? '#94A3B8' : 'white', fontSize: 12, outline: 'none', transition: 'all 0.2s', opacity: modalMode === 'view' ? 0.8 : 1 }} />
                 </div>
                 <div>
                   <label style={{ display: 'block', color: '#CBD5E1', fontSize: 11, marginBottom: 4, fontWeight: 600 }}>Issued By <span style={{ color: '#EF4444' }}>*</span></label>

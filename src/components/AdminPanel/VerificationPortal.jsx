@@ -1515,7 +1515,7 @@ export default function VerificationPortal({ certificateNumber }) {
                         <DetailRow icon={BookOpen} label="Certificate Name" value={mockData.role || mockData.domain} color="#6BCB77" />
                         <DetailRow icon={Calendar} label="Issue Date" value={mockData.certificate_date || mockData.certificateDate} color="#FFD93D" />
                         <DetailRow icon={Code} label="Technical Lead" value={mockData.metadata?.technical_lead || mockData.technicalLead || mockData.technical_lead} color="#9D4EDD" />
-                        <DetailRow icon={User} label="Internship Manager" value={mockData.metadata?.internship_manager || mockData.internshipManager || mockData.internship_manager} color="#F72585" />
+                        <DetailRow icon={User} label="Project Manager" value={mockData.metadata?.internship_manager || mockData.internshipManager || mockData.internship_manager} color="#F72585" />
                         <DetailRow icon={Landmark} label="Issued By" value={mockData.metadata?.issued_by || 'Klanvision'} color="#00F5D4" />
                         <DetailRow icon={MapPin} label="Location" value={mockData.metadata?.location || ''} color="#F94144" />
                         <DetailRow icon={Briefcase} label="CERTIFICATE TYPE" color="#F8961E" value={
