@@ -557,15 +557,14 @@ export default function AdminPanel() {
           const newFailCount = (verifyingUser.failed2FAAttempts || 0) + 1;
           const isSuperAdminOrAdmin = verifyingUser.role === 'Admin' || verifyingUser.role === 'Super Admin';
           const limit = isSuperAdminOrAdmin ? 7 : 5;
-          try {
-            await api.updateUser(verifyingUser.id, {
-              ...verifyingUser,
-              failed2FAAttempts: newFailCount,
-              isAuthorized: newFailCount >= limit ? false : verifyingUser.isAuthorized
-            });
-          } catch (updateErr) {
-            console.error('Failed to update fail count:', updateErr);
-          }
+          
+          // The backend verify2FA endpoint already updates the database with the new fail count.
+          // We just need to update our local state to reflect it across multiple clicks.
+          setVerifyingUser(prev => ({
+            ...prev,
+            failed2FAAttempts: newFailCount,
+            isAuthorized: newFailCount >= limit ? false : prev.isAuthorized
+          }));
 
           setUsers(prev => prev.map(u => u.id === verifyingUser.id ? { ...u, failed2FAAttempts: newFailCount, isAuthorized: newFailCount >= limit ? false : u.isAuthorized } : u));
 
@@ -573,7 +572,9 @@ export default function AdminPanel() {
             setLoginError('Account BLOCKED due to security violations.');
             addActivity(verifyingUser.name, 'System Lockout', 'security', 'warning', `${verifyingUser.email} blocked after ${limit} failures.`);
           } else {
-            setLoginError(`Invalid Security Code. ${limit - newFailCount} attempts remaining.`);
+            // Using the error message from backend if available, else fallback
+            const errMsg = (err.message && err.message.includes('attempts remaining')) ? err.message : `Invalid Security Code. ${limit - newFailCount} attempts remaining.`;
+            setLoginError(errMsg);
           }
         }
       }
