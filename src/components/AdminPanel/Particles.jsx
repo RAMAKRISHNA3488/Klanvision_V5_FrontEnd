@@ -203,9 +203,9 @@ const Particles = ({
       }
 
       if (!disableRotation) {
-        particles.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
-        particles.rotation.y -= 0.05 * speed;
-        particles.rotation.z = 0;
+        particles.rotation.x = Math.sin(elapsed * 0.0001) * 0.05; // Gentle tilt
+        particles.rotation.y -= 0.02 * speed; // Elegant slow pan to the left
+        particles.rotation.z = Math.sin(elapsed * 0.00005) * 0.03; // Slight organic roll
       }
 
       renderer.render({ scene: particles, camera });

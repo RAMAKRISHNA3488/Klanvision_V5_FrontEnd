@@ -1912,7 +1912,7 @@ export default function VerificationPortal({ certificateNumber }) {
               particleColors={["#ffffff", "#F0D060"]}
               particleCount={300}
               particleSpread={10}
-              speed={0.09}
+              speed={0.03}
               particleBaseSize={80}
               moveParticlesOnHover
               alphaParticles={false}
@@ -2021,11 +2021,13 @@ export default function VerificationPortal({ certificateNumber }) {
         @media (max-width: 900px) {
           .cert-details-grid   { grid-template-columns: 1fr !important; }
           .verify-footer-grid  { 
-            flex-direction: column; 
-            align-items: center; 
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            align-items: start;
             text-align: center;
-            gap: 40px;
+            gap: 10px;
           }
+          .verify-footer-grid > div { min-width: 0 !important; }
           .footer-divider { display: none !important; }
           .footer-logo-container {
             flex-direction: column !important;
