@@ -688,3 +688,20 @@
     overflow-x: hidden;
   }
 }
+
+/* Fix gap below footer strictly in mobile portrait view */
+@media (max-width: 768px) and (orientation: portrait) {
+  body, html, #root {
+    background-color: #000612 !important;
+    min-height: 100dvh !important;
+  }
+  .admin-portal-wrapper, .admin-portal-content {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100dvh !important; /* Uses dynamic viewport height */
+    flex: 1;
+  }
+  .admin-portal-footer {
+    margin-top: auto !important;
+  }
+}

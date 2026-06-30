@@ -814,12 +814,22 @@ export default function VerificationPortal({ certificateNumber }) {
     };
 
     // Try automatically after a short delay (may be blocked by browser on hard refresh)
-    const timer = setTimeout(() => {
-      tryAutoplay();
-    }, 1000);
+    // On mobile, setTimeout autoplay is always blocked, which falsely marks it as played.
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    let timer;
+    if (!isMobile) {
+      timer = setTimeout(() => {
+        tryAutoplay();
+      }, 1000);
+    }
 
-    // Workaround: Trigger audio on the very first user interaction if the browser blocked the autoplay
+    // Workaround: Trigger audio on the very first user interaction
     const unlockAudio = () => {
+      // Unlock iOS/Android speech synthesis engine with an empty utterance
+      const unlockUtterance = new SpeechSynthesisUtterance('');
+      unlockUtterance.volume = 0;
+      window.speechSynthesis.speak(unlockUtterance);
+
       if (!hasAutoplayedRef.current) {
         tryAutoplay();
       }
@@ -925,8 +935,17 @@ export default function VerificationPortal({ certificateNumber }) {
       voices.find(v => v.name.toLowerCase().includes('female')) ||
       voices.find(v => v.name.toLowerCase().match(/catherine|susan|linda|hazel|victoria|kyoko|amelia|elsa/));
 
+    let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
     if (femaleVoice) {
       utterance.voice = femaleVoice;
+    } else if (isMobile) {
+      // On mobile, voices are often unnamed or default to a good system voice. 
+      // We allow the default voice to speak rather than failing silently.
+      let mobileFallback = voices.find(v => v.lang && v.lang.includes('en')) || voices[0];
+      if (mobileFallback) {
+        utterance.voice = mobileFallback;
+      }
     } else {
       // STRICT RULE: If absolutely no female voice is installed, do not speak. Never use a male voice.
       window.speechSynthesis.cancel();
@@ -1046,7 +1065,7 @@ export default function VerificationPortal({ certificateNumber }) {
   const { dateStr: verifiedDateStr, timeStr: verifiedTimeStr } = mockData ? formatVerificationDate(mockData.last_verified_at) : { dateStr: '', timeStr: '' };
 
   return (
-    <div ref={portalRef} style={{
+    <div className="admin-portal-wrapper" ref={portalRef} style={{
       minHeight: '100vh',
       fontFamily: "'Outfit', 'Inter', sans-serif",
       color: 'white', position: 'relative', overflowX: 'hidden',
@@ -1118,7 +1137,7 @@ export default function VerificationPortal({ certificateNumber }) {
       {/* ══════════════════════════════════════════════
           HERO SECTION
       ══════════════════════════════════════════════ */}
-      <div style={{ position: 'relative', zIndex: 1 }}>
+      <div className="admin-portal-content" style={{ position: 'relative', zIndex: 1 }}>
 
         {/* ── TOP HEADER ── */}
         <motion.div
@@ -1905,7 +1924,7 @@ export default function VerificationPortal({ certificateNumber }) {
         {/* ══════════════════════════════════════════════
             FOOTER
         ══════════════════════════════════════════════ */}
-        <footer style={{ background: '#000612', padding: '100px 40px 40px', position: 'relative', overflow: 'hidden' }}>
+        <footer className="admin-portal-footer" style={{ background: '#000612', padding: '100px 40px 40px', position: 'relative', overflow: 'hidden' }}>
           {/* Particles Background */}
           <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
             <Particles
@@ -2064,6 +2083,24 @@ export default function VerificationPortal({ certificateNumber }) {
           -ms-user-select: none;
           user-select: none;
           -webkit-user-drag: none;
+        }
+
+        /* GUARANTEED MOBILE PORTRAIT STICKY FOOTER */
+        @media (max-width: 768px) and (orientation: portrait) {
+          .admin-portal-wrapper {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100dvh !important;
+          }
+          .admin-portal-content {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100dvh !important;
+            flex-grow: 1 !important;
+          }
+          .admin-portal-footer {
+            margin-top: auto !important;
+          }
         }
       `}</style>
     </div>
