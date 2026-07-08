@@ -116,6 +116,32 @@ export const supabase = {
             };
           }
         };
+      },
+      update: (data) => {
+        const updateFilters = {};
+        const executeUpdate = async () => {
+          if (table === "attempts") {
+            try {
+              const id = updateFilters.id;
+              if (!id) throw new Error("Attempt ID required for update");
+              const res = await api.updateAttempt(id, data);
+              return { data: res, error: null };
+            } catch (err) {
+              return { data: null, error: err };
+            }
+          }
+          return { data: null, error: new Error("Update not implemented") };
+        };
+        const updateBuilder = {
+          eq: (field, val) => {
+            updateFilters[field] = val;
+            return updateBuilder;
+          },
+          then: (resolve, reject) => {
+            executeUpdate().then(resolve, reject);
+          }
+        };
+        return updateBuilder;
       }
     };
   },
@@ -131,7 +157,7 @@ export const supabase = {
     
     if (fnName === "submit_test_attempt") {
       try {
-        await api.submitAttempt(params._attempt_id, params._time_taken);
+        await api.submitAttempt(params._attempt_id, params._time_taken, params._violations_count);
         return { error: null };
       } catch (err) {
         return { error: err };

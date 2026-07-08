@@ -185,6 +185,11 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     }).then(handleResponse),
+    updateAttempt: (id, data) => fetch(`${API_BASE_URL}/attempts/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).then(handleResponse),
     getAttemptAnswers: (attemptId) => fetch(`${API_BASE_URL}/attempt-answers?attemptId=${encodeURIComponent(attemptId)}`).then(handleResponse),
     upsertAttemptAnswers: (data) => fetch(`${API_BASE_URL}/attempt-answers`, {
         method: 'POST',
@@ -192,10 +197,10 @@ export const api = {
         body: JSON.stringify(data)
     }).then(handleResponse),
     getExamQuestions: (id) => fetch(`${API_BASE_URL}/exams/${id}/questions`).then(handleResponse),
-    submitAttempt: (id, timeTaken) => fetch(`${API_BASE_URL}/attempts/${id}/submit`, {
+    submitAttempt: (id, timeTaken, violationsCount) => fetch(`${API_BASE_URL}/attempts/${id}/submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ timeTaken })
+        body: JSON.stringify({ timeTaken, violationsCount })
     }).then(handleResponse),
     createQuestion: (examId, data) => fetchWithAuth(`${API_BASE_URL}/exams/${examId}/questions`, {
         method: 'POST',
@@ -273,6 +278,22 @@ export const api = {
     getEmailTemplates: () => fetchWithAuth(`${API_BASE_URL}/email-templates`),
     updateEmailTemplate: (key, data) => fetchWithAuth(`${API_BASE_URL}/email-templates/${key}`, {
         method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+
+    // HR Exam System additions
+    getExamReports: () => fetchWithAuth(`${API_BASE_URL}/exam-reports`),
+    getInvitations: () => fetchWithAuth(`${API_BASE_URL}/exam-invitations`),
+    createInvitation: (data) => fetchWithAuth(`${API_BASE_URL}/exam-invitations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }),
+    deleteInvitation: (id) => fetchWithAuth(`${API_BASE_URL}/exam-invitations/${id}`, { method: 'DELETE' }),
+    verifyInvitation: (token) => fetch(`${API_BASE_URL}/exam-invitations/verify/${token}`).then(handleResponse),
+    generateExamCertificate: (attemptId, data) => fetchWithAuth(`${API_BASE_URL}/attempts/${attemptId}/certificate`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })

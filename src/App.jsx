@@ -9,6 +9,7 @@ import './index.css';
 import './App.css';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 
 // ── Section Components ───────────────────────────────────────
 import Navbar from './components/Navbar';
@@ -278,8 +279,11 @@ function Loader() {
 // Controls app-level state: shows Loader for 2.4s,
 // then fades in the full site content.
 function App() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   // Only show loader on the home page, not when navigating via navbar
-  const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
+  const isHomePage = currentPath === '/' || currentPath === '/home';
   const [loading, setLoading] = useState(isHomePage);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('klanvision_theme') || 'dark';
@@ -301,21 +305,21 @@ function App() {
     if (!isHomePage) return;
     const t = setTimeout(() => setLoading(false), 2400);
     return () => clearTimeout(t);   // cleanup on unmount
-  }, []);
+  }, [isHomePage]);
 
 
 
-  if (window.location.pathname === '/admin') {
+  if (currentPath === '/admin') {
     return <AdminPanel />;
   }
-  if (window.location.pathname === '/admin/reset-password') {
+  if (currentPath === '/admin/reset-password') {
     return <ResetPassword />;
   }
-  if (window.location.pathname.startsWith('/test/')) {
+  if (currentPath.startsWith('/test/') || currentPath === '/test') {
     return <Engine />;
   }
-  if (window.location.pathname === '/verify' || window.location.pathname === '/verify/' || window.location.pathname === '/verify-certificate' || window.location.pathname.startsWith('/verify/')) {
-    const certNum = window.location.pathname.startsWith('/verify/') ? window.location.pathname.substring(8) : '';
+  if (currentPath === '/verify' || currentPath === '/verify/' || currentPath === '/verify-certificate' || currentPath.startsWith('/verify/')) {
+    const certNum = currentPath.startsWith('/verify/') ? currentPath.substring(8) : '';
     return <VerificationPortal certificateNumber={certNum} />;
   }
 
@@ -339,31 +343,31 @@ function App() {
 
           {/* Page sections in scroll order */}
           <main>
-            {window.location.pathname === '/faq' && <FAQPage />}
-            {window.location.pathname === '/refund-policy' && <RefundPolicyPage />}
-            {window.location.pathname === '/privacy-policy' && <PrivacyPolicyPage />}
-            {window.location.pathname === '/service-policy' && <ServicePolicyPage />}
-            {window.location.pathname === '/terms' && <TermsPage />}
-            {window.location.pathname === '/it-consultation' && <ConsultationPage />}
-            {window.location.pathname === '/managed-services' && <ManagedServicesPage />}
-            {window.location.pathname === '/cybersecurity' && <CybersecurityPage />}
-            {window.location.pathname === '/web-development' && <WebDevelopmentPage />}
-            {window.location.pathname === '/mobile-app' && <MobileAppPage />}
-            {window.location.pathname === '/cloud-services' && <CloudServicesPage />}
-            {window.location.pathname === '/upgrade-migration' && <UpgradeMigrationPage />}
-            {window.location.pathname === '/api-integration' && <APIIntegrationPage />}
-            {window.location.pathname === '/careers' && <CareersPage />}
-            {window.location.pathname === '/apply' && <JobApplicationPage />}
-            {window.location.pathname === '/services' && <ServicesPage />}
-            {window.location.pathname === '/portfolio' && <PortfolioPage />}
-            {window.location.pathname === '/blog' && <BlogPage />}
-            {window.location.pathname === '/about' && <AboutPage />}
-            {window.location.pathname === '/contact' && <ContactPage />}
-            {window.location.pathname === '/verify-authentic' && <AuthenticVerificationPage />}
-            {window.location.pathname === '/verify-protection' && <DataProtectionPage />}
-            {window.location.pathname === '/verify-database' && <TrustedDatabasePage />}
-            {window.location.pathname === '/verify-global' && <GlobalAcceptancePage />}
-            {(window.location.pathname === '/' || window.location.pathname === '/home') && (
+            {currentPath === '/faq' && <FAQPage />}
+            {currentPath === '/refund-policy' && <RefundPolicyPage />}
+            {currentPath === '/privacy-policy' && <PrivacyPolicyPage />}
+            {currentPath === '/service-policy' && <ServicePolicyPage />}
+            {currentPath === '/terms' && <TermsPage />}
+            {currentPath === '/it-consultation' && <ConsultationPage />}
+            {currentPath === '/managed-services' && <ManagedServicesPage />}
+            {currentPath === '/cybersecurity' && <CybersecurityPage />}
+            {currentPath === '/web-development' && <WebDevelopmentPage />}
+            {currentPath === '/mobile-app' && <MobileAppPage />}
+            {currentPath === '/cloud-services' && <CloudServicesPage />}
+            {currentPath === '/upgrade-migration' && <UpgradeMigrationPage />}
+            {currentPath === '/api-integration' && <APIIntegrationPage />}
+            {currentPath === '/careers' && <CareersPage />}
+            {currentPath === '/apply' && <JobApplicationPage />}
+            {currentPath === '/services' && <ServicesPage />}
+            {currentPath === '/portfolio' && <PortfolioPage />}
+            {currentPath === '/blog' && <BlogPage />}
+            {currentPath === '/about' && <AboutPage />}
+            {currentPath === '/contact' && <ContactPage />}
+            {currentPath === '/verify-authentic' && <AuthenticVerificationPage />}
+            {currentPath === '/verify-protection' && <DataProtectionPage />}
+            {currentPath === '/verify-database' && <TrustedDatabasePage />}
+            {currentPath === '/verify-global' && <GlobalAcceptancePage />}
+            {(currentPath === '/' || currentPath === '/home') && (
               <>
                 <Hero />                  {/* Full-screen hero with heading, CTA, and image */}
                 <StrategicServices />     {/* 8-card digital services overview grid */}

@@ -1,5 +1,7 @@
+import { useCallback, useMemo } from 'react';
+
 export function useToast() {
-  const toast = ({ title, description, variant = 'default' }) => {
+  const toast = useCallback(({ title, description, variant = 'default' }) => {
     console.log(`[Toast] [${variant}] ${title} - ${description}`);
     
     let container = document.getElementById('klanvision-toast-container');
@@ -49,7 +51,7 @@ export function useToast() {
         card.remove();
       }, 300);
     }, 4000);
-  };
+  }, []);
 
-  return { toast };
+  return useMemo(() => ({ toast }), [toast]);
 }
