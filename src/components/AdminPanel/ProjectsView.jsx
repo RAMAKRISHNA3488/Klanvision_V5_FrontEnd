@@ -137,8 +137,8 @@ export default function ProjectsView({ projects, onAddClick, onEditClick, onDele
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 44 }}>
         <div>
-          <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1.5px' }}>Project <span className="gradient-text">Control</span></h2>
-          <p style={{ color: '#94A3B8', marginTop: 10, fontSize: 18 }}>Manage high-impact initiatives and milestones.</p>
+          <h2 className="admin-section-title">Project Control</h2>
+          <p className="admin-section-subtitle">Track project status, client milestones, progress, and team assignments.</p>
         </div>
         {canEdit && (
           <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
@@ -152,8 +152,7 @@ export default function ProjectsView({ projects, onAddClick, onEditClick, onDele
       ) : (
         <div className="admin-grid-cards-420" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(420px, 1fr))', gap: 28 }}>
           {filteredProjects.map((p) => (
-            <motion.div key={p.id} layout whileHover={{ y: -10, boxShadow: '0 25px 50px rgba(0,0,0,0.3)' }} style={{ background: 'rgba(30, 41, 59, 0.4)', padding: '40px', borderRadius: 40, border: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 4, background: p.color }} />
+            <motion.div key={p.id} layout whileHover={{ y: -6 }} className="clay-card clay-card-interactive" style={{ padding: '32px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%', borderTop: `4px solid ${p.color}` }}>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
                 <div>

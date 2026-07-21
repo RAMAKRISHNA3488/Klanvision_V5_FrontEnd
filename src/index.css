@@ -1090,3 +1090,413 @@ textarea.form-input {
   width: 100% !important;
   position: relative !important;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Claymorphism Design System — Tactile 3D Soft Depth
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Base Clay Card */
+.clay-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95));
+  border-radius: 28px;
+  box-shadow: 
+    8px 12px 24px rgba(0, 0, 0, 0.45),
+    -6px -6px 14px rgba(255, 255, 255, 0.04),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+    inset -3px -3px 8px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-card-interactive {
+  cursor: pointer;
+}
+.clay-card-interactive:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 
+    14px 18px 32px rgba(0, 0, 0, 0.55),
+    -8px -8px 18px rgba(255, 255, 255, 0.08),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.15),
+    inset -3px -3px 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Color Variant Clay Cards */
+.clay-card-indigo {
+  background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+  box-shadow: 
+    8px 14px 28px rgba(79, 70, 229, 0.4),
+    -6px -6px 16px rgba(255, 255, 255, 0.15),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.35),
+    inset -4px -4px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.clay-card-purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #4c1d95 100%);
+  box-shadow: 
+    8px 14px 28px rgba(139, 92, 246, 0.4),
+    -6px -6px 16px rgba(255, 255, 255, 0.15),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.35),
+    inset -4px -4px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.clay-card-emerald {
+  background: linear-gradient(135deg, #10b981 0%, #064e3b 100%);
+  box-shadow: 
+    8px 14px 28px rgba(16, 185, 129, 0.4),
+    -6px -6px 16px rgba(255, 255, 255, 0.15),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.35),
+    inset -4px -4px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.clay-card-amber {
+  background: linear-gradient(135deg, #f59e0b 0%, #78350f 100%);
+  box-shadow: 
+    8px 14px 28px rgba(245, 158, 11, 0.4),
+    -6px -6px 16px rgba(255, 255, 255, 0.15),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.35),
+    inset -4px -4px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.clay-card-rose {
+  background: linear-gradient(135deg, #ef4444 0%, #7f1d1d 100%);
+  box-shadow: 
+    8px 14px 28px rgba(239, 68, 68, 0.4),
+    -6px -6px 16px rgba(255, 255, 255, 0.15),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.35),
+    inset -4px -4px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Clay Button Styles */
+.clay-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+  border-radius: 18px;
+  padding: 12px 24px;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    6px 8px 16px rgba(0, 0, 0, 0.35),
+    -4px -4px 10px rgba(255, 255, 255, 0.12),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  outline: none;
+}
+.clay-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+    8px 12px 22px rgba(0, 0, 0, 0.45),
+    -5px -5px 12px rgba(255, 255, 255, 0.18),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.5),
+    inset -2px -2px 7px rgba(0, 0, 0, 0.5);
+}
+.clay-btn:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 
+    3px 4px 10px rgba(0, 0, 0, 0.4),
+    inset 3px 3px 6px rgba(0, 0, 0, 0.6),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.2);
+}
+
+.clay-btn-emerald {
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  box-shadow: 
+    6px 8px 16px rgba(16, 185, 129, 0.35),
+    -4px -4px 10px rgba(255, 255, 255, 0.12),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.clay-btn-purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  box-shadow: 
+    6px 8px 16px rgba(139, 92, 246, 0.35),
+    -4px -4px 10px rgba(255, 255, 255, 0.12),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.clay-btn-rose {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  box-shadow: 
+    6px 8px 16px rgba(239, 68, 68, 0.35),
+    -4px -4px 10px rgba(255, 255, 255, 0.12),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Clay Inset Inputs */
+.clay-input-field {
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    inset 4px 4px 8px rgba(0, 0, 0, 0.6),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.05),
+    2px 2px 4px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  padding: 12px 18px;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+.clay-input-field:focus {
+  border-color: #818cf8;
+  box-shadow: 
+    inset 4px 4px 8px rgba(0, 0, 0, 0.7),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.08),
+    0 0 20px rgba(99, 102, 241, 0.35);
+}
+
+/* Clay Pill Badges */
+.clay-pill {
+  border-radius: 14px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  box-shadow: 
+    4px 4px 8px rgba(0, 0, 0, 0.3),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.3),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Global Admin Panel Claymorphism Enforcement --- */
+.admin-layout .btn-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%) !important;
+  border-radius: 18px !important;
+  box-shadow: 
+    6px 8px 16px rgba(0, 0, 0, 0.35),
+    -4px -4px 10px rgba(255, 255, 255, 0.12),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  color: #ffffff !important;
+}
+.admin-layout .btn-primary:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 
+    8px 12px 22px rgba(0, 0, 0, 0.45),
+    -5px -5px 12px rgba(255, 255, 255, 0.18),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.5),
+    inset -2px -2px 7px rgba(0, 0, 0, 0.5) !important;
+}
+
+.admin-layout input[type="text"],
+.admin-layout input[type="search"],
+.admin-layout input[type="password"],
+.admin-layout input[type="email"],
+.admin-layout select,
+.admin-layout textarea {
+  background: rgba(15, 23, 42, 0.7) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 
+    inset 4px 4px 8px rgba(0, 0, 0, 0.6),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.05),
+    2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.admin-sidebar {
+  box-shadow: 
+    8px 0 24px rgba(0, 0, 0, 0.4),
+    inset -2px 0 4px rgba(255, 255, 255, 0.05),
+    inset 2px 2px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+.admin-header {
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.05) !important;
+}
+
+/* --- Admin Panel Standardized Typography (Certification Scale) --- */
+.admin-section-title {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.admin-section-subtitle {
+  font-size: 14px !important;
+  color: #94a3b8 !important;
+  margin-top: 8px !important;
+  font-weight: 400 !important;
+}
+
+.admin-stat-label {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  color: #94a3b8 !important;
+}
+
+.admin-stat-value {
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+}
+
+.admin-stat-subtext {
+  font-size: 13px !important;
+  color: #64748b !important;
+}
+
+.admin-table-th {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: #94a3b8 !important;
+  padding: 16px 24px !important;
+}
+
+.admin-table-td {
+  font-size: 13px !important;
+  padding: 16px 24px !important;
+}
+
+.admin-badge {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 4px 10px !important;
+  border-radius: 4px !important;
+}
+
+.admin-btn {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 10px 20px !important;
+  border-radius: 12px !important;
+}
+
+/* --- Professional Admin Panel Mobile Flexibility & Responsiveness --- */
+
+/* Responsive Grid System */
+@media (max-width: 1200px) {
+  .admin-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    z-index: 100 !important;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8) !important;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+
+  .admin-sidebar-closed {
+    transform: translateX(-100%) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Layout Padding & Spacing Adjustments */
+  .admin-main-container {
+    padding: 20px 14px !important;
+  }
+
+  .admin-header {
+    padding: 0 16px !important;
+    height: 70px !important;
+  }
+
+  .admin-header-search-container {
+    max-width: 180px !important;
+  }
+
+  .admin-header-search-input {
+    width: 100% !important;
+    padding-left: 36px !important;
+    font-size: 12px !important;
+  }
+
+  .admin-user-details-text {
+    display: none !important;
+  }
+
+  /* Grid Layouts collapse to 1 column on Mobile */
+  .admin-grid-4,
+  .admin-grid-3,
+  .admin-grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* Section Titles & Controls Stack Vertically */
+  .admin-section-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .admin-section-title {
+    font-size: 22px !important;
+  }
+
+  .admin-section-subtitle {
+    font-size: 12.5px !important;
+  }
+
+  /* Sub-tab navigation buttons wrap on mobile */
+  .admin-subtabs-container {
+    width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding: 6px !important;
+    gap: 8px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-subtabs-container button {
+    padding: 10px 16px !important;
+    font-size: 12px !important;
+  }
+
+  /* Modal Dialogs on Mobile */
+  .clay-card-modal,
+  .confirm-modal-card {
+    padding: 24px 20px !important;
+    max-width: 94vw !important;
+    border-radius: 24px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header-search-container {
+    display: none !important;
+  }
+
+  .admin-table-th,
+  .admin-table-td {
+    padding: 12px 14px !important;
+    font-size: 12px !important;
+  }
+}

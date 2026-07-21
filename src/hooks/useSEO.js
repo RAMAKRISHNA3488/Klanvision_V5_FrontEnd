@@ -78,7 +78,7 @@ export function useSEO({
 
     // ── Cleanup: restore home defaults on unmount ─────────────
     return () => {
-      document.title = 'Klanvision – Digital Innovations for Corporate Success';
+      document.title = 'Klanvision';
       setMeta('meta[name="description"]', 'name=description',
         'Klanvision – Unique, Safe, and Scalable Digital Innovations for Corporate Success. Web development, mobile apps, cloud services, SEO and more.');
       setLink('canonical', window.location.origin + '/');

@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Lock, Filter, Zap, Shield, Check, X, Clock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Lock, Filter, Zap, Shield, Check, X, Clock, AlertTriangle, Trash2 } from 'lucide-react';
 
 // --- TOTP Utilities ---
 export const base32ToBuffer = (base32) => {
@@ -343,23 +343,174 @@ export function NoResults({ query }) {
 
 export function BoardCard({ title, value, desc, color }) {
   return (
-    <div style={{
-      background: 'rgba(30, 41, 59, 0.3)',
-      backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255,255,255,0.05)',
-      borderRadius: 24,
-      padding: '24px 28px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 12,
-      borderTop: `4px solid ${color}`
-    }}>
+    <motion.div
+      whileHover={{ y: -4, scale: 1.02 }}
+      className="clay-card"
+      style={{
+        padding: '26px 30px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        position: 'relative',
+        overflow: 'hidden',
+        borderTop: `4px solid ${color || '#6366F1'}`
+      }}
+    >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: 11, color: '#94A3B8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>{title}</span>
-        <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, boxShadow: `0 0 10px ${color}` }} />
+        <span style={{ fontSize: 11, color: '#94A3B8', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1.2px' }}>{title}</span>
+        <div style={{ width: 10, height: 10, borderRadius: '50%', background: color || '#6366F1', boxShadow: `0 0 14px ${color || '#6366F1'}` }} />
       </div>
-      <div style={{ fontSize: 28, fontWeight: 900, color: 'white', letterSpacing: '-0.5px' }}>{value}</div>
-      <div style={{ fontSize: 12, color: '#64748B', lineHeight: 1.4 }}>{desc}</div>
-    </div>
+      <div style={{ fontSize: 32, fontWeight: 900, color: 'white', letterSpacing: '-0.8px', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>{value}</div>
+      <div style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.4, fontWeight: 500 }}>{desc}</div>
+    </motion.div>
+  );
+}
+
+export function ConfirmDeleteModal({ isOpen, onClose, onConfirm, title, itemName, message, loading }) {
+  if (!isOpen) return null;
+
+  return (
+    <AnimatePresence>
+      <div 
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 20,
+          background: 'rgba(2, 6, 23, 0.85)',
+          backdropFilter: 'blur(24px)'
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] }}
+          className="clay-card"
+          style={{
+            maxWidth: 480,
+            width: '100%',
+            padding: '32px 36px',
+            textAlign: 'center',
+            position: 'relative',
+            borderTop: '4px solid #EF4444',
+            boxShadow: '0 30px 80px rgba(239, 68, 68, 0.25), 0 20px 40px rgba(0, 0, 0, 0.6)'
+          }}
+        >
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            disabled={loading}
+            style={{
+              position: 'absolute',
+              top: 20,
+              right: 20,
+              width: 32,
+              height: 32,
+              borderRadius: 10,
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: 'none',
+              color: '#94A3B8',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            <X size={16} />
+          </button>
+
+          {/* Glowing Red Clay Icon */}
+          <div 
+            className="clay-card-rose"
+            style={{
+              width: 68,
+              height: 68,
+              borderRadius: 22,
+              margin: '0 auto 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 10px 25px rgba(239, 68, 68, 0.45)'
+            }}
+          >
+            <AlertTriangle size={32} color="white" />
+          </div>
+
+          {/* Modal Header */}
+          <h3 style={{ fontSize: 22, fontWeight: 900, color: 'white', marginBottom: 10 }}>
+            {title || 'Confirm Deletion'}
+          </h3>
+
+          {/* Target Item Name Pill */}
+          {itemName && (
+            <div 
+              className="clay-pill"
+              style={{
+                display: 'inline-block',
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                color: '#FCA5A5',
+                fontSize: 13,
+                fontWeight: 800,
+                padding: '6px 16px',
+                marginBottom: 16,
+                maxWidth: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              "{itemName}"
+            </div>
+          )}
+
+          {/* Explanation message */}
+          <p style={{ color: '#94A3B8', fontSize: 13.5, lineHeight: 1.6, marginBottom: 28, fontWeight: 500 }}>
+            {message || 'Are you sure you want to proceed? This action is permanent and cannot be undone.'}
+          </p>
+
+          {/* Buttons Row */}
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+            <button
+              onClick={onClose}
+              disabled={loading}
+              className="clay-btn"
+              style={{
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#CBD5E1',
+                padding: '12px 24px',
+                flex: 1,
+                justifyContent: 'center'
+              }}
+            >
+              Cancel
+            </button>
+
+            <button
+              onClick={onConfirm}
+              disabled={loading}
+              className="clay-btn clay-btn-rose"
+              style={{
+                padding: '12px 24px',
+                flex: 1.2,
+                justifyContent: 'center'
+              }}
+            >
+              {loading ? 'Deleting...' : (
+                <>
+                  <Trash2 size={16} /> Confirm Delete
+                </>
+              )}
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
   );
 }

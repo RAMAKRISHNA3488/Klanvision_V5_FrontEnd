@@ -100,6 +100,9 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     }),
+    purgeOldActivities: () => fetchWithAuth(`${API_BASE_URL}/activities/purge`, {
+        method: 'DELETE'
+    }),
 
     // Admin Users
     getUsers: () => fetchWithAuth(`${API_BASE_URL}/admin/users`),
@@ -291,6 +294,7 @@ export const api = {
 
     // HR Exam System additions
     getExamReports: () => fetchWithAuth(`${API_BASE_URL}/exam-reports`),
+    deleteExamReport: (id) => fetchWithAuth(`${API_BASE_URL}/exam-reports/${id}`, { method: 'DELETE' }),
     getInvitations: () => fetchWithAuth(`${API_BASE_URL}/exam-invitations`),
     createInvitation: (data) => fetchWithAuth(`${API_BASE_URL}/exam-invitations`, {
         method: 'POST',

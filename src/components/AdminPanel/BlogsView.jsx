@@ -161,8 +161,8 @@ export default function BlogsView({ blogs, onAddClick, onEditClick, onDeleteClic
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 44 }}>
         <div>
-          <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1.5px' }}>Insight <span className="gradient-text">Engine</span></h2>
-          <p style={{ color: '#94A3B8', marginTop: 10, fontSize: 18 }}>Publish thought leadership and company milestones.</p>
+          <h2 className="admin-section-title">Insight Engine</h2>
+          <p className="admin-section-subtitle">Publish thought leadership, news, and company technical insights.</p>
         </div>
         {canEdit && (
           <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
@@ -179,9 +179,9 @@ export default function BlogsView({ blogs, onAddClick, onEditClick, onDeleteClic
             <motion.div
               key={blog.id}
               layout
-              whileHover={{ y: -10, boxShadow: '0 30px 60px rgba(0,0,0,0.4)' }}
+              whileHover={{ y: -6 }}
+              className="clay-card clay-card-interactive"
               style={{
-                background: 'rgba(30, 41, 59, 0.4)', borderRadius: 40, border: '1px solid rgba(255,255,255,0.05)',
                 overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column'
               }}
             >

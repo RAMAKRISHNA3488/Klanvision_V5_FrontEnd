@@ -263,38 +263,42 @@ export default function AdminPanel() {
 
       api.getActivities()
         .then(data => {
-          if (data && data.length > 0) {
+          if (Array.isArray(data)) {
             setActivities(data);
-            // Record the highest ID so the poll only fetches rows AFTER this
-            lastActivityIdRef.current = Math.max(...data.map(a => a.id));
+            const validIds = data.map(a => Number(a.id)).filter(id => !isNaN(id) && id > 0);
+            if (validIds.length > 0) {
+              lastActivityIdRef.current = Math.max(...validIds);
+            }
           }
         })
         .catch(err => console.error('Database error fetching activities:', err));
     }
   }, [isAuthenticated]);
 
-  // --- Live Activity Pulse Polling (every 15 seconds) ---
-  // Uses id-based polling (afterId) to avoid MySQL timezone issues.
-  // Fetches only NEW rows by comparing against the highest known id.
+  // --- Live Activity Pulse Polling (every 5 seconds) ---
+  // Uses id-based polling (afterId) for real-time live pulse stream.
   useEffect(() => {
     if (!isAuthenticated) return;
 
     const pollActivities = async () => {
       try {
         const currentMaxId = lastActivityIdRef.current;
-        if (currentMaxId === 0) return; // wait for initial load
+        const newItems = currentMaxId === 0
+          ? await api.getActivities()
+          : await api.getActivitiesAfter(currentMaxId);
 
-        const newItems = await api.getActivitiesAfter(currentMaxId);
-        if (newItems && newItems.length > 0) {
-          // Update cursor to highest new id
-          const newMaxId = Math.max(...newItems.map(a => a.id));
-          lastActivityIdRef.current = newMaxId;
-          // Prepend genuinely new items (dedup by id just in case)
+        if (Array.isArray(newItems) && newItems.length > 0) {
+          const validIds = newItems.map(a => Number(a.id)).filter(id => !isNaN(id) && id > 0);
+          if (validIds.length > 0) {
+            const maxNewId = Math.max(...validIds);
+            if (maxNewId > lastActivityIdRef.current) {
+              lastActivityIdRef.current = maxNewId;
+            }
+          }
           setActivities(prev => {
-            const existingIds = new Set(prev.map(a => a.id));
-            const fresh = newItems.filter(a => !existingIds.has(a.id));
+            const existingIds = new Set(prev.map(a => String(a.id)));
+            const fresh = newItems.filter(a => !existingIds.has(String(a.id)));
             if (fresh.length === 0) return prev;
-            // Keep at most 500 items in memory
             const merged = [...fresh, ...prev];
             return merged.length > 500 ? merged.slice(0, 500) : merged;
           });
@@ -304,7 +308,7 @@ export default function AdminPanel() {
       }
     };
 
-    const pollInterval = setInterval(pollActivities, 15000); // every 15 seconds
+    const pollInterval = setInterval(pollActivities, 5000); // snappy 5-second live pulse
     return () => clearInterval(pollInterval);
   }, [isAuthenticated]);
 
@@ -873,7 +877,8 @@ export default function AdminPanel() {
       <motion.aside
         initial={false}
         animate={{ width: isSidebarOpen ? 280 : 100 }}
-        className="admin-sidebar" style={{
+        className={`admin-sidebar ${!isSidebarOpen ? 'admin-sidebar-closed' : ''}`}
+        style={{
           background: 'rgba(30, 41, 59, 0.7)', backdropFilter: 'blur(20px)',
           borderRight: '1px solid rgba(255,255,255,0.1)', display: 'flex',
           flexDirection: 'column', position: 'sticky', top: 0, height: '100vh', zIndex: 50
@@ -950,10 +955,11 @@ export default function AdminPanel() {
             <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', cursor: 'pointer', width: 44, height: 44, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <LayoutPanelLeft size={22} />
             </button>
-            <div style={{ position: 'relative', marginTop: 8 }}>
+            <div className="admin-header-search-container" style={{ position: 'relative', marginTop: 8 }}>
               <Search size={18} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
               <input
                 type="text"
+                className="admin-header-search-input"
                 value={globalSearchQuery}
                 onChange={(e) => setGlobalSearchQuery(e.target.value)}
                 placeholder={`Search in ${activeTab}...`}
@@ -963,7 +969,7 @@ export default function AdminPanel() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
             <div className="user-info" style={{ display: 'flex', alignItems: 'center', gap: 16, paddingLeft: 32, borderLeft: '1px solid rgba(255,255,255,0.1)' }}>
-              <div style={{ textAlign: 'right' }}>
+              <div className="admin-user-details-text" style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 15, fontWeight: 800, color: 'white' }}>{currentUser?.name || 'Alex Rivera'}</div>
                 <div style={{ fontSize: 11, color: '#6366F1', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>{currentUser?.role || 'SYSTEM ADMIN'}</div>
               </div>
@@ -1018,7 +1024,7 @@ export default function AdminPanel() {
           )}
         </AnimatePresence>
 
-        <div style={{ padding: '40px', maxWidth: 1600, margin: '0 auto', width: '100%' }}>
+        <div className="admin-main-container" style={{ padding: '40px', maxWidth: 1600, margin: '0 auto', width: '100%' }}>
           <SearchCommander
             activeTab={activeTab}
             query={globalSearchQuery}
@@ -1125,7 +1131,7 @@ export default function AdminPanel() {
             )}
             {activeTab === 'activity' && (
               hasTabPermission(currentUser, 'activity') ? (
-                <ActivityView activities={activities} />
+                <ActivityView activities={activities} onRefresh={() => api.getActivities().then(data => setActivities(data || []))} />
               ) : <UnauthorizedView />
             )}
             {activeTab === 'exams' && (

@@ -391,42 +391,42 @@ export function ThankYouDashboard({ attemptId, answeredCount, totalQuestions, te
         <div className="w-full max-w-3xl flex flex-col gap-4">
           
           {/* Main Stats Receipt Box */}
-          <div className="bg-[#070D1F]/50 border border-[#1A2244] rounded-2xl p-5 md:p-6 divide-y divide-[#1A2244] shadow-xl backdrop-blur-md">
+          <div className="clay-card rounded-3xl p-6 md:p-8 divide-y divide-slate-800/60 shadow-2xl">
             
             {/* Reference ID */}
-            <div className="flex items-center justify-between py-3.5 first:pt-0">
+            <div className="flex items-center justify-between py-4 first:pt-0">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                  <FileText className="w-4.5 h-4.5 text-indigo-400" />
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center clay-pill">
+                  <FileText className="w-5 h-5 text-indigo-300" />
                 </div>
-                <span className="text-[11.5px] font-black uppercase tracking-wider text-slate-400 font-['Outfit']">Reference ID</span>
+                <span className="text-[12px] font-black uppercase tracking-wider text-slate-300 font-['Outfit']">Reference ID</span>
               </div>
-              <span className="text-xs md:text-sm font-bold text-slate-200 select-all font-mono">{attemptId || "attempt-1783624787241-55"}</span>
+              <span className="text-xs md:text-sm font-bold text-slate-100 select-all font-mono">{attemptId || "attempt-1783624787241-55"}</span>
             </div>
 
             {/* Submission Time */}
-            <div className="flex items-center justify-between py-3.5">
+            <div className="flex items-center justify-between py-4">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                  <svg className="w-4.5 h-4.5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center clay-pill">
+                  <svg className="w-5 h-5 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <span className="text-[11.5px] font-black uppercase tracking-wider text-slate-400 font-['Outfit']">Submission Time</span>
+                <span className="text-[12px] font-black uppercase tracking-wider text-slate-300 font-['Outfit']">Submission Time</span>
               </div>
-              <span className="text-xs md:text-sm font-bold text-slate-200">{currentTime || "7 October 2026, 1:32:09 AM"}</span>
+              <span className="text-xs md:text-sm font-bold text-slate-100">{currentTime || "7 October 2026, 1:32:09 AM"}</span>
             </div>
 
             {/* Proctoring Security Status */}
-            <div className="flex items-center justify-between py-3.5 last:pb-0">
+            <div className="flex items-center justify-between py-4 last:pb-0">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                  <ShieldCheck className="w-4.5 h-4.5 text-indigo-400" />
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center clay-pill">
+                  <ShieldCheck className="w-5 h-5 text-indigo-300" />
                 </div>
-                <span className="text-[11.5px] font-black uppercase tracking-wider text-slate-400 font-['Outfit']">Proctoring Security</span>
+                <span className="text-[12px] font-black uppercase tracking-wider text-slate-300 font-['Outfit']">Proctoring Security</span>
               </div>
-              <div className="flex items-center gap-1.5 text-emerald-400 font-black text-[10.5px] uppercase tracking-wider font-['Outfit']">
-                <ShieldCheck className="w-4 h-4 fill-emerald-500/10" />
+              <div className="flex items-center gap-1.5 text-emerald-300 font-black text-[11px] uppercase tracking-wider font-['Outfit'] clay-pill bg-emerald-950/60 border border-emerald-500/40">
+                <ShieldCheck className="w-4 h-4 fill-emerald-500/20 text-emerald-400" />
                 Secure Record Synchronized
               </div>
             </div>
@@ -434,11 +434,11 @@ export function ThankYouDashboard({ attemptId, answeredCount, totalQuestions, te
           </div>
 
           {/* Green alert ribbon */}
-          <div className="flex items-start gap-3 bg-emerald-950/15 border border-emerald-500/20 rounded-xl p-4 shadow-sm">
-            <CheckCircle2 className="w-5.5 h-5.5 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="flex items-start gap-4 clay-card clay-card-emerald p-5">
+            <CheckCircle2 className="w-6 h-6 text-white shrink-0 mt-0.5" />
             <div className="text-left font-['Outfit']">
-              <h4 className="text-[12.5px] font-bold text-emerald-400">Thank you for completing your assessment.</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+              <h4 className="text-[13.5px] font-extrabold text-white">Thank you for completing your assessment.</h4>
+              <p className="text-[11.5px] text-emerald-100/90 mt-0.5 leading-relaxed font-medium">
                 Your responses have been securely recorded and will be reviewed as per the evaluation process.
               </p>
             </div>

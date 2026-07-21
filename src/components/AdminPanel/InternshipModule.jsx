@@ -48,12 +48,9 @@ function DashboardView({ interns, certificates }) {
         ].map((card, idx) => (
           <motion.div
             key={idx}
-            whileHover={{ y: -5, boxShadow: '0 15px 30px rgba(0,0,0,0.2)' }}
+            whileHover={{ y: -5 }}
+            className="clay-card clay-card-interactive"
             style={{
-              background: 'rgba(30, 41, 59, 0.3)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,0.05)',
-              borderRadius: 24,
               padding: '24px 28px',
               borderTop: `4px solid ${card.color}`
             }}
@@ -68,7 +65,7 @@ function DashboardView({ interns, certificates }) {
       {/* Charts Section */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 32 }}>
         {/* Domain Distribution Horizontal Bar Chart */}
-        <div style={{ background: 'rgba(30, 41, 59, 0.2)', border: '1px solid rgba(255,255,255,0.05)', padding: 32, borderRadius: 28 }}>
+        <div className="clay-card" style={{ padding: 32 }}>
           <h3 style={{ fontSize: 18, fontWeight: 900, color: 'white', marginBottom: 24 }}>Department / Domain Distribution</h3>
           {Object.keys(domainCounts).length === 0 ? (
             <p style={{ color: '#64748B', fontStyle: 'italic', fontSize: 14 }}>No data registered yet.</p>

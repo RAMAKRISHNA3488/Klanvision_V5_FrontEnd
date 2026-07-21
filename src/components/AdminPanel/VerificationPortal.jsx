@@ -567,14 +567,11 @@ function TrustBadge({ icon: Icon, imgSrc, imgAnim = 'spin', title, desc, delay, 
         transition: { duration: 0.12, ease: 'easeOut' }
       }}
       transition={{ delay, duration: 0.6 }}
-      className="card"
+      className="clay-card clay-card-interactive"
       style={{
         flex: '1 1 200px',
         display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
         padding: '36px 24px',
-        background: '#0F172A',
-        border: '1px solid #1E293B',
-        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.6)',
         borderRadius: 20,
         position: 'relative',
         overflow: 'hidden',

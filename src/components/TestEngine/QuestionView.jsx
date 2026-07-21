@@ -51,29 +51,31 @@ export function QuestionView({ question, index, answer, onAnswer, totalQuestions
       </div>
 
       {/* Options Selection Cards */}
-      <div className="grid grid-cols-1 gap-2.5">
+      <div className="grid grid-cols-1 gap-3.5 mt-2">
         {options.map((opt) => {
           const isSelected = answer === opt.key;
           return (
             <button
               key={opt.key}
               onClick={() => onAnswer(question.id, opt.key)}
-              className={`w-full text-left p-3.5 rounded-xl border text-[13px] font-semibold transition-all duration-300 flex items-center justify-between cursor-pointer group shadow-[inset_0_1px_1px_rgba(255,255,255,0.01),0_4px_12px_rgba(0,0,0,0.2)]
-                ${isSelected 
-                  ? "border-emerald-500/50 bg-[#061C18]/40 shadow-[0_0_15px_rgba(16,185,129,0.1)]" 
-                  : "border-[#111A35] bg-[#050B1E] hover:bg-white/[0.01] hover:border-[#1F2E5C]"}`}
+              className={`w-full text-left p-4.5 rounded-2xl text-[13.5px] font-semibold transition-all duration-300 flex items-center justify-between cursor-pointer group clay-card-interactive ${
+                isSelected 
+                  ? "clay-card-emerald text-white" 
+                  : "clay-card hover:border-indigo-500/40"
+              }`}
             >
               <div className="flex items-center gap-4 flex-1">
                 {/* Option Index Bubble */}
-                <div className={`h-8 w-8 rounded-full font-black flex items-center justify-center border shrink-0 transition-all duration-300 font-['Outfit'] text-[13px]
-                  ${isSelected 
-                    ? "bg-transparent border-emerald-500 text-[#10B981] shadow-[0_0_10px_rgba(16,185,129,0.2)]" 
-                    : "bg-[#090F26] border-[#202750] text-[#A5B4FC] group-hover:border-[#2D3775]"}`}
-                >
+                <div className={`h-9 w-9 rounded-xl font-black flex items-center justify-center border shrink-0 transition-all duration-300 font-['Outfit'] text-[14px] clay-pill ${
+                  isSelected 
+                    ? "bg-emerald-600 border-white/40 text-white shadow-lg" 
+                    : "bg-slate-900/80 border-slate-700/60 text-indigo-300 group-hover:border-indigo-500"
+                }`}>
                   {opt.key}
                 </div>
-                <span className={`text-[13px] leading-relaxed font-semibold font-['Outfit'] transition-colors duration-300
-                  ${isSelected ? "text-emerald-400" : "text-slate-300 group-hover:text-white"}`}>
+                <span className={`text-[13.5px] leading-relaxed font-bold font-['Outfit'] transition-colors duration-300 ${
+                  isSelected ? "text-white drop-shadow-md" : "text-slate-200 group-hover:text-white"
+                }`}>
                   {opt.text}
                 </span>
               </div>
@@ -81,11 +83,11 @@ export function QuestionView({ question, index, answer, onAnswer, totalQuestions
               {/* Selection Checkbox Ring */}
               <div className="shrink-0 ml-4">
                 {isSelected ? (
-                  <div className="w-5 h-5 rounded-full bg-emerald-500 border border-emerald-600 flex items-center justify-center text-white shadow-[0_0_10px_rgba(16,185,129,0.3)] animate-pulse">
-                    <Check className="w-3.5 h-3.5 stroke-[4.5]" />
+                  <div className="w-6 h-6 rounded-full bg-white text-emerald-600 flex items-center justify-center shadow-lg animate-bounce">
+                    <Check className="w-4 h-4 stroke-[4]" />
                   </div>
                 ) : (
-                  <div className="w-5 h-5 rounded-full border-2 border-[#1E295D]/40 group-hover:border-[#1E295D]/60 transition-colors" />
+                  <div className="w-6 h-6 rounded-full border-2 border-slate-600/60 group-hover:border-indigo-500/80 transition-colors" />
                 )}
               </div>
             </button>

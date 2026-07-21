@@ -5,7 +5,7 @@ import {
   Send, Copy, Check, FileSpreadsheet, Award, Calendar, AlertTriangle, ShieldCheck, Download, User
 } from 'lucide-react';
 import { api } from '../../utils/api';
-import { BoardCard, NoResults } from './SharedComponents';
+import { BoardCard, NoResults, ConfirmDeleteModal } from './SharedComponents';
 
 const internshipRoles = [
   "Cyber Security & Ethical Hacking",
@@ -125,6 +125,16 @@ export default function ExamsView({ triggerToast }) {
     certificateType: 'Exam Competency Certification'
   });
 
+  // Delete Confirmation Modal State
+  const [deleteModalState, setDeleteModalState] = useState({
+    isOpen: false,
+    title: '',
+    itemName: '',
+    message: '',
+    onConfirm: null,
+    loading: false
+  });
+
   const allRoles = [...jobs, ...internshipRoles];
 
   // Initial load
@@ -196,14 +206,27 @@ export default function ExamsView({ triggerToast }) {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this exam blueprint?")) return;
+  const requestDeleteExam = (exam) => {
+    setDeleteModalState({
+      isOpen: true,
+      title: 'Delete Exam Blueprint',
+      itemName: exam.test_name,
+      message: `Are you sure you want to delete the exam blueprint "${exam.test_name}"? All associated questions and test configurations will be permanently removed.`,
+      loading: false,
+      onConfirm: () => executeDeleteExam(exam.id)
+    });
+  };
+
+  const executeDeleteExam = async (id) => {
+    setDeleteModalState(prev => ({ ...prev, loading: true }));
     try {
       await api.deleteExam(id);
       setExams(prev => prev.filter(e => e.id !== id));
-      triggerToast("Exam blueprint successfully terminated.", "Exam Manager");
+      triggerToast("Exam blueprint successfully deleted.", "Exam Manager");
     } catch (err) {
       triggerToast("Failed to delete exam: " + err.message, "Exam Manager");
+    } finally {
+      setDeleteModalState({ isOpen: false, title: '', itemName: '', message: '', onConfirm: null, loading: false });
     }
   };
 
@@ -275,8 +298,19 @@ export default function ExamsView({ triggerToast }) {
     setShowQuestionForm(true);
   };
 
-  const handleDeleteQuestion = async (qId) => {
-    if (!confirm("Are you sure you want to remove this question?")) return;
+  const requestDeleteQuestion = (qId, index) => {
+    setDeleteModalState({
+      isOpen: true,
+      title: 'Delete Question',
+      itemName: index !== undefined ? `Question ${index + 1}` : 'Selected Question',
+      message: 'Are you sure you want to remove this question from the exam blueprint?',
+      loading: false,
+      onConfirm: () => executeDeleteQuestion(qId)
+    });
+  };
+
+  const executeDeleteQuestion = async (qId) => {
+    setDeleteModalState(prev => ({ ...prev, loading: true }));
     try {
       await api.deleteQuestion(qId);
       setExamQuestions(prev => prev.filter(q => q.id !== qId));
@@ -294,6 +328,8 @@ export default function ExamsView({ triggerToast }) {
       triggerToast("Question deleted successfully.", "Exam Manager");
     } catch (err) {
       triggerToast("Failed to delete question: " + err.message, "Exam Manager");
+    } finally {
+      setDeleteModalState({ isOpen: false, title: '', itemName: '', message: '', onConfirm: null, loading: false });
     }
   };
 
@@ -369,14 +405,27 @@ export default function ExamsView({ triggerToast }) {
     setShareTab('public');
   };
 
-  const handleRevokeInvite = async (id) => {
-    if (!confirm("Are you sure you want to revoke this candidate invitation?")) return;
+  const requestRevokeInvite = (invite) => {
+    setDeleteModalState({
+      isOpen: true,
+      title: 'Revoke Candidate Invitation',
+      itemName: invite.name || invite.email,
+      message: `Are you sure you want to revoke the assessment invitation for "${invite.name || invite.email}"? The invitation token will become invalid immediately.`,
+      loading: false,
+      onConfirm: () => executeRevokeInvite(invite.id)
+    });
+  };
+
+  const executeRevokeInvite = async (id) => {
+    setDeleteModalState(prev => ({ ...prev, loading: true }));
     try {
       await api.deleteInvitation(id);
       setInvitations(prev => prev.filter(i => i.id !== id));
-      triggerToast("Invitation link revoked.", "Inviter");
+      triggerToast("Invitation link revoked successfully.", "Inviter");
     } catch (err) {
       triggerToast("Failed to revoke invitation: " + err.message, "Inviter");
+    } finally {
+      setDeleteModalState({ isOpen: false, title: '', itemName: '', message: '', onConfirm: null, loading: false });
     }
   };
 
@@ -420,6 +469,30 @@ export default function ExamsView({ triggerToast }) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const requestDeleteReport = (reportId, candidateName) => {
+    setDeleteModalState({
+      isOpen: true,
+      title: 'Delete Assessment Report',
+      itemName: candidateName || 'Candidate Record',
+      message: `Are you sure you want to delete the assessment report for "${candidateName || 'Candidate'}"? All score metrics, exit violations, and proctoring logs will be permanently removed. This action cannot be undone.`,
+      loading: false,
+      onConfirm: () => executeDeleteReport(reportId)
+    });
+  };
+
+  const executeDeleteReport = async (reportId) => {
+    setDeleteModalState(prev => ({ ...prev, loading: true }));
+    try {
+      await api.deleteExamReport(reportId);
+      setReports(prev => prev.filter(r => r.id !== reportId));
+      triggerToast("Assessment report deleted successfully.", "Reports Console");
+    } catch (err) {
+      triggerToast("Failed to delete report: " + err.message, "Reports Console");
+    } finally {
+      setDeleteModalState({ isOpen: false, title: '', itemName: '', message: '', onConfirm: null, loading: false });
+    }
   };
 
   // Certification actions
@@ -471,10 +544,10 @@ export default function ExamsView({ triggerToast }) {
     <div style={{ color: 'white', fontFamily: 'Outfit, sans-serif' }}>
       
       {/* Page Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
+      <div className="admin-section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
         <div>
-          <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: '-0.5px' }}>Assessment Console</h2>
-          <p style={{ color: '#94A3B8', fontSize: 14, marginTop: 4 }}>Design technical assessments, invite candidates, monitor AI proctoring, and issue competency certificates.</p>
+          <h2 className="admin-section-title">Assessment Console</h2>
+          <p className="admin-section-subtitle">Design technical assessments, invite candidates, monitor AI proctoring, and issue competency certificates.</p>
         </div>
         
         {activeSubTab === 'blueprints' && (
@@ -494,12 +567,8 @@ export default function ExamsView({ triggerToast }) {
         {activeSubTab === 'invitations' && (
           <button
             onClick={handleOpenInvite}
-            style={{
-              background: 'linear-gradient(135deg, #10B981, #34D399)',
-              color: 'white', fontWeight: 800, padding: '14px 28px', borderRadius: 16,
-              border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, fontSize: 14,
-              boxShadow: '0 10px 20px rgba(16, 185, 129, 0.3)'
-            }}
+            className="clay-btn clay-btn-emerald"
+            style={{ padding: '14px 28px', fontSize: 14 }}
           >
             <Send size={18} /> Invite Candidate
           </button>
@@ -508,12 +577,8 @@ export default function ExamsView({ triggerToast }) {
         {activeSubTab === 'reports' && (
           <button
             onClick={handleExportCSV}
-            style={{
-              background: 'linear-gradient(135deg, #3B82F6, #60A5FA)',
-              color: 'white', fontWeight: 800, padding: '14px 28px', borderRadius: 16,
-              border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, fontSize: 14,
-              boxShadow: '0 10px 20px rgba(59, 130, 246, 0.3)'
-            }}
+            className="clay-btn"
+            style={{ padding: '14px 28px', fontSize: 14 }}
           >
             <FileSpreadsheet size={18} /> Export Results (CSV)
           </button>
@@ -521,16 +586,17 @@ export default function ExamsView({ triggerToast }) {
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div style={{
-        display: 'flex',
-        gap: 16,
-        background: 'rgba(255,255,255,0.02)',
-        padding: 8,
-        borderRadius: 20,
-        marginBottom: 32,
-        border: '1px solid rgba(255,255,255,0.05)',
-        width: 'fit-content'
-      }}>
+      <div 
+        className="clay-card admin-subtabs-container"
+        style={{
+          display: 'flex',
+          gap: 12,
+          padding: 10,
+          borderRadius: 24,
+          marginBottom: 36,
+          width: 'fit-content'
+        }}
+      >
         {[
           { id: 'blueprints', label: 'Exam Blueprints', icon: GraduationCap },
           { id: 'invitations', label: 'Invitations Manager', icon: Send },
@@ -542,19 +608,20 @@ export default function ExamsView({ triggerToast }) {
             <button
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id)}
+              className={isActive ? 'clay-btn clay-btn-purple' : 'clay-card-interactive'}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
                 padding: '12px 24px',
-                borderRadius: 14,
+                borderRadius: 18,
                 border: 'none',
-                background: isActive ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
-                color: isActive ? '#A78BFA' : '#94A3B8',
+                background: isActive ? undefined : 'rgba(255,255,255,0.03)',
+                color: isActive ? '#ffffff' : '#94A3B8',
                 fontSize: 14,
                 fontWeight: 800,
                 cursor: 'pointer',
-                transition: 'all 0.2s'
+                transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)'
               }}
             >
               <Icon size={16} />
@@ -576,19 +643,18 @@ export default function ExamsView({ triggerToast }) {
           </div>
 
           {/* Filters and search */}
-          <div style={{
-            background: 'rgba(15, 23, 42, 0.7)',
-            backdropFilter: 'blur(40px)',
-            border: '1px solid rgba(255,255,255,0.05)',
-            borderRadius: 32,
-            padding: '24px 32px',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 20,
-            marginBottom: 24
-          }}>
+          <div 
+            className="clay-card admin-filter-bar"
+            style={{
+              padding: '24px 32px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 20,
+              marginBottom: 24
+            }}
+          >
             <div style={{ display: 'flex', gap: 12 }}>
               {['All', 'Job', 'Internship'].map((type) => (
                 <button
@@ -639,11 +705,11 @@ export default function ExamsView({ triggerToast }) {
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Exam Details</th>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Scope</th>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Scheduling Window</th>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Duration & Penalty</th>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Actions</th>
+                      <th className="admin-table-th">Exam Details</th>
+                      <th className="admin-table-th">Scope</th>
+                      <th className="admin-table-th">Scheduling Window</th>
+                      <th className="admin-table-th">Duration &amp; Penalty</th>
+                      <th className="admin-table-th">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -747,7 +813,7 @@ export default function ExamsView({ triggerToast }) {
                               <Edit2 size={16} />
                             </button>
                             <button
-                              onClick={() => handleDelete(exam.id)}
+                              onClick={() => requestDeleteExam(exam)}
                               type="button"
                               title="Delete Exam"
                               style={{ background: 'rgba(239, 68, 68, 0.05)', border: 'none', color: '#F87171', padding: 10, borderRadius: 10, cursor: 'pointer' }}
@@ -799,11 +865,11 @@ export default function ExamsView({ triggerToast }) {
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}>
-                    <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Candidate Details</th>
-                    <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Exam / Role</th>
-                    <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Invite Link</th>
-                    <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Expiry & Status</th>
-                    <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Actions</th>
+                    <th className="admin-table-th">Candidate Details</th>
+                    <th className="admin-table-th">Exam / Role</th>
+                    <th className="admin-table-th">Invite Link</th>
+                    <th className="admin-table-th">Expiry &amp; Status</th>
+                    <th className="admin-table-th">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -852,7 +918,7 @@ export default function ExamsView({ triggerToast }) {
 
                       <td style={{ padding: '24px 32px' }}>
                         <button
-                          onClick={() => handleRevokeInvite(invite.id)}
+                          onClick={() => requestRevokeInvite(invite)}
                           style={{
                             background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#F87171',
                             padding: '8px 14px', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 800
@@ -882,43 +948,40 @@ export default function ExamsView({ triggerToast }) {
           </div>
 
           {/* Search bar */}
-          <div style={{
-            background: 'rgba(15, 23, 42, 0.7)',
-            backdropFilter: 'blur(40px)',
-            border: '1px solid rgba(255,255,255,0.05)',
-            borderRadius: 32,
-            padding: '24px 32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 20,
-            marginBottom: 24
-          }}>
-            <div style={{ position: 'relative', width: '100%', maxWidth: 350 }}>
-              <Search size={18} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
+          <div 
+            className="clay-card admin-filter-bar"
+            style={{
+              padding: '22px 32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 20,
+              marginBottom: 28
+            }}
+          >
+            <div style={{ position: 'relative', width: '100%', maxWidth: 380 }}>
+              <Search size={18} style={{ position: 'absolute', left: 18, top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
               <input
                 type="text"
+                className="clay-input-field"
                 placeholder="Search candidate name or exam..."
                 value={reportsSearchQuery}
                 onChange={(e) => setReportsSearchQuery(e.target.value)}
                 style={{
-                  width: '100%', padding: '12px 16px 12px 48px', borderRadius: 14,
-                  border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(15, 23, 42, 0.5)',
-                  color: 'white', fontSize: 13, outline: 'none'
+                  width: '100%', paddingLeft: 48, borderRadius: 16
                 }}
               />
             </div>
           </div>
 
           {/* Table List */}
-          <div style={{
-            background: 'rgba(15, 23, 42, 0.7)',
-            backdropFilter: 'blur(40px)',
-            border: '1px solid rgba(255,255,255,0.05)',
-            borderRadius: 40,
-            overflow: 'hidden',
-            boxShadow: '0 40px 100px rgba(0,0,0,0.5)'
-          }}>
+          <div 
+            className="clay-card"
+            style={{
+              borderRadius: 32,
+              overflow: 'hidden'
+            }}
+          >
             {loadingReports ? (
               <div style={{ textAlign: 'center', padding: '80px 0', color: '#64748B' }}>Loading results & reports...</div>
             ) : filteredReports.length === 0 ? (
@@ -928,11 +991,12 @@ export default function ExamsView({ triggerToast }) {
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Candidate</th>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Exam Title</th>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Score & Time</th>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>AI Proctor Status</th>
-                      <th style={{ padding: '24px 32px', fontSize: 11, fontWeight: 900, color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Credentialing</th>
+                      <th className="admin-table-th">Candidate</th>
+                      <th className="admin-table-th">Exam Title</th>
+                      <th className="admin-table-th">Score &amp; Time</th>
+                      <th className="admin-table-th">AI Proctor Status</th>
+                      <th className="admin-table-th">Credentialing</th>
+                      <th className="admin-table-th" style={{ textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1082,6 +1146,23 @@ export default function ExamsView({ triggerToast }) {
                                 <Award size={14} /> Issue Certificate
                               </button>
                             )}
+                          </td>
+
+                          <td style={{ padding: '24px 32px', textAlign: 'right' }}>
+                            <button
+                              onClick={() => requestDeleteReport(report.id, report.candidate_name)}
+                              style={{
+                                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                width: 34, height: 34, borderRadius: 10,
+                                background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)',
+                                color: '#EF4444', cursor: 'pointer', transition: 'all 0.2s ease'
+                              }}
+                              title="Delete Assessment Report"
+                              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'; }}
+                            >
+                              <Trash2 size={14} />
+                            </button>
                           </td>
                         </tr>
                       );
@@ -1375,7 +1456,7 @@ export default function ExamsView({ triggerToast }) {
                               <Edit2 size={14} />
                             </button>
                             <button
-                              onClick={() => handleDeleteQuestion(q.id)}
+                              onClick={() => requestDeleteQuestion(q.id, qidx)}
                               style={{ background: 'rgba(239, 68, 68, 0.05)', border: 'none', color: '#F87171', padding: 8, borderRadius: 8, cursor: 'pointer' }}
                             >
                               <Trash2 size={14} />
@@ -1710,6 +1791,17 @@ export default function ExamsView({ triggerToast }) {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Professional Claymorphic Confirm Delete Modal */}
+      <ConfirmDeleteModal
+        isOpen={deleteModalState.isOpen}
+        onClose={() => setDeleteModalState({ isOpen: false, title: '', itemName: '', message: '', onConfirm: null, loading: false })}
+        onConfirm={deleteModalState.onConfirm}
+        title={deleteModalState.title}
+        itemName={deleteModalState.itemName}
+        message={deleteModalState.message}
+        loading={deleteModalState.loading}
+      />
 
     </div>
   );

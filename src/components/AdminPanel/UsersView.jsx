@@ -166,8 +166,8 @@ export default function UsersView({ users, onAddClick, onEditClick, onDeleteClic
     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 44 }}>
         <div>
-          <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1.5px' }}>Team <span className="gradient-text">Directory</span></h2>
-          <p style={{ color: '#94A3B8', marginTop: 10, fontSize: 16 }}>Manage authentication and security modules.</p>
+          <h2 className="admin-section-title">Team Directory</h2>
+          <p className="admin-section-subtitle">Manage administrative accounts, role permissions, and access controls.</p>
         </div>
         {canEdit && (
           <button onClick={onAddClick} className="btn-primary" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: 16 }}>
@@ -181,7 +181,7 @@ export default function UsersView({ users, onAddClick, onEditClick, onDeleteClic
       ) : (
         <div className="admin-grid-cards-360" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 32 }}>
           {filteredUsers.map((user) => (
-            <motion.div key={user.id} layout whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.3)' }} style={{ background: 'rgba(30, 41, 59, 0.4)', padding: '40px', borderRadius: 36, border: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <motion.div key={user.id} layout whileHover={{ y: -6 }} className="clay-card clay-card-interactive" style={{ padding: '32px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%', borderTop: `4px solid ${user.color}` }}>
               <div style={{ position: 'absolute', top: 0, right: 0, width: 120, height: 120, background: user.color, filter: 'blur(80px)', opacity: 0.05 }} />
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 32 }}>

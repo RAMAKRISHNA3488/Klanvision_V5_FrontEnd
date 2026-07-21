@@ -77,7 +77,7 @@ export default function DashboardView({ projects, users, activities, setActiveTa
 
           {/* SYSTEM RADAR & PROJECT VELOCITY */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
-            <div style={{ background: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(40px)', borderRadius: 48, border: '1px solid rgba(255,255,255,0.08)', padding: 56, position: 'relative', overflow: 'hidden' }}>
+            <div className="clay-card" style={{ padding: 48, position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: 0, right: 0, width: 300, height: 300, background: 'radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%)', filter: 'blur(60px)' }} />
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 56 }}>
@@ -157,7 +157,7 @@ export default function DashboardView({ projects, users, activities, setActiveTa
 
           {/* REAL-TIME AUDIT STREAM */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-            <div style={{ background: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(40px)', borderRadius: 48, border: '1px solid rgba(255,255,255,0.08)', padding: 48, height: '100%', position: 'relative', overflow: 'hidden' }}>
+            <div className="clay-card" style={{ padding: 40, height: '100%', position: 'relative', overflow: 'hidden' }}>
               <h3 style={{ fontSize: 22, fontWeight: 900, marginBottom: 40, display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'space-between' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <Activity size={20} color="#6366F1" /> Live <span className="gradient-text">Pulse</span>
@@ -230,10 +230,12 @@ export default function DashboardView({ projects, users, activities, setActiveTa
 function MetricCard({ title, value, label, icon: Icon, color, trend, isChart, isLive }) {
   return (
     <motion.div
-      whileHover={{ y: -12, scale: 1.02, boxShadow: `0 30px 60px ${color}20` }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      className="clay-card clay-card-interactive"
       style={{
-        background: 'rgba(15, 23, 42, 0.7)', backdropFilter: 'blur(30px)', border: '1px solid rgba(255,255,255,0.08)', padding: 36, borderRadius: 40,
-        position: 'relative', overflow: 'hidden'
+        padding: 32,
+        position: 'relative', overflow: 'hidden',
+        borderTop: `4px solid ${color}`
       }}
     >
       <motion.div
@@ -308,8 +310,9 @@ function MonitoringRow({ label, value, total, color }) {
 function StatusPanel({ title, icon: Icon, color, count }) {
   return (
     <motion.div
-      whileHover={{ y: -8, scale: 1.02, boxShadow: `0 20px 40px ${color}15` }}
-      style={{ background: 'rgba(15, 23, 42, 0.7)', backdropFilter: 'blur(40px)', borderRadius: 40, border: `1px solid ${color}30`, padding: 32, display: 'flex', alignItems: 'center', gap: 24, position: 'relative', overflow: 'hidden' }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      className="clay-card clay-card-interactive"
+      style={{ padding: 28, display: 'flex', alignItems: 'center', gap: 20, position: 'relative', overflow: 'hidden', borderTop: `3px solid ${color}` }}
     >
       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}10, transparent)`, pointerEvents: 'none' }} />
       <motion.div

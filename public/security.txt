@@ -1,0 +1,8 @@
+# Security Contact for Klanvision IT Solutions
+Contact: mailto:info@klanvision.com
+Contact: tel:+91-7032362358
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://www.klanvision.com/security.txt
+Policy: https://www.klanvision.com/privacy-policy
+Hiring: https://www.klanvision.com/careers
